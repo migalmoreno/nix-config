@@ -1,0 +1,3 @@
+secrets/secrets.json filter=git-agecrypt diff=git-agecrypt
+secrets/ca-bundle.crt filter=git-agecrypt diff=git-agecrypt
+.gitattributes !filter !diff

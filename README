@@ -1,0 +1,16 @@
+# -*- mode: org; after-save-hook: org-md-export-to-markdown; org-html-head-include-default-style: nil; org-html-postamble: nil; org-export-with-author: nil; org-export-with-date: nil; -*-
+#+OPTIONS: toc:nil
+* Nix Configuration
+This is my personal set of configuration files built around the [[https://nixos.org/][Nix]] package manager.
+
+This repository makes use of [[https://nix.dev/concepts/flakes.html][Flakes]] to manage and pin its dependencies. You can rebuild the current hostname's entire system configuration and home configuration with this command:
+
+#+begin_src sh
+sudo nix-rebuild switch --flake .
+#+end_src
+
+If you only want to rebuild the current hostname's home configuration via [[https://nix-community.github.io/home-manager/][Home Manager]], do this:
+
+#+begin_src sh
+home-manager switch --flake .
+#+end_src

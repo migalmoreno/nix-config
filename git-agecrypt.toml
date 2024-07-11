@@ -1,0 +1,3 @@
+[config]
+"secrets/secrets.json" = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID4wvOT5ULJRAXAsD8wyuutfeBQC45LO/4dLPtAE5uA4"]
+"secrets/ca-bundle.crt" = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID4wvOT5ULJRAXAsD8wyuutfeBQC45LO/4dLPtAE5uA4"]
