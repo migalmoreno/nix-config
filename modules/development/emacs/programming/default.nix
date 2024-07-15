@@ -13,6 +13,7 @@
           rainbow-delimiters
           tree-sitter
           tree-sitter-langs
+          emacs-conflict
         ];
         extraConfig = ''
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
