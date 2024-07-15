@@ -6,11 +6,17 @@ This is my personal set of configuration files built around the [[https://nixos.
 This repository makes use of [[https://nix.dev/concepts/flakes.html][Flakes]] to manage and pin its dependencies. You can rebuild the current hostname's entire system configuration and home configuration with this command:
 
 #+begin_src sh
-sudo nix-rebuild switch --flake .
+sudo nixos-rebuild switch --flake .
 #+end_src
 
 If you only want to rebuild the current hostname's home configuration via [[https://nix-community.github.io/home-manager/][Home Manager]], do this:
 
 #+begin_src sh
 home-manager switch --flake .
+#+end_src
+
+To deploy a =<hostname>= located in a remote =<host>= from a non-NixOS system, use this:
+
+#+begin_src sh
+nix-shell -p nixos-rebuild --run "nixos-rebuild switch --flake .#<hostname> --fast --build-host <host> --target-host <host> --use-remote-sudo"
 #+end_src
