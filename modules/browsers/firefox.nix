@@ -59,8 +59,8 @@
             "browser.urlbar.suggest.recentsearches" = false;
             "browser.urlbar.suggest.searches" = false;
             "browser.urlbar.suggest.topsites" = false;
-            # "extensions.autoDisableScopes" = 0;
-            # "extensions.enabledScopes" = 15;
+            "extensions.autoDisableScopes" = 0;
+            "extensions.enabledScopes" = 15;
             "general.smoothScroll" = false;
             "network.protocol-handler.external.mailto" = false;
             "places.history.enabled" = false;
