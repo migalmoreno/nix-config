@@ -11,7 +11,7 @@ nixpkgs.lib.nixosSystem {
     sops-nix.nixosModules.sops
     agenix.nixosModules.default
     ({ lib, pkgs, config, ... }: {
-      user = "nixos";
+      user = "saiph";
       environment.systemPackages = with pkgs; [
         ssh-to-age
         sops
@@ -27,22 +27,14 @@ nixpkgs.lib.nixosSystem {
           keyFile = "/home/${config.user}/.config/sops/age/keys.txt";
           generateKey = false;
         };
-        secrets = {
-          "work/email".owner = "root";
-          "work/ca-bundle.crt" = {};
-          "work/dnsAddresses" = {};
-        };
-        templates = {
-          "work/ca-bundle.crt" = {
-            content = ''${config.sops.placeholder."work/ca-bundle.crt"}'';
-            owner = "root";
-          };
-        };
+        secrets = {};
+        templates = {};
       };
       age = {
         identityPaths = [ "/home/${config.user}/.ssh/id_ed25519" ];
         secrets = {};
       };
+      networking.hostName = "orion";
       networking.firewall.enable = false;
       security.pki.certificateFiles = [ ../secrets/ca-bundle.crt ];
       systemd.services.wsl-vpnkit = {
@@ -57,10 +49,9 @@ nixpkgs.lib.nixosSystem {
         };
       };
       system.stateVersion = "22.05";
-      users.extraGroups.docker.members = [ "nixos" ];
+      users.extraGroups.docker.members = [ config.user ];
       time.timeZone = "Europe/Madrid";
       virtualisation.docker = {
-        enable = true;
         daemon.settings = {
           bip = "10.2.20.10/16";
           dns = config.secrets.work.dnsAddresses;
@@ -78,15 +69,29 @@ nixpkgs.lib.nixosSystem {
           user.default = config.user;
         };
       };
-      home-manager.users.${config.user}.home.packages = [
-        pkgs.libreoffice
-      ];
-    }
-    )
+      # boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+      home-manager.users.${config.user} = {
+        home.packages = [ pkgs.libreoffice ];
+        programs.ssh = {
+          enable = true;
+          matchBlocks = {
+            auriga = {
+              hostname = config.secrets.hosts.auriga.address;
+              user = "root";
+            };
+            capella = {
+              hostname = config.secrets.hosts.auriga.address;
+              user = "capella";
+            };
+          };
+        };
+      };
+    })
     ../modules/browsers
     ../modules/common
     ../modules/development
-    ../modules/networking
+    ../modules/networking/syncthing.nix
+    ../modules/networking/docker.nix
     ../modules/wm
   ];
 }

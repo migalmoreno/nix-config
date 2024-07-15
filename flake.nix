@@ -1,5 +1,5 @@
 {
-  description = "Personal Nix configurations.";
+  description = "Personal Nix configuration";
   inputs = {
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -14,12 +14,12 @@
   };
   outputs = inputs: rec {
     nixosConfigurations = {
-      nixos = import ./hosts/nixos.nix { inherit inputs; };
       auriga = import ./hosts/auriga.nix { inherit inputs; };
+      orion = import ./hosts/orion.nix { inherit inputs; };
     };
     homeConfigurations = {
-      nixos = nixosConfigurations.nixos.config.home-manager.users.nixos.home;
       capella = nixosConfigurations.nixos.config.home-manager.users.capella.home;
+      saiph = nixosConfigurations.nixos.config.home-manager.users.saiph.home;
     };
   };
 }
