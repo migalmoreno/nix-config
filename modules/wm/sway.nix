@@ -59,6 +59,15 @@
             titlebar = false;
             border = 2;
           };
+          colors = {
+            focused = {
+              background = "#285577";
+              border = "#00BCFF";
+              childBorder = "#285577";
+              indicator = "#2e9ef4";
+              text = "#ffffff";
+            };
+          };
           window = {
             titlebar = false;
             border = 2;
