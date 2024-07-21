@@ -39,19 +39,19 @@ nixpkgs.lib.nixosSystem {
       };
       fileSystems = {
         "/" = {
-          device = "/dev/disk/by-label/root";
+          device = "/dev/disk/by-label/ROOT";
           fsType = "ext4";
           options = [ "noatime" ];
         };
         "/boot" = {
-          device = "/dev/disk/by-label/boot";
+          device = "/dev/disk/by-label/BOOT";
           fsType = "vfat";
         };
       };
       swapDevices = [
         {
-          device = "/dev/disk/by-label/swap";
-        };
+          device = "/dev/disk/by-label/SWAP";
+        }
       ];
       time.timeZone = "Europe/Madrid";
       environment.systemPackages = with pkgs; [
