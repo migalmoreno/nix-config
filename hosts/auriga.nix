@@ -27,7 +27,8 @@ nixpkgs.lib.nixosSystem {
         loader = {
           systemd-boot.enable = false;
           generic-extlinux-compatible.enable = false;
-          efi.canTouchEfiVariables = true;
+          efi.canTouchEfiVariables = false;
+          timeout = 0;
           grub = {
             enable = true;
             efiInstallAsRemovable = true;
