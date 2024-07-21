@@ -18,6 +18,9 @@
             "battery"
             "clock"
           ];
+          "clock" = {
+            format = "{:%A, %d %b (w.%V) %H:%M}";
+          };
           "sway/window" = {
             max-length = 50;
           };
@@ -56,11 +59,28 @@
 }
 
 #workspaces button {
-  background: none;
+  background: #333333;
   border: none;
   border-radius: 0;
-  margin: 0.4em;
-  padding: 0.2em;
+  margin: 0;
+  padding: 0.5em;
+}
+
+#workspaces button.active {
+  background: #333333;
+}
+
+#workspaces button.persistent {
+  background: none;
+}
+
+#workspaces button.focused {
+  background: #00BCFF;
+  color: #1e1e1e;
+}
+#workspaces button.urgent {
+  background: #ff5f59;
+  color: #1e1e1e;
 }
 
 #battery, #clock {
