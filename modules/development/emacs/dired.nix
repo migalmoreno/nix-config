@@ -2,7 +2,7 @@
 
 {
   home-manager.users.${config.user} = {
-    home.packages = with pkgs; [ zip rsync ];
+    home.packages = with pkgs; [ zip unzip rsync ];
     programs.emacs = {
       extraPackages = epkgs: with epkgs; [
         all-the-icons-dired
