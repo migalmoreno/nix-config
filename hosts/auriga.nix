@@ -7,6 +7,7 @@ nixpkgs.lib.nixosSystem {
   modules = [
     nixos-hardware.nixosModules.raspberry-pi-4
     home-manager.nixosModules.home-manager
+    nixarr.nixosModules.default
     ({ config, lib, pkgs, ... }: {
       user = "capella";
       hardware = {
@@ -65,9 +66,23 @@ nixpkgs.lib.nixosSystem {
           PermitRootLogin = "yes";
         };
       };
-      services.jellyfin = {
+      nixarr = {
         enable = true;
-        openFirewall = true;
+        jellyfin = {
+          enable = true;
+        };
+        radarr = {
+          enable = true;
+        };
+        sonarr = {
+          enable = true;
+        };
+        prowlarr = {
+          enable = true;
+        };
+        transmission = {
+          enable = true;
+        };
       };
       users.users.root = {
         openssh.authorizedKeys.keys = [

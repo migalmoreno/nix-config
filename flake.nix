@@ -11,6 +11,7 @@
     sops-nix.url = "github:mic92/sops-nix";
     agenix.url = "github:ryantm/agenix";
     nixos-hardware.url = "github:nixos/nixos-hardware/master";
+    nixarr.url = "github:rasmus-kirk/nixarr";
   };
   outputs = inputs: rec {
     nixosConfigurations = {
