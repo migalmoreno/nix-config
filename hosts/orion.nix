@@ -55,7 +55,7 @@ nixpkgs.lib.nixosSystem {
         daemon.settings = {
           bip = "10.2.20.10/16";
           dns = config.secrets.work.dnsAddresses;
-          dns-search = [ config.secrets.work.domain ];
+          dns-search = [ (builtins.elemAt config.secrets.work.domains 0) ];
           live-restore = false;
           default-address-pools = [{ base = "10.1.0.0/16"; size = 24; }];
         };

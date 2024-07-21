@@ -8,7 +8,11 @@
         forge
         git-link
       ];
-      extraConfig = ''
+      extraConfig =
+        let primaryWorkDomain = builtins.elemAt config.secrets.work.domains 0;
+            secondaryWorkDomain = builtins.elemAt config.secrets.work.domains 1;
+        in
+        ''
 (add-hook 'magit-mode-hook 'toggle-truncate-lines)
 (with-eval-after-load 'project
   (define-key project-prefix-map "m" 'magit-project-status)
@@ -23,8 +27,14 @@
 (with-eval-after-load 'nrde-keymaps
   (define-key nrde-app-map (kbd "g l") 'git-link))
 (with-eval-after-load 'git-link
-  (add-to-list 'git-link-remote-alist '("git.${config.secrets.work.domain}" git-link-gitlab))
-  (add-to-list 'git-link-commit-remote-alist '("git.${config.secrets.work.domain}" git-link-gitlab)))
+  (add-to-list 'git-link-remote-alist
+               '("git.${primaryWorkDomain}" git-link-gitlab))
+  (add-to-list 'git-link-remote-alist
+               '("git-ext.${secondaryWorkDomain}" git-link-gitlab))
+  (add-to-list 'git-link-commit-remote-alist
+               '("git.${primaryWorkDomain}" git-link-gitlab))
+  (add-to-list 'git-link-commit-remote-alist
+               '("git-ext.${secondaryWorkDomain}" git-link-gitlab)))
 '';
     };
   };
