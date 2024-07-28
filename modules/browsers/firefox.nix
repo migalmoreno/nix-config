@@ -65,6 +65,7 @@
             "network.protocol-handler.external.mailto" = false;
             "places.history.enabled" = false;
             "signon.rememberSignons" = false;
+            "trailhead.firstrun.branches" = "nofirstrun-empty";
           };
           extensions = with config.nur.repos.rycee.firefox-addons; [
             ublock-origin
