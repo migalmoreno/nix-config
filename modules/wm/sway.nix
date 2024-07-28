@@ -5,6 +5,7 @@
     environment.loginShellInit = ''
 [[ $(tty) == /dev/pts/0 ]] && exec sway
 '';
+    security.pam.services.swaylock = {};
     home-manager.users.${config.user} = {
       home.packages = with pkgs; [
         bemenu
@@ -13,6 +14,8 @@
         wev
         wl-clipboard
         libxkbcommon
+        swaylock-effects
+        swaybg
       ];
       programs.swayr = {
         enable = true;
@@ -39,7 +42,10 @@
           # };
           output = {
             "*" = {
-              bg = "#000000 solid_color";
+              bg = "${(builtins.fetchurl {
+                url = "https://w.wallhaven.cc/full/dg/wallhaven-dgo6pl.jpg";
+                sha256 = "09jap8g5232h8ham41jljvm1x7d87wjn0p42dy0x119cqd1ds1i3";
+              })} fill";
             };
             eDP-1 = {
               scale = "1";
@@ -72,9 +78,7 @@
             titlebar = false;
             border = 2;
           };
-          gaps = {
-            inner = 8;
-          };
+          gaps.inner = 12;
           bars = [];
         };
       };
