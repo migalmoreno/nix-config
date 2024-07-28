@@ -11,10 +11,10 @@ nixpkgs.lib.nixosSystem {
     ({ config, lib, pkgs, ... }: {
       user = "capella";
       hardware = {
-        raspberry-pi."4".apply-overlays-dtmerge.enable = true;
-        deviceTree = {
-          enable = true;
-          filter = "*rpi-4-*.dtb";
+        enableRedistributableFirmware = true;
+        raspberry-pi."4" = {
+          apply-overlays-dtmerge.enable = true;
+          fkms-3d.enable = true;
         };
       };
       networking.hostName = "auriga";
@@ -99,6 +99,7 @@ nixpkgs.lib.nixosSystem {
           config.secrets.work.publicSshKey
         ];
       };
+      users.users.streamer.extraGroups = [ "video" ];
       system.stateVersion = "24.05";
     })
     ../modules/common
