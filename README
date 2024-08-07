@@ -1,5 +1,5 @@
-# -*- mode: org; after-save-hook: org-md-export-to-markdown; org-html-head-include-default-style: nil; org-html-postamble: nil; org-export-with-author: nil; org-export-with-date: nil; -*-
-#+OPTIONS: toc:nil
+# -*- mode: org; org-html-head-include-default-style: nil; org-html-postamble: nil; org-export-with-author: nil; org-export-with-date: nil; -*-
+#+OPTIONS: toc:nil num:nil
 * Nix Configuration
 This is my personal set of configuration files built around the [[https://nixos.org/][Nix]] package manager.
 
