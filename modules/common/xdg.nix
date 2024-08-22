@@ -27,7 +27,7 @@
           download = "${homeDir}/downloads";
           music = "${homeDir}/music";
           pictures = "${homeDir}/pictures";
-          publicShare = null;
+          publicShare = "${homeDir}/public";
           templates = null;
           videos = "${homeDir}/videos";
         };
