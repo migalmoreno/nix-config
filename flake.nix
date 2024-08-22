@@ -16,11 +16,24 @@
       url = "github:nixos/mobile-nixos";
       flake = false;
     };
+    systems.url = "github:nix-systems/default";
   };
-  outputs = inputs: rec {
+  outputs = inputs@{ nixpkgs, systems, ... }: let
+    eachSystem = f: nixpkgs.lib.genAttrs (import systems) (system: f (import nixpkgs { inherit system; }));
+  in rec {
     images = {
       taurus = nixosConfigurations.taurus.config.mobile.outputs.android.android-fastboot-images;
     };
+    devShells = eachSystem (pkgs: {
+      default = pkgs.mkShell {
+        buildInputs = with pkgs; [
+          git-agecrypt
+          ssh-to-age
+          home-manager
+          sops
+        ];
+      };
+    });
     nixosConfigurations = {
       auriga = import ./hosts/auriga.nix { inherit inputs; };
       orion = import ./hosts/orion.nix { inherit inputs; };
