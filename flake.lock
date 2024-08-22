@@ -216,6 +216,22 @@
         "type": "github"
       }
     },
+    "mobile-nixos": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1723667452,
+        "narHash": "sha256-j++MdJ7vl9U+GXPr4DVVC9qpdIzoUUKVdxbqhA4D9t4=",
+        "owner": "nixos",
+        "repo": "mobile-nixos",
+        "rev": "da892ce73d691f8fa5869d7cdc721f8ec98db872",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "mobile-nixos",
+        "type": "github"
+      }
+    },
     "nixarr": {
       "inputs": {
         "devshell": "devshell",
@@ -391,6 +407,7 @@
       "inputs": {
         "agenix": "agenix",
         "home-manager": "home-manager_2",
+        "mobile-nixos": "mobile-nixos",
         "nixarr": "nixarr",
         "nixos-hardware": "nixos-hardware",
         "nixos-wsl": "nixos-wsl",
