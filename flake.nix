@@ -38,12 +38,15 @@
     });
     nixosConfigurations = {
       auriga = import ./hosts/auriga.nix { inherit inputs; };
+      lyra = import ./hosts/lyra.nix { inherit inputs; };
       orion = import ./hosts/orion.nix { inherit inputs; };
       taurus = import ./hosts/taurus.nix { inherit inputs; };
     };
-    homeConfigurations = {
-      capella = nixosConfigurations.nixos.config.home-manager.users.capella.home;
-      saiph = nixosConfigurations.nixos.config.home-manager.users.saiph.home;
+    homeConfigurations = with nixosConfigurations.nixos.config.home-manager.users; {
+      capella = capella.home;
+      maia = maia.home;
+      saiph = saiph.home;
+      vega = vega.home;
     };
   };
 }
