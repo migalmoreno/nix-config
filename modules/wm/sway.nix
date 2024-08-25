@@ -3,7 +3,7 @@
 {
   config = {
     environment.loginShellInit = ''
-[[ $(tty) == ${(if wsl.enable then "/dev/pts/0" "/dev/tty1")} ]] && exec sway
+[[ $(tty) == ${if builtins.hasAttr "wsl" config && config.wsl.enable then "/dev/pts/0" else "/dev/tty1"} ]] && exec sway
 '';
     security.pam.services.swaylock = {};
     home-manager.users.${config.user} = {
