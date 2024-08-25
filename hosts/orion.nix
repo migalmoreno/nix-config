@@ -15,11 +15,8 @@ nixpkgs.lib.nixosSystem {
       git.username = config.secrets.work.fullname;
       git.email = config.secrets.work.email;
       environment.systemPackages = with pkgs; [
-        ssh-to-age
-        sops
-        vim
         agenix.packages.${system}.default
-        git-agecrypt
+        libreoffice
       ];
       sops = {
         defaultSopsFile = ../secrets.yaml;
@@ -71,9 +68,8 @@ nixpkgs.lib.nixosSystem {
           user.default = config.user;
         };
       };
-      # boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+      boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
       home-manager.users.${config.user} = {
-        home.packages = [ pkgs.libreoffice ];
         programs.ssh = {
           enable = true;
           matchBlocks = {
@@ -93,7 +89,7 @@ nixpkgs.lib.nixosSystem {
     ../modules/common
     ../modules/development
     ../modules/networking/syncthing.nix
-    ../modules/networking/docker.nix
+    ../modules/virtualisation/docker.nix
     ../modules/wm
   ];
 }

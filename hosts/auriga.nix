@@ -85,6 +85,9 @@ nixpkgs.lib.nixosSystem {
           enable = true;
         };
       };
+      services.syncthing = {
+        enable = true;
+      };
       users.users.root = {
         openssh.authorizedKeys.keys = [
           config.secrets.personal.publicSshKey
@@ -104,6 +107,6 @@ nixpkgs.lib.nixosSystem {
     })
     ../modules/common
     ../modules/networking
-    ../modules/networking/docker.nix
+    ../modules/virtualisation/docker.nix
   ];
 }
