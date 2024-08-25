@@ -88,6 +88,7 @@ nixpkgs.lib.nixosSystem {
       services.syncthing = {
         enable = true;
       };
+      systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true";
       users.users.root = {
         openssh.authorizedKeys.keys = [
           config.secrets.personal.publicSshKey
