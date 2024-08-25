@@ -23,10 +23,10 @@ nixpkgs.lib.nixosSystem {
       networking.firewall.allowedTCPPorts = [ 80 443 22 ];
       boot = {
         kernelPackages = pkgs.linuxKernel.packages.linux_rpi4;
+        kernelModules = [ "v4l2loopback" ];
+        extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
         initrd.availableKernelModules = [ "xhci_pci" "usbhid" "usb_storage" ];
         loader = {
-          systemd-boot.enable = false;
-          generic-extlinux-compatible.enable = false;
           efi.canTouchEfiVariables = false;
           timeout = 0;
           grub = {
