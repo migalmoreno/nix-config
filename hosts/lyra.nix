@@ -20,7 +20,7 @@ nixpkgs.lib.nixosSystem {
       git.username = "Miguel Ángel Moreno";
       git.email = "mail@migalmoreno.com";
       boot = {
-        initrd.availablkeKernelModules = [
+        initrd.availableKernelModules = [
           "xhci_pci"
           "thunderbolt"
           "usb_storage"
@@ -33,7 +33,7 @@ nixpkgs.lib.nixosSystem {
           "ddcci_backlight"
           "v4l2loopback"
         ];
-        extraModulePackages = config.boot.kernelPackages; [
+        extraModulePackages = with config.boot.kernelPackages; [
           ddcci-driver
           v4l2loopback
         ];
@@ -82,6 +82,10 @@ nixpkgs.lib.nixosSystem {
       systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true";
       services.spice-vdagentd.enable = true;
       virtualisation.spiceUSBRedirection.enable = true;
+      users.users.${config.user} = {
+        isNormalUser = true;
+        extraGroups = [ "wheel" ];
+      };
       system.stateVersion = "24.05";
     })
     ../modules/browsers
@@ -92,4 +96,4 @@ nixpkgs.lib.nixosSystem {
     ../modules/virtualisation/docker.nix
     ../modules/wm
   ];
-};
+}
