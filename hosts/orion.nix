@@ -12,6 +12,8 @@ nixpkgs.lib.nixosSystem {
     agenix.nixosModules.default
     ({ lib, pkgs, config, ... }: {
       user = "saiph";
+      git.username = config.secrets.work.fullname;
+      git.email = config.secrets.work.email;
       environment.systemPackages = with pkgs; [
         ssh-to-age
         sops
