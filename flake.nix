@@ -31,6 +31,8 @@
           ssh-to-age
           home-manager
           sops
+          nixos-rebuild
+          nixos-install-tools
         ];
       };
     });

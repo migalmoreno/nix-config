@@ -18,5 +18,5 @@ home-manager switch --flake .
 To deploy a =<hostname>= located in a remote =<host>= from a non-NixOS system, use this:
 
 #+begin_src sh
-nix-shell -p nixos-rebuild --run "nixos-rebuild switch --flake .#<hostname> --fast --build-host <host> --target-host <host> --use-remote-sudo"
+nixos-rebuild switch --flake .#<hostname> --fast --build-host <host> --target-host <host> --use-remote-sudo
 #+end_src
