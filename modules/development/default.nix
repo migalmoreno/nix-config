@@ -3,5 +3,6 @@
 {
   imports = [
     ./emacs
+    ./git.nix
   ];
 }
