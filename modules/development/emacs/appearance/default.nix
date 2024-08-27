@@ -3,7 +3,6 @@
 {
   imports = [
     ./all-the-icons.nix
-    ./fonts.nix
     ./modus-themes.nix
   ];
   config = {
