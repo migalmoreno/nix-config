@@ -6,6 +6,9 @@
       "x-scheme-handler/http" = "firefox.desktop";
       "x-scheme-handler/https" = "firefox.desktop";
     };
+    home.sessionVariables = {
+      MOZ_ENABLE_WAYLAND = 1;
+    };
     programs.firefox = {
       enable = true;
       policies = {
@@ -73,7 +76,8 @@
           };
           extensions = with config.nur.repos.rycee.firefox-addons; [
             ublock-origin
-            redirector
+            multi-account-containers
+            tridactyl
           ];
         };
       };
