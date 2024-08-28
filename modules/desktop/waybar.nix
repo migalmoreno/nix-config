@@ -13,13 +13,16 @@
           modules-left = ["sway/workspaces" "sway/mode"];
           modules-center = ["sway/window"];
           modules-right = [
-            #"pulseaudio"
+            "pulseaudio"
             "sway/language"
             "battery"
             "clock"
           ];
           "clock" = {
             format = "{:%A, %d %b (w.%V) %H:%M}";
+          };
+          "pulseaudio" = {
+            format = "{volume}%";
           };
           "sway/window" = {
             max-length = 50;
@@ -78,12 +81,13 @@
   background: #00BCFF;
   color: #1e1e1e;
 }
+
 #workspaces button.urgent {
   background: #ff5f59;
   color: #1e1e1e;
 }
 
-#battery, #clock {
+#pulseaudio, #language, #battery, #clock {
   margin-left: 1em;
 }
 '';
