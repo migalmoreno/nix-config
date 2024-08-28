@@ -132,16 +132,9 @@
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2))
 
+(add-to-list 'major-mode-remap-alist '(css-mode . css-ts-mode))
 (with-eval-after-load 'css-mode
   (setq css-indent-offset 2))
-
-(add-to-list 'major-mode-remap-alist '(css-mode . css-ts-mode))
-(with-eval-after-load 'apheleia
-  ;; (setf (alist-get 'prettier-javascript apheleia-formatters)
-  ;;       '("apheleia-npx" "prettier-eslint" "--stdin-filepath" filepath))
-  ;; (setf (alist-get 'prettier-typescript apheleia-formatters)
-  ;;       '("apheleia-npx" "prettier-eslint" "--stdin-filepath" filepath))
-)
 '';
     };
   };
