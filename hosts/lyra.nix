@@ -13,6 +13,8 @@ nixpkgs.lib.nixosSystem {
       networking.firewall.enable = false;
       time.timeZone = "Europe/Madrid";
       hardware.firmware = [ pkgs.sof-firmware ];
+      hardware.enableRedistributableFirmware = true;
+      hardware.graphics.enable = true;
       environment.systemPackages = with pkgs; [
         emacs
         git
@@ -54,7 +56,11 @@ nixpkgs.lib.nixosSystem {
           };
         };
         binfmt.emulatedSystems = [ "aarch64-linux" ];
-        initrd.luks.devices."system-root".device = "/dev/disk/by-uuid/0f74821b-da48-4f0c-9f94-f39e646da1bf";
+        initrd.luks.devices = {
+          system-root = {
+            device = "/dev/disk/by-uuid/0f74821b-da48-4f0c-9f94-f39e646da1bf";
+          };
+        };
       };
       fileSystems = {
         "/" = {
@@ -74,26 +80,29 @@ nixpkgs.lib.nixosSystem {
       MODE="0666", \
       RUN+="${pkgs.coreutils}/bin/chmod a+w /sys/class/backlight/%k/brightness"
       '';
-      services.syncthing = {
-        enable = true;
-        user = config.user;
-      };
       services.guix.enable = true;
       systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true";
-      services.spice-vdagentd.enable = true;
-      virtualisation.spiceUSBRedirection.enable = true;
       users.users.${config.user} = {
         isNormalUser = true;
         extraGroups = [ "wheel" ];
       };
       system.stateVersion = "24.05";
     })
+    ../modules/bash.nix
     ../modules/browsers
-    ../modules/common
+    ../modules/desktop
     ../modules/development
+    ../modules/home.nix
     ../modules/networking
     ../modules/networking/syncthing.nix
+    ../modules/nix.nix
+    ../modules/secrets.nix
+    ../modules/security/gpg.nix
+    ../modules/security/password-store.nix
+    ../modules/shellutils.nix
+    ../modules/terminals.nix
+    ../modules/virtualisation/android.nix
     ../modules/virtualisation/docker.nix
-    ../modules/wm
+    ../modules/virtualisation/qemu.nix
   ];
 }

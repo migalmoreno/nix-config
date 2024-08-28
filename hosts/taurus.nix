@@ -11,14 +11,6 @@ nixpkgs.lib.nixosSystem {
     })
     ({ config, lib, pkgs, ... }: {
       user = "maia";
-      services.openssh = {
-        enable = true;
-        settings = {
-          PasswordAuthentication = true;
-          KbdInteractiveAuthentication = false;
-          PermitRootLogin = "yes";
-        };
-      };
       users.users.root = {
         password = config.secrets.hosts.taurus.password;
       };
@@ -43,7 +35,6 @@ nixpkgs.lib.nixosSystem {
         group = "users";
       };
       networking.interfaces.wlan0.useDHCP = true;
-      networking.networkmanager.enable = true;
       networking.hostName = "taurus";
       programs.calls.enable = true;
       environment.systemPackages = with pkgs; [
@@ -52,8 +43,14 @@ nixpkgs.lib.nixosSystem {
         megapixels
         portfolio-filemanager
       ];
+      hardware.enableRedistributableFirmware = true;
+      hardware.graphics.enable = true;
       hardware.sensor.iio.enable = true;
     })
-    ../modules/common
+    ../modules/home.nix
+    ../modules/networking
+    ../modules/nix.nix
+    ../modules/networking/ssh.nix
+    ../modules/secrets.nix
   ];
 }

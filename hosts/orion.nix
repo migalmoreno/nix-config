@@ -50,6 +50,7 @@ nixpkgs.lib.nixosSystem {
       system.stateVersion = "22.05";
       users.extraGroups.docker.members = [ config.user ];
       time.timeZone = "Europe/Madrid";
+      hardware.graphics.enable = true;
       virtualisation.docker = {
         daemon.settings = {
           bip = "10.2.20.10/16";
@@ -85,11 +86,17 @@ nixpkgs.lib.nixosSystem {
         };
       };
     })
+    ../modules/bash.nix
     ../modules/browsers
-    ../modules/common
+    ../modules/desktop
     ../modules/development
+    ../modules/home.nix
     ../modules/networking/syncthing.nix
+    ../modules/nix.nix
+    ../modules/secrets.nix
+    ../modules/security/gpg.nix
+    ../modules/shellutils.nix
+    ../modules/terminals.nix
     ../modules/virtualisation/docker.nix
-    ../modules/wm
   ];
 }

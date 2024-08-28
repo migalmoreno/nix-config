@@ -17,6 +17,7 @@ nixpkgs.lib.nixosSystem {
           fkms-3d.enable = true;
         };
       };
+      hardware.graphics.enable = true;
       networking.hostName = "auriga";
       networking.interfaces.wlan0.useDHCP = true;
       networking.firewall.enable = false;
@@ -59,36 +60,6 @@ nixpkgs.lib.nixosSystem {
         git
         rsync
       ];
-      services.openssh = {
-        enable = true;
-        settings = {
-          PasswordAuthentication = false;
-          KbdInteractiveAuthentication = false;
-          PermitRootLogin = "yes";
-        };
-      };
-      nixarr = {
-        enable = true;
-        jellyfin = {
-          enable = true;
-        };
-        radarr = {
-          enable = true;
-        };
-        sonarr = {
-          enable = true;
-        };
-        prowlarr = {
-          enable = true;
-        };
-        transmission = {
-          enable = true;
-        };
-      };
-      services.syncthing = {
-        enable = true;
-      };
-      systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true";
       users.users.root = {
         openssh.authorizedKeys.keys = [
           config.secrets.personal.publicSshKey
@@ -106,8 +77,12 @@ nixpkgs.lib.nixosSystem {
       users.users.streamer.extraGroups = [ "video" ];
       system.stateVersion = "24.05";
     })
-    ../modules/common
+    ../modules/home.nix
+    ../modules/multimedia
     ../modules/networking
+    ../modules/networking/ssh.nix
+    ../modules/nix.nix
+    ../modules/secrets.nix
     ../modules/virtualisation/docker.nix
   ];
 }
