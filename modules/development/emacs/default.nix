@@ -10,11 +10,12 @@
     ./git.nix
     ./help.nix
     ./keymaps.nix
+    ./mail
     ./markup
     ./programming
     ./project.nix
-    ./shellutils.nix
-    ./terminals.nix
+    ./shell.nix
+    ./vterm.nix
   ];
   config = {
     home-manager.users.${config.user} = {
