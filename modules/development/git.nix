@@ -22,6 +22,10 @@ in {
         enable = true;
         userName = config.git.username;
         userEmail = config.git.email;
+        signing = {
+          signByDefault = !(builtins.hasAttr "wsl" config && config.wsl.enable);
+          key = "5F23F458";
+        };
       };
     };
   };
