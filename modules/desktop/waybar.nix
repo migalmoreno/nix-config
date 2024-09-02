@@ -29,7 +29,7 @@
           };
           "sway/workspaces" = {
             disable-scroll = true;
-            all-outputs = true;
+            all-outputs = false;
             persistent-workspaces = {
               "1" = [];
               "2" = [];
