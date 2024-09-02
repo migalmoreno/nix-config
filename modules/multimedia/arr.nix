@@ -9,4 +9,5 @@
     prowlarr.enable = true;
     transmission.enable = true;
   };
+  users.users.streamer.extraGroups = [ "video" ];
 }
