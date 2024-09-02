@@ -13,7 +13,7 @@
     nixos-hardware.url = "github:nixos/nixos-hardware/master";
     nixarr.url = "github:rasmus-kirk/nixarr";
     mobile-nixos = {
-      url = "github:nixos/mobile-nixos";
+      url = "github:mobile-nixos/mobile-nixos";
       flake = false;
     };
     systems.url = "github:nix-systems/default";
