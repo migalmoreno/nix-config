@@ -37,7 +37,7 @@ in {
             ];
           }
           {
-            profile.name = "single";
+            profile.name = "single-left";
             profile.outputs = [
               {
                 criteria = "eDP-1";
@@ -45,6 +45,19 @@ in {
               }
               {
                 criteria = "HDMI-A-1";
+                status = "enable";
+              }
+            ];
+          }
+          {
+            profile.name = "single-right";
+            profile.outputs = [
+              {
+                criteria = "eDP-1";
+                status = "disable";
+              }
+              {
+                criteria = "DP-2";
                 status = "enable";
               }
             ];
@@ -59,12 +72,12 @@ in {
               {
                 criteria = "HDMI-A-1";
                 mode = "1920x1080";
-                position = "0,0";
+                position = "-1920,0";
               }
               {
                 criteria = "DP-2";
                 mode = "1920x1080";
-                position = "-1920,0";
+                position = "0,0";
               }
             ];
           }
