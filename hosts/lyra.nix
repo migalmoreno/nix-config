@@ -27,6 +27,7 @@ nixpkgs.lib.nixosSystem {
           "thunderbolt"
           "usb_storage"
           "usbhid"
+    sops-nix.nixosModules.sops
         ];
         kernelModules = [
           "kvm-intel"
@@ -53,12 +54,53 @@ nixpkgs.lib.nixosSystem {
             efiSupport = true;
             enableCryptodisk = true;
             device = "nodev";
+        sops = {
+          secrets = {
+            "hosts/lyra/syncthing/key".owner = config.user;
+            "hosts/lyra/syncthing/cert".owner = config.user;
           };
         };
         binfmt.emulatedSystems = [ "aarch64-linux" ];
         initrd.luks.devices = {
           system-root = {
             device = "/dev/disk/by-uuid/0f74821b-da48-4f0c-9f94-f39e646da1bf";
+        services.syncthing = with config.home-manager.users.${config.user}; {
+          user = config.user;
+          key = config.sops.secrets."hosts/lyra/syncthing/key".path;
+          cert = config.sops.secrets."hosts/lyra/syncthing/cert".path;
+          dataDir = "${xdg.dataHome}/syncthing";
+          configDir = "${xdg.configHome}/syncthing";
+          overrideDevices = true;
+          overrideFolders = true;
+          settings = {
+            devices = {
+              auriga.id = "TA7YNZV-D5NBYBY-AFB2UU5-S4YNLRA-DCVV5CB-QP333MS-K7MVD4O-NIWUBQB";
+              taurus.id = "NLIYTEA-LIL3CAW-N62ZGBA-6DRE2ZM-UNPTBLN-J7JQGBY-RVLYJNT-GD6ZTAG";
+            };
+            folders = {
+              documents = {
+                path = "~/documents";
+                devices = [ "auriga" ];
+              };
+              pictures = {
+                path = "~/pictures";
+                devices = [
+                  "auriga"
+                  "taurus"
+                ];
+              };
+              notes = {
+                path = "~/notes";
+                devices = [
+                  "auriga"
+                  "taurus"
+                ];
+              };
+              videos = {
+                path = "~/videos";
+                devices = [ "auriga" ];
+              };
+            };
           };
         };
       };
