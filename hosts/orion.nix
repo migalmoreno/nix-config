@@ -8,31 +8,13 @@ nixpkgs.lib.nixosSystem {
     nixos-wsl.nixosModules.default
     nur.nixosModules.nur
     home-manager.nixosModules.home-manager
-    sops-nix.nixosModules.sops
-    agenix.nixosModules.default
     ({ lib, pkgs, config, ... }: {
       user = "saiph";
       git.username = config.secrets.work.fullname;
       git.email = config.secrets.work.email;
       environment.systemPackages = with pkgs; [
-        agenix.packages.${system}.default
         libreoffice
       ];
-      sops = {
-        defaultSopsFile = ../secrets.yaml;
-        defaultSopsFormat = "yaml";
-        age = {
-          sshKeyPaths = ["/home/${config.user}/.ssh/id_ed25519"];
-          keyFile = "/home/${config.user}/.config/sops/age/keys.txt";
-          generateKey = false;
-        };
-        secrets = {};
-        templates = {};
-      };
-      age = {
-        identityPaths = [ "/home/${config.user}/.ssh/id_ed25519" ];
-        secrets = {};
-      };
       networking.hostName = "orion";
       networking.firewall.enable = false;
       security.pki.certificateFiles = [ ../secrets/ca-bundle.crt ];
@@ -96,7 +78,6 @@ nixpkgs.lib.nixosSystem {
     ../modules/secrets.nix
     ../modules/security/gpg.nix
     ../modules/shellutils.nix
-    ../modules/sops.nix
     ../modules/terminals.nix
     ../modules/virtualisation/docker.nix
   ];
