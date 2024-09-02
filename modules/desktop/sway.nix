@@ -1,14 +1,21 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
-let isWsl = builtins.hasAttr "wsl" config && config.wsl.enable;
-in {
+let
+  isWsl = builtins.hasAttr "wsl" config && config.wsl.enable;
+in
+{
   config = {
     security.polkit.enable = true;
     environment.loginShellInit = ''
-[[ $(tty) == ${if isWsl then "/dev/pts/0" else "/dev/tty1"} ]] && exec sway
-'';
+      [[ $(tty) == ${if isWsl then "/dev/pts/0" else "/dev/tty1"} ]] && exec sway
+    '';
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
-    security.pam.services.swaylock = {};
+    security.pam.services.swaylock = { };
     home-manager.users.${config.user} = {
       home.packages = with pkgs; [
         bemenu
@@ -102,9 +109,9 @@ in {
         config = {
           terminal = "alacritty";
           menu = ''
-           ${pkgs.j4-dmenu-desktop}/bin/j4-dmenu-desktop \
-            --dmenu="${pkgs.bemenu}/bin/bemenu -i -H 30 --fn ${config.fonts.monospace.name}"
-            '';
+            ${pkgs.j4-dmenu-desktop}/bin/j4-dmenu-desktop \
+             --dmenu="${pkgs.bemenu}/bin/bemenu -i -H 30 --fn ${config.fonts.monospace.name}"
+          '';
           defaultWorkspace = "workspace number 1";
           modifier = if isWsl then "Mod2" else "Mod4";
           input = {
@@ -120,18 +127,22 @@ in {
           };
           output = {
             "*" = {
-              bg = "${(builtins.fetchurl {
-                url = "https://w.wallhaven.cc/full/dg/wallhaven-dgo6pl.jpg";
-                sha256 = "09jap8g5232h8ham41jljvm1x7d87wjn0p42dy0x119cqd1ds1i3";
-              })} fill";
+              bg = "${
+                (builtins.fetchurl {
+                  url = "https://w.wallhaven.cc/full/dg/wallhaven-dgo6pl.jpg";
+                  sha256 = "09jap8g5232h8ham41jljvm1x7d87wjn0p42dy0x119cqd1ds1i3";
+                })
+              } fill";
             };
             eDP-1 = {
               scale = "1";
             };
           };
           keybindings =
-            let modifier = config.home-manager.users.${config.user}.wayland.windowManager.sway.config.modifier;
-            in lib.mkOptionDefault {
+            let
+              modifier = config.home-manager.users.${config.user}.wayland.windowManager.sway.config.modifier;
+            in
+            lib.mkOptionDefault {
               # "${modifier}+j" = "exec swayr next-window current-workspace";
               # "${modifier}+k" = "exec swayr prev-window current-workspace";
               "${modifier}+j" = "focus left";
@@ -142,11 +153,7 @@ in {
           floating = {
             titlebar = false;
             border = 2;
-            criteria = [
-              {
-                app_id = "Waydroid";
-              }
-            ];
+            criteria = [ { app_id = "Waydroid"; } ];
           };
           colors = {
             focused = {
@@ -162,7 +169,7 @@ in {
             border = 2;
           };
           gaps.inner = 12;
-          bars = [];
+          bars = [ ];
         };
       };
     };

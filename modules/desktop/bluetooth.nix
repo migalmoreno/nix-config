@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, ... }:
 
 {
   hardware.bluetooth.enable = true;
@@ -7,11 +7,11 @@
     programs.emacs = {
       extraPackages = epkgs: [ epkgs.bluetooth ];
       extraConfig = ''
-(with-eval-after-load 'nrde-keymaps
-  (define-key nrde-app-map (kbd "B") 'bluetooth-list-devices))
-(with-eval-after-load 'bluetooth
-  (define-key bluetooth-mode-map "C" 'bluetooth-connect-profile))
-'';
+        (with-eval-after-load 'nrde-keymaps
+          (define-key nrde-app-map (kbd "B") 'bluetooth-list-devices))
+        (with-eval-after-load 'bluetooth
+          (define-key bluetooth-mode-map "C" 'bluetooth-connect-profile))
+      '';
     };
   };
 }

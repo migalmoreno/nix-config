@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
-let inherit (lib) types mkOption;
-in {
+let
+  inherit (lib) types mkOption;
+in
+{
   options = {
     user = mkOption {
       type = types.str;

@@ -1,7 +1,1 @@
-{ config, lib, pkgs }:
-
-{
-  imports = [
-    ./arr.nix
-  ];
-}
+{ imports = [ ./arr.nix ]; }

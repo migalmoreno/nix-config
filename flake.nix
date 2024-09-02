@@ -17,35 +17,39 @@
     };
     systems.url = "github:nix-systems/default";
   };
-  outputs = inputs@{ nixpkgs, systems, ... }: let
-    eachSystem = f: nixpkgs.lib.genAttrs (import systems) (system: f (import nixpkgs { inherit system; }));
-  in rec {
-    images = {
-      taurus = nixosConfigurations.taurus.config.mobile.outputs.android.android-fastboot-images;
-    };
-    devShells = eachSystem (pkgs: {
-      default = pkgs.mkShell {
-        buildInputs = with pkgs; [
-          git-agecrypt
-          ssh-to-age
-          home-manager
-          sops
-          nixos-rebuild
-          nixos-install-tools
-        ];
+  outputs =
+    inputs@{ nixpkgs, systems, ... }:
+    let
+      eachSystem =
+        f: nixpkgs.lib.genAttrs (import systems) (system: f (import nixpkgs { inherit system; }));
+    in
+    rec {
+      images = {
+        taurus = nixosConfigurations.taurus.config.mobile.outputs.android.android-fastboot-images;
       };
-    });
-    nixosConfigurations = {
-      auriga = import ./hosts/auriga.nix { inherit inputs; };
-      lyra = import ./hosts/lyra.nix { inherit inputs; };
-      orion = import ./hosts/orion.nix { inherit inputs; };
-      taurus = import ./hosts/taurus.nix { inherit inputs; };
+      devShells = eachSystem (pkgs: {
+        default = pkgs.mkShell {
+          buildInputs = with pkgs; [
+            git-agecrypt
+            ssh-to-age
+            home-manager
+            sops
+            nixos-rebuild
+            nixos-install-tools
+          ];
+        };
+      });
+      nixosConfigurations = {
+        auriga = import ./hosts/auriga.nix { inherit inputs; };
+        lyra = import ./hosts/lyra.nix { inherit inputs; };
+        orion = import ./hosts/orion.nix { inherit inputs; };
+        taurus = import ./hosts/taurus.nix { inherit inputs; };
+      };
+      homeConfigurations = with nixosConfigurations.nixos.config.home-manager.users; {
+        capella = capella.home;
+        maia = maia.home;
+        saiph = saiph.home;
+        vega = vega.home;
+      };
     };
-    homeConfigurations = with nixosConfigurations.nixos.config.home-manager.users; {
-      capella = capella.home;
-      maia = maia.home;
-      saiph = saiph.home;
-      vega = vega.home;
-    };
-  };
 }

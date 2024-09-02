@@ -9,10 +9,10 @@
     programs.emacs = {
       extraPackages = epkgs: [ epkgs.nix-mode ];
       extraConfig = ''
-(add-hook 'nix-mode-hook #'eglot-ensure)
-(with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs '(nix-mode . ("nil"))))
-'';
+        (add-hook 'nix-mode-hook #'eglot-ensure)
+        (with-eval-after-load 'eglot
+          (add-to-list 'eglot-server-programs '(nix-mode . ("nil"))))
+      '';
     };
   };
 }

@@ -1,11 +1,13 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   home-manager.users.${config.user} = {
     home.packages = with pkgs; [ xdg-utils ];
     xdg =
-      let homeDir = config.home-manager.users.${config.user}.home.homeDirectory;
-      in {
+      let
+        homeDir = config.home-manager.users.${config.user}.home.homeDirectory;
+      in
+      {
         enable = true;
         mime.enable = true;
         mimeApps.enable = true;
@@ -16,7 +18,10 @@
             pkgs.xdg-desktop-portal-wlr
           ];
           config = {
-            common.default = [ "gtk" "wlr" ];
+            common.default = [
+              "gtk"
+              "wlr"
+            ];
           };
         };
         userDirs = {

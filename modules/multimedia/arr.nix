@@ -1,5 +1,3 @@
-{ config, lib, pkgs, ... }:
-
 {
   nixarr = {
     enable = true;

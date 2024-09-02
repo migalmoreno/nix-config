@@ -1,5 +1,1 @@
-{
-  imports = [
-    ./ebdb.nix
-  ];
-}
+{ imports = [ ./ebdb.nix ]; }
