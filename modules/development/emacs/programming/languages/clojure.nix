@@ -4,10 +4,11 @@
   home-manager.users.${config.user} = {
     home.sessionVariables.LEIN_HOME = "${config.home-manager.users.${config.user}.xdg.dataHome}/lein";
     home.packages = with pkgs; [
+      clj-kondo
+      cljfmt
       clojure
       jdk
-      cljfmt
-      clj-kondo
+      leiningen
     ];
     programs.emacs = {
       extraPackages = epkgs: with epkgs; [
