@@ -7,6 +7,11 @@
       adwaita-icon-theme
       gnome-tweaks
     ];
+    home.pointerCursor = {
+      gtk.enable = true;
+      package = pkgs.bibata-cursors;
+      name = "Bibata-Modern-Classic";
+    };
     gtk = {
       enable = true;
       theme = {
