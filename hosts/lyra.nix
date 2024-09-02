@@ -100,6 +100,7 @@ nixpkgs.lib.nixosSystem {
     ../modules/security/gpg.nix
     ../modules/security/password-store.nix
     ../modules/shellutils.nix
+    ../modules/sops.nix
     ../modules/terminals.nix
     ../modules/virtualisation/android.nix
     ../modules/virtualisation/docker.nix

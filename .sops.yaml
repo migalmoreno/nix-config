@@ -1,7 +1,7 @@
 keys:
-  - &nixos age164jvgs39v4qzmke0h2ua4tygtgmchnjvexfgvtjxvl9hd07ugdfqqw95at
+  - &primary age164jvgs39v4qzmke0h2ua4tygtgmchnjvexfgvtjxvl9hd07ugdfqqw95at
 creation_rules:
   - path_regex: ^secrets.yaml$
     key_groups:
       - age:
-          - *nixos
+          - *primary

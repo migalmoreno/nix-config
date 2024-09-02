@@ -96,6 +96,7 @@ nixpkgs.lib.nixosSystem {
     ../modules/secrets.nix
     ../modules/security/gpg.nix
     ../modules/shellutils.nix
+    ../modules/sops.nix
     ../modules/terminals.nix
     ../modules/virtualisation/docker.nix
   ];
