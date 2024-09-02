@@ -7,8 +7,8 @@ in {
       monospace = mkOption {
         type = types.attrs;
         default = {
-          name = "Iosevka Nerd Font";
-          package = (pkgs.nerdfonts.override { fonts = [ "Iosevka" ]; });
+          name = "Iosevka";
+          package = pkgs.iosevka;
           size = 11;
         };
       };
@@ -54,6 +54,8 @@ in {
         config.fonts.sans.package
         config.fonts.serif.package
         config.fonts.unicode.package
+        dejavu_fonts
+        unifont
       ];
       programs.emacs = {
         extraPackages = epkgs: with epkgs; [ fontaine ];
