@@ -9,7 +9,6 @@
     nixos-wsl.url = "github:nix-community/nixos-wsl/main";
     nur.url = "github:nix-community/nur";
     sops-nix.url = "github:mic92/sops-nix";
-    agenix.url = "github:ryantm/agenix";
     nixos-hardware.url = "github:nixos/nixos-hardware/master";
     nixarr.url = "github:rasmus-kirk/nixarr";
     mobile-nixos = {
