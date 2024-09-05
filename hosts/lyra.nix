@@ -90,6 +90,7 @@ nixpkgs.lib.nixosSystem {
         '';
         services.guix.enable = true;
         sops = {
+          age.sshKeyPaths = [ "/home/${config.user}/.ssh/id_ed25519" ];
           secrets = {
             "hosts/lyra/syncthing/key".owner = config.user;
             "hosts/lyra/syncthing/cert".owner = config.user;
@@ -106,6 +107,7 @@ nixpkgs.lib.nixosSystem {
           settings = {
             devices = {
               auriga.id = "TA7YNZV-D5NBYBY-AFB2UU5-S4YNLRA-DCVV5CB-QP333MS-K7MVD4O-NIWUBQB";
+              orion.id = "JHG7EZC-D52KXLP-AN45CEX-ADKNSST-J4R3XDF-NDI26JH-JIJYZJ5-AEJHFQO";
               taurus.id = "NLIYTEA-LIL3CAW-N62ZGBA-6DRE2ZM-UNPTBLN-J7JQGBY-RVLYJNT-GD6ZTAG";
             };
             folders = {
@@ -130,6 +132,18 @@ nixpkgs.lib.nixosSystem {
               videos = {
                 path = "~/videos";
                 devices = [ "auriga" ];
+              };
+              work-projects = {
+                path = "~/src/work";
+                devices = [ "orion" ];
+              };
+              work-notes = {
+                path = "~/notes/work";
+                devices = [ "orion" ];
+              };
+              work-documents = {
+                path = "~/documents/work";
+                devices = [ "orion" ];
               };
             };
           };
