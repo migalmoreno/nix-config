@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, pkgs, ... }:
 
 {
   home-manager.users.${config.user} = {
@@ -11,7 +6,7 @@
       gnumake
       direnv
     ];
-    programs.emacs = lib.mkIf config.home-manager.users.${config.user}.programs.emacs.enable {
+    programs.emacs = {
       extraPackages = epkgs: with epkgs; [ envrc ];
       extraConfig = ''
         (defun nrde-compile-ansi-color-apply ()
