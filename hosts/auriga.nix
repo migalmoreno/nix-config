@@ -28,11 +28,6 @@ nixpkgs.lib.nixosSystem {
         networking.hostName = "auriga";
         networking.interfaces.wlan0.useDHCP = true;
         networking.firewall.enable = false;
-        networking.firewall.allowedTCPPorts = [
-          80
-          443
-          22
-        ];
         boot = {
           kernelPackages = pkgs.linuxKernel.packages.linux_rpi4;
           kernelModules = [ "v4l2loopback" ];
