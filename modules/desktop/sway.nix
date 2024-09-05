@@ -27,6 +27,18 @@ in
         swaylock-effects
         swaybg
       ];
+      programs.swaylock = {
+        enable = true;
+        package = pkgs.swaylock-effects;
+        settings = {
+          screenshots = true;
+          clock = true;
+          indicator = true;
+          effect-blur = "7x5";
+          effect-vignette = "0.5:0.5";
+          hide-keyboard-layout = true;
+        };
+      };
       programs.swayr = {
         enable = true;
         systemd.enable = true;
@@ -149,6 +161,7 @@ in
               "${modifier}+k" = "focus right";
               "${modifier}+Prior" = "exec ${pkgs.pamixer}/bin/pamixer --unmute --increase 5";
               "${modifier}+Next" = "exec ${pkgs.pamixer}/bin/pamixer --unmute --decrease 5";
+              "${modifier}+x" = "exec ${pkgs.swaylock-effects}/bin/swaylock";
             };
           floating = {
             titlebar = false;
