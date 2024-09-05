@@ -8,4 +8,8 @@
     transmission.enable = true;
   };
   users.users.streamer.extraGroups = [ "video" ];
+  services.jellyseerr = {
+    enable = true;
+    openFirewall = true;
+  };
 }
