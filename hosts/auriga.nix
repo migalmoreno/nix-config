@@ -8,6 +8,7 @@ nixpkgs.lib.nixosSystem {
     nixos-hardware.nixosModules.raspberry-pi-4
     home-manager.nixosModules.home-manager
     nixarr.nixosModules.default
+    sops-nix.nixosModules.sops
     (
       {
         config,
@@ -81,15 +82,55 @@ nixpkgs.lib.nixosSystem {
             config.secrets.work.publicSshKey
           ];
         };
+        sops = {
+          age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+          secrets = {
+            "hosts/auriga/syncthing/key" = { };
+            "hosts/auriga/syncthing/cert" = { };
+          };
+        };
+        services.syncthing = {
+          key = config.sops.secrets."hosts/auriga/syncthing/key".path;
+          cert = config.sops.secrets."hosts/auriga/syncthing/cert".path;
+          overrideDevices = true;
+          overrideFolders = true;
+          settings = {
+            devices = {
+              lyra.id = "M4GMJIA-KU75HGM-BTXRUNS-MVXZQFD-N2YG5KQ-6V2RQHZ-CNORKP5-H2WN6AP";
+            };
+            folders = {
+              documents = {
+                path = "~/documents";
+                devices = [ "lyra" ];
+              };
+              pictures = {
+                path = "~/pictures";
+                devices = [ "lyra" ];
+              };
+              notes = {
+                path = "~/notes";
+                devices = [ "lyra" ];
+              };
+              videos = {
+                path = "~/videos";
+                devices = [ "lyra" ];
+              };
+            };
+          };
+        };
         system.stateVersion = "24.05";
       }
     )
+    ../modules/bash.nix
     ../modules/home.nix
     ../modules/multimedia
     ../modules/networking
     ../modules/networking/ssh.nix
+    ../modules/networking/syncthing.nix
     ../modules/nix.nix
+    ../modules/nginx.nix
     ../modules/secrets.nix
+    ../modules/sops.nix
     ../modules/virtualisation/docker.nix
   ];
 }
