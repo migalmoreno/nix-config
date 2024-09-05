@@ -7,4 +7,5 @@
       PermitRootLogin = "yes";
     };
   };
+  networking.firewall.allowedTCPPorts = [ 22 ];
 }
