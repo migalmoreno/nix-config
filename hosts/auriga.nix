@@ -38,6 +38,7 @@ nixpkgs.lib.nixosSystem {
             "usb_storage"
           ];
           loader = {
+            generic-extlinux-compatible.enable = false;
             efi.canTouchEfiVariables = false;
             timeout = 0;
             grub = {
