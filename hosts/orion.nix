@@ -8,6 +8,7 @@ nixpkgs.lib.nixosSystem {
     nixos-wsl.nixosModules.default
     nur.nixosModules.nur
     home-manager.nixosModules.home-manager
+    sops-nix.nixosModules.sops
     (
       {
         lib,
@@ -61,6 +62,41 @@ nixpkgs.lib.nixosSystem {
           };
         };
         boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+        sops = {
+          age.sshKeyPaths = [ "/home/${config.user}/.ssh/id_ed25519" ];
+          secrets = {
+            "hosts/orion/syncthing/key".owner = config.user;
+            "hosts/orion/syncthing/cert".owner = config.user;
+          };
+        };
+        services.syncthing = with config.home-manager.users.${config.user}; {
+          user = config.user;
+          key = config.sops.secrets."hosts/orion/syncthing/key".path;
+          cert = config.sops.secrets."hosts/orion/syncthing/cert".path;
+          dataDir = "${xdg.dataHome}/syncthing";
+          configDir = "${xdg.configHome}/syncthing";
+          overrideDevices = true;
+          overrideFolders = true;
+          settings = {
+            devices = {
+              lyra.id = "M4GMJIA-KU75HGM-BTXRUNS-MVXZQFD-N2YG5KQ-6V2RQHZ-CNORKP5-H2WN6AP";
+            };
+            folders = {
+              work-projects = {
+                path = "~/src/work";
+                devices = [ "lyra" ];
+              };
+              work-notes = {
+                path = "~/notes";
+                devices = [ "lyra" ];
+              };
+              work-documents = {
+                path = "~/documents";
+                devices = [ "lyra" ];
+              };
+            };
+          };
+        };
         home-manager.users.${config.user} = {
           programs.ssh = {
             enable = true;
@@ -88,6 +124,7 @@ nixpkgs.lib.nixosSystem {
     ../modules/secrets.nix
     ../modules/security/gpg.nix
     ../modules/shellutils.nix
+    ../modules/sops.nix
     ../modules/terminals.nix
     ../modules/virtualisation/docker.nix
   ];
