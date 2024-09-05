@@ -22,6 +22,7 @@
       services.emacs = {
         enable = true;
         defaultEditor = true;
+        client.enable = true;
       };
       programs.emacs = {
         enable = true;
