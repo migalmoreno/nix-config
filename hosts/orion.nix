@@ -64,7 +64,6 @@ nixpkgs.lib.nixosSystem {
             user.default = config.user;
           };
         };
-        boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
         sops = {
           age.sshKeyPaths = [ "/home/${config.user}/.ssh/id_ed25519" ];
           secrets = {
