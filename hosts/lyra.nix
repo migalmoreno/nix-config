@@ -153,17 +153,21 @@ nixpkgs.lib.nixosSystem {
           isNormalUser = true;
           extraGroups = [ "wheel" ];
         };
-        home-manager.users.${config.user} = {
+        home-manager.users.${config.user} = with config.secrets.hosts; {
           programs.ssh = {
             enable = true;
             matchBlocks = {
               auriga = {
-                hostname = config.secrets.hosts.auriga.address;
+                hostname = auriga.address;
                 user = "root";
               };
               capella = {
-                hostname = config.secrets.hosts.auriga.address;
+                hostname = auriga.address;
                 user = "capella";
+              };
+              cygnus = {
+                hostname = cygnus.address;
+                user = "root";
               };
             };
           };
