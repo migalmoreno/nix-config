@@ -96,9 +96,10 @@ nixpkgs.lib.nixosSystem {
               "migalmoreno.com" = {
                 enableACME = true;
                 forceSSL = true;
-                locations."/" = {
-                  proxyPass = "http://auriga:8080";
-                };
+                root = "/srv/http/migalmoreno.com";
+                extraConfig = ''
+                  error_page 404 = /404.html;
+                '';
                 locations."/robots.txt" = robotsTxt;
               };
               "git.migalmoreno.com" = {
