@@ -1,6 +1,10 @@
 {
   description = "Personal Nix configuration";
   inputs = {
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -41,6 +45,7 @@
       });
       nixosConfigurations = {
         auriga = import ./hosts/auriga.nix { inherit inputs; };
+        cygnus = import ./hosts/cygnus.nix { inherit inputs; };
         lyra = import ./hosts/lyra.nix { inherit inputs; };
         orion = import ./hosts/orion.nix { inherit inputs; };
         taurus = import ./hosts/taurus.nix { inherit inputs; };
