@@ -7,6 +7,10 @@
 
 let
   isWsl = builtins.hasAttr "wsl" config && config.wsl.enable;
+  wallpaper = builtins.fetchurl {
+    url = "https://w.wallhaven.cc/full/dg/wallhaven-dgo6pl.jpg";
+    sha256 = "09jap8g5232h8ham41jljvm1x7d87wjn0p42dy0x119cqd1ds1i3";
+  };
 in
 {
   config = {
@@ -18,25 +22,19 @@ in
     security.pam.services.swaylock = { };
     home-manager.users.${config.user} = {
       home.packages = with pkgs; [
-        bemenu
-        j4-dmenu-desktop
-        swayr
         wev
         wl-clipboard
         libxkbcommon
-        swaylock-effects
-        swaybg
       ];
       programs.swaylock = {
         enable = true;
         package = pkgs.swaylock-effects;
         settings = {
-          screenshots = true;
           clock = true;
           indicator = true;
-          effect-blur = "7x5";
           effect-vignette = "0.5:0.5";
           hide-keyboard-layout = true;
+          image = wallpaper;
         };
       };
       programs.swayr = {
@@ -139,12 +137,7 @@ in
           };
           output = {
             "*" = {
-              bg = "${
-                (builtins.fetchurl {
-                  url = "https://w.wallhaven.cc/full/dg/wallhaven-dgo6pl.jpg";
-                  sha256 = "09jap8g5232h8ham41jljvm1x7d87wjn0p42dy0x119cqd1ds1i3";
-                })
-              } fill";
+              bg = "${wallpaper} fill";
             };
             eDP-1 = {
               scale = "1";
