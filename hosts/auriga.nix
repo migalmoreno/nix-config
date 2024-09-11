@@ -167,6 +167,14 @@ nixpkgs.lib.nixosSystem {
             }
           ];
           root = "/srv/http/migalmoreno.com";
+          extraConfig = ''
+            error_page 404 = /404.html;
+          '';
+          locations."/" = {
+            extraConfig = ''
+              try_files $uri $uri/ $uri/index.html $uri;
+            '';
+          };
         };
         users.users.${config.services.cgit."git.migalmoreno.com".user} = {
           extraGroups = [ "git" ];
