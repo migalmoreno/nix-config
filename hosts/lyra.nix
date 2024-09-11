@@ -205,6 +205,7 @@ nixpkgs.lib.nixosSystem {
     ../modules/home.nix
     ../modules/networking
     ../modules/networking/syncthing.nix
+    ../modules/networking/tailscale.nix
     ../modules/nix.nix
     ../modules/secrets.nix
     ../modules/security/gpg.nix
