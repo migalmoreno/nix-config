@@ -24,6 +24,8 @@
         enable = true;
         defaultEditor = true;
         client.enable = true;
+        socketActivation.enable = true;
+        startWithUserSession = true;
       };
       programs.emacs = {
         enable = true;
