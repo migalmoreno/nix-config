@@ -26,6 +26,7 @@ nixpkgs.lib.nixosSystem {
         environment.systemPackages = with pkgs; [
           emacs
           git
+          git-agecrypt
         ];
         git.username = "Miguel Ángel Moreno";
         git.email = "mail@migalmoreno.com";
