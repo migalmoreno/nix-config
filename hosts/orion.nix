@@ -20,7 +20,10 @@ nixpkgs.lib.nixosSystem {
         user = "saiph";
         git.username = config.secrets.work.fullname;
         git.email = config.secrets.work.email;
-        environment.systemPackages = with pkgs; [ libreoffice ];
+        environment.systemPackages = with pkgs; [
+          libreoffice
+          git-agecrypt
+        ];
         networking.hostName = "orion";
         networking.firewall.enable = false;
         security.pki.certificateFiles = [ ../secrets/ca-bundle.crt ];
