@@ -15,6 +15,7 @@
     ./programming
     ./project.nix
     ./shell.nix
+    ./tramp.nix
     ./vterm.nix
   ];
   config = {
