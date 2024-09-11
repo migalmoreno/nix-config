@@ -28,7 +28,7 @@ nixpkgs.lib.nixosSystem {
         hardware.graphics.enable = true;
         networking.hostName = "auriga";
         networking.interfaces.wlan0.useDHCP = true;
-        networking.firewall.enable = false;
+        networking.firewall.enable = true;
         boot = {
           kernelPackages = pkgs.linuxKernel.packages.linux_rpi4;
           kernelModules = [ "v4l2loopback" ];
