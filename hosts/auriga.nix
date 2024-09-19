@@ -159,6 +159,24 @@ nixpkgs.lib.nixosSystem {
             readme=:README.org
           '';
         };
+        virtualisation.oci-containers.containers = {
+          tubo = {
+            image = "migalmoreno/tubo";
+            ports = [ "3000:3000" ];
+            extraOptions = [ "--network=host" ];
+          };
+          whoogle-search = {
+            image = "benbusby/whoogle-search";
+            ports = [ "5000:5000" ];
+            extraOptions = [ "--network=host" ];
+            environment = {
+              WHOOGLE_MINIMAL = "1";
+              WHOOGLE_CONFIG_VIEW_IMAGE = "1";
+              WHOOGLE_RESULTS_PER_PAGE = "50";
+              WHOOGLE_CONFIG_SEARCH_LANGUAGE = "lang_en";
+            };
+          };
+        };
         services.nginx.virtualHosts."_" = {
           listen = [
             {
