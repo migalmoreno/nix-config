@@ -80,6 +80,19 @@ nixpkgs.lib.nixosSystem {
             ];
           };
         };
+        virtualisation.oci-containers.containers = {
+          whoogle-search = {
+            image = "benbusby/whoogle-search";
+            ports = [ "5000:5000" ];
+            extraOptions = [ "--network=host" ];
+            environment = {
+              WHOOGLE_MINIMAL = "1";
+              WHOOGLE_CONFIG_VIEW_IMAGE = "1";
+              WHOOGLE_RESULTS_PER_PAGE = "50";
+              WHOOGLE_CONFIG_SEARCH_LANGUAGE = "lang_en";
+            };
+          };
+        };
         wsl = {
           enable = true;
           defaultUser = config.user;
