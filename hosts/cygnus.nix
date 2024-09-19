@@ -91,6 +91,11 @@ nixpkgs.lib.nixosSystem {
                   return 200 "User-agent: *\nDisallow: /";
                 '';
               };
+              crawlersBlock = ''
+                if ($http_user_agent ~* (Bytespider|Amazonbot|MJ12bot|DotBot|FriendlyCrawler)) {
+                  return 403;
+                }
+              '';
             in
             {
               "migalmoreno.com" = {
@@ -99,6 +104,7 @@ nixpkgs.lib.nixosSystem {
                 root = "/srv/http/migalmoreno.com";
                 extraConfig = ''
                   error_page 404 = /404.html;
+                  ${crawlersBlock}
                 '';
                 locations."/robots.txt" = robotsTxt;
               };
@@ -113,6 +119,7 @@ nixpkgs.lib.nixosSystem {
               "whoogle.migalmoreno.com" = {
                 enableACME = true;
                 forceSSL = true;
+                extraConfig = crawlersBlock;
                 locations."/" = {
                   proxyPass = "http://localhost:5000";
                 };
@@ -121,6 +128,7 @@ nixpkgs.lib.nixosSystem {
               "jellyfin.migalmoreno.com" = {
                 enableACME = true;
                 forceSSL = true;
+                extraConfig = crawlersBlock;
                 locations."/" = {
                   proxyPass = "http://auriga:8096";
                 };
@@ -137,6 +145,7 @@ nixpkgs.lib.nixosSystem {
               "tubo.migalmoreno.com" = {
                 enableACME = true;
                 forceSSL = true;
+                extraConfig = crawlersBlock;
                 locations."/" = {
                   return = "301 https://tubo.media$request_uri";
                 };
@@ -149,6 +158,7 @@ nixpkgs.lib.nixosSystem {
                   proxyPass = "http://localhost:3000";
                   extraConfig = ''
                     limit_req zone=ip burst=20 nodelay;
+                    ${crawlersBlock}
                   '';
                 };
                 locations."/robots.txt" = robotsTxt;
