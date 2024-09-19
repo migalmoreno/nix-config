@@ -174,28 +174,63 @@ nixpkgs.lib.nixosSystem {
             };
           };
         };
-        ordenada.features.emacs.org-roam = {
-          captureTemplates = ''
-            `(("w" "work" plain "%?"
-               :if-new (file+head "work/%<%Y%m%d%H%M%S>-''${slug}.org"
-                                  "#+title: ''${title}\n#+filetags: :''${Topic}:\n")
-               :unnarrowed t)
-              ("p" "personal" plain "%?"
-               :if-new (file+head "personal/%<%Y%m%d%H%M%S>-''${slug}.org"
-                                  "#+title: ''${title}\n#+filetags: :''${Topic}:\n")
-               :unnarrowed t))
-          '';
-          dailiesDirectory = "./";
-          dailiesCaptureTemplates = ''
-            '(("w" "work" entry
-               "* %?"
-               :if-new (file+head "work/daily/%<%Y-%m-%d>.org"
-                                  "#+title: %<%Y-%m-%d>\n"))
-              ("p" "personal" entry
-               "* %?"
-               :if-new (file+head "personal/daily/%<%Y-%m-%d>.org"
-                                  "#+title: %<%Y-%m-%d>\n")))
-          '';
+        ordenada.features = {
+          waybar.enable = true;
+          emacs.org-roam = {
+            captureTemplates = ''
+              `(("w" "work" plain "%?"
+                 :if-new (file+head "work/%<%Y%m%d%H%M%S>-''${slug}.org"
+                                    "#+title: ''${title}\n#+filetags: :''${Topic}:\n")
+                 :unnarrowed t)
+                ("p" "personal" plain "%?"
+                 :if-new (file+head "personal/%<%Y%m%d%H%M%S>-''${slug}.org"
+                                    "#+title: ''${title}\n#+filetags: :''${Topic}:\n")
+                 :unnarrowed t))
+            '';
+            dailiesDirectory = "./";
+            dailiesCaptureTemplates = ''
+              '(("w" "work" entry
+                 "* %?"
+                 :if-new (file+head "work/daily/%<%Y-%m-%d>.org"
+                                    "#+title: %<%Y-%m-%d>\n"))
+                ("p" "personal" entry
+                 "* %?"
+                 :if-new (file+head "personal/daily/%<%Y-%m-%d>.org"
+                                    "#+title: %<%Y-%m-%d>\n")))
+            '';
+          };
+          firefox = {
+            enable = true;
+            primaryEngine = {
+              iconUpdateURL = "http://localhost:5000/favicon.ico";
+              updateInterval = 24 * 60 * 60 * 1000;
+              definedAliases = [ "@w" ];
+              urls = [
+                {
+                  template = "http://localhost:5000/search";
+                  params = [
+                    {
+                      name = "q";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+            };
+          };
+        };
+        virtualisation.oci-containers.containers = {
+          whoogle-search = {
+            image = "benbusby/whoogle-search";
+            ports = [ "5000:5000" ];
+            extraOptions = [ "--network=host" ];
+            environment = {
+              WHOOGLE_MINIMAL = "1";
+              WHOOGLE_CONFIG_VIEW_IMAGE = "1";
+              WHOOGLE_RESULTS_PER_PAGE = "50";
+              WHOOGLE_CONFIG_SEARCH_LANGUAGE = "lang_en";
+            };
+          };
         };
         system.stateVersion = "24.05";
       }
