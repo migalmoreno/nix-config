@@ -160,7 +160,11 @@ nixpkgs.lib.nixosSystem {
     )
     ../modules/bash.nix
     ../modules/browsers
-    ../modules/desktop
+    ../modules/desktop/fonts.nix
+    ../modules/desktop/gtk.nix
+    ../modules/desktop/sway.nix
+    ../modules/desktop/waybar.nix
+    ../modules/desktop/xdg.nix
     ../modules/development
     ../modules/home.nix
     ../modules/networking/syncthing.nix
