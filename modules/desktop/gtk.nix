@@ -1,31 +1,40 @@
-{ config, pkgs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+
+let
+  cursorName =
+    if config.stylix.polarity == "dark" then "Bibata-Modern-Classic" else "Bibata-Modern-Ice";
+in
+{
+  stylix.cursor = {
+    name = cursorName;
+    package = pkgs.bibata-cursors;
+    size = 24;
+  };
   home-manager.users.${config.user} = {
     home.packages = with pkgs; [
       dconf
       adwaita-icon-theme
       gnome-tweaks
     ];
-    home.pointerCursor = {
+    home.pointerCursor = lib.mkIf (config.stylix.enable != true) {
       gtk.enable = true;
       package = pkgs.bibata-cursors;
-      name = "Bibata-Modern-Classic";
+      name = cursorName;
     };
-    gtk = {
+    gtk = lib.mkIf (config.stylix.targets.gtk.enable != true) {
       enable = true;
       theme = {
-        name = "Adwaita-dark";
-        package = pkgs.gnome-themes-extra;
+        name = if config.stylix.polarity == "dark" then "adw-gtk3-dark" else "adw-gtk3";
+        package = lib.mkForce pkgs.adw-gtk3;
       };
       cursorTheme = {
-        name = "Bibata-Modern-Classic";
+        name = cursorName;
         package = pkgs.bibata-cursors;
-      };
-      gtk3 = {
-        extraConfig = {
-          gtk-application-prefer-dark-theme = true;
-        };
       };
     };
   };

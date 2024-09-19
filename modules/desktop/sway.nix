@@ -7,10 +7,6 @@
 
 let
   isWsl = builtins.hasAttr "wsl" config && config.wsl.enable;
-  wallpaper = builtins.fetchurl {
-    url = "https://w.wallhaven.cc/full/dg/wallhaven-dgo6pl.jpg";
-    sha256 = "09jap8g5232h8ham41jljvm1x7d87wjn0p42dy0x119cqd1ds1i3";
-  };
 in
 {
   config = {
@@ -26,17 +22,51 @@ in
         wl-clipboard
         libxkbcommon
       ];
-      programs.swaylock = {
-        enable = true;
-        package = pkgs.swaylock-effects;
-        settings = {
-          clock = true;
-          indicator = true;
-          effect-vignette = "0.5:0.5";
-          hide-keyboard-layout = true;
-          image = wallpaper;
+      programs.swaylock =
+        with config.lib.stylix.colors;
+        let
+          transparent = "00000000";
+        in
+        {
+          enable = true;
+          package = pkgs.swaylock-effects;
+          settings = {
+            clock = true;
+            indicator = true;
+            indicator-thickness = 7;
+            effect-vignette = "0.5:0.5";
+            hide-keyboard-layout = true;
+            image = config.stylix.image;
+            color = base00;
+            inside-color = base00;
+            inside-clear-color = base00;
+            inside-caps-lock-color = base00;
+            inside-ver-color = base00;
+            inside-wrong-color = base00;
+            key-hl-color = base0B;
+            layout-bg-color = base00;
+            layout-border-color = base01;
+            layout-text-color = base05;
+            line-uses-inside = false;
+            line-uses-ring = false;
+            line-color = transparent;
+            line-ver-color = transparent;
+            line-clear-color = transparent;
+            line-wrong-color = transparent;
+            ring-color = base01;
+            ring-clear-color = base0A;
+            ring-caps-lock-color = base01;
+            ring-ver-color = base0B;
+            ring-wrong-color = base08;
+            separator-color = transparent;
+            text-color = base05;
+            text-clear-color = base05;
+            text-caps-lock-color = base05;
+            text-ver-color = base05;
+            text-wrong-color = base05;
+            font = config.stylix.fonts.sansSerif.name;
+          };
         };
-      };
       programs.swayr = {
         enable = true;
         systemd.enable = true;
@@ -89,16 +119,39 @@ in
               {
                 criteria = "HDMI-A-1";
                 mode = "1920x1080";
-                position = "-1920,0";
+                position = "0,0";
               }
               {
                 criteria = "DP-2";
                 mode = "1920x1080";
-                position = "0,0";
+                position = "1920,0";
               }
             ];
           }
         ];
+      };
+      programs.bemenu = {
+        enable = true;
+        settings = with config.lib.stylix.colors.withHashtag; {
+          line-height = 34;
+          ignorecase = true;
+          hp = 10;
+          cw = 1;
+          ch = 20;
+          tf = base05;
+          tb = base02;
+          ff = base05;
+          fb = base01;
+          nf = base05;
+          nb = base01;
+          af = base05;
+          ab = base01;
+          cf = base05;
+          cb = base01;
+          hf = base01;
+          hb = base0D;
+          fn = "${config.fonts.monospace.name} 11";
+        };
       };
       wayland.windowManager.sway = {
         enable = true;
@@ -116,11 +169,16 @@ in
           export SDL_VIDEODRIVER=wayland
           export _JAVA_AWT_WM_NONREPARENTING=1
         '';
-        config = {
+        config = with config.lib.stylix.colors.withHashtag; {
           terminal = "alacritty";
           menu = ''
             ${pkgs.j4-dmenu-desktop}/bin/j4-dmenu-desktop \
-             --dmenu="${pkgs.bemenu}/bin/bemenu -i -H 30 --fn ${config.fonts.monospace.name}"
+             --dmenu="${pkgs.bemenu}/bin/bemenu -i -H 34 \
+             --fn '${config.fonts.monospace.name} 11' \
+             --hp 10 --cw 1 --ch 20 \
+             --tf '${base05}' --tb '${base02}' --ff '${base05}' --fb '${base01}' \
+             --nf '${base05}' --nb '${base01}' --af '${base05}' --ab '${base01}' \
+             --cf '${base05}' --cb '${base01}' --hf '${base01}' --hb '${base0D}'"
           '';
           defaultWorkspace = "workspace number 1";
           modifier = if isWsl then "Mod2" else "Mod4";
@@ -137,11 +195,11 @@ in
           };
           output = {
             "*" = {
-              bg = "${wallpaper} fill";
+              bg = "${config.stylix.image} ${config.stylix.imageScalingMode}";
             };
-            eDP-1 = {
-              scale = "1";
-            };
+          };
+          seat."*" = {
+            xcursor_theme = "${config.stylix.cursor.name} ${toString config.stylix.cursor.size}";
           };
           keybindings =
             let
@@ -161,15 +219,49 @@ in
             border = 2;
             criteria = [ { app_id = "Waydroid"; } ];
           };
-          colors = {
-            focused = {
-              background = "#285577";
-              border = "#00BCFF";
-              childBorder = "#285577";
-              indicator = "#2e9ef4";
-              text = "#ffffff";
+          colors =
+            with config.lib.stylix.colors;
+            with pkgs.lib.nix-rice.color;
+            let
+              background = base00;
+              focused =
+                if config.stylix.polarity == "dark" then
+                  toRgbHex (darken 50 (hexToRgba withHashtag.base0D))
+                else
+                  toRgbHex (brighten 50 (hexToRgba withHashtag.base0D));
+              indicator = focused;
+              unfocused = base01;
+              text = base05;
+              urgent = base08;
+            in
+            {
+              inherit background;
+              urgent = {
+                inherit background indicator text;
+                border = urgent;
+                childBorder = urgent;
+              };
+              focused = {
+                inherit background indicator text;
+                border = focused;
+                childBorder = focused;
+              };
+              focusedInactive = {
+                inherit background indicator text;
+                border = unfocused;
+                childBorder = unfocused;
+              };
+              unfocused = {
+                inherit background indicator text;
+                border = unfocused;
+                childBorder = unfocused;
+              };
+              placeholder = {
+                inherit background indicator text;
+                border = unfocused;
+                childBorder = unfocused;
+              };
             };
-          };
           window = {
             titlebar = false;
             border = 2;

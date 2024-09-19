@@ -19,6 +19,8 @@
       url = "github:mobile-nixos/mobile-nixos";
       flake = false;
     };
+    stylix.url = "github:danth/stylix";
+    nix-rice.url = "github:bertof/nix-rice";
     systems.url = "github:nix-systems/default";
   };
   outputs =
@@ -43,13 +45,18 @@
           ];
         };
       });
-      nixosConfigurations = {
-        auriga = import ./hosts/auriga.nix { inherit inputs; };
-        cygnus = import ./hosts/cygnus.nix { inherit inputs; };
-        lyra = import ./hosts/lyra.nix { inherit inputs; };
-        orion = import ./hosts/orion.nix { inherit inputs; };
-        taurus = import ./hosts/taurus.nix { inherit inputs; };
-      };
+      nixosConfigurations =
+        let
+          overlays = [ inputs.nix-rice.overlays.default ];
+          pkgs = import nixpkgs { inherit overlays; };
+        in
+        {
+          auriga = import ./hosts/auriga.nix { inherit inputs; };
+          cygnus = import ./hosts/cygnus.nix { inherit inputs; };
+          lyra = import ./hosts/lyra.nix { inherit inputs pkgs; };
+          orion = import ./hosts/orion.nix { inherit inputs pkgs; };
+          taurus = import ./hosts/taurus.nix { inherit inputs; };
+        };
       homeConfigurations = with nixosConfigurations.nixos.config.home-manager.users; {
         capella = capella.home;
         maia = maia.home;

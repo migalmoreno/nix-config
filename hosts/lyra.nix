@@ -8,6 +8,7 @@ nixpkgs.lib.nixosSystem {
     nur.nixosModules.nur
     home-manager.nixosModules.home-manager
     sops-nix.nixosModules.sops
+    stylix.nixosModules.stylix
     (
       {
         lib,
@@ -23,6 +24,7 @@ nixpkgs.lib.nixosSystem {
         hardware.firmware = [ pkgs.sof-firmware ];
         hardware.enableRedistributableFirmware = true;
         hardware.graphics.enable = true;
+        nixpkgs.overlays = [ nix-rice.overlays.default ];
         environment.systemPackages = with pkgs; [
           emacs
           git
@@ -212,6 +214,7 @@ nixpkgs.lib.nixosSystem {
     ../modules/security/password-store.nix
     ../modules/shellutils.nix
     ../modules/sops.nix
+    ../modules/stylix.nix
     ../modules/terminals.nix
     ../modules/virtualisation/android.nix
     ../modules/virtualisation/docker.nix

@@ -9,6 +9,7 @@ nixpkgs.lib.nixosSystem {
     nur.nixosModules.nur
     home-manager.nixosModules.home-manager
     sops-nix.nixosModules.sops
+    stylix.nixosModules.stylix
     (
       {
         lib,
@@ -24,6 +25,7 @@ nixpkgs.lib.nixosSystem {
           libreoffice
           git-agecrypt
         ];
+        nixpkgs.overlays = [ nix-rice.overlays.default ];
         networking.hostName = "orion";
         networking.firewall.enable = false;
         security.pki.certificateFiles = [ ../secrets/ca-bundle.crt ];
@@ -131,6 +133,7 @@ nixpkgs.lib.nixosSystem {
     ../modules/security/gpg.nix
     ../modules/shellutils.nix
     ../modules/sops.nix
+    ../modules/stylix.nix
     ../modules/terminals.nix
     ../modules/virtualisation/docker.nix
   ];
