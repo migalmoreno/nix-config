@@ -21,6 +21,28 @@ nixpkgs.lib.nixosSystem {
         user = "saiph";
         git.username = config.secrets.work.fullname;
         git.email = config.secrets.work.email;
+        ordenada.features = {
+          waybar.enable = true;
+          firefox = {
+            enable = true;
+            primaryEngine = {
+              iconUpdateURL = "http://localhost:5000/favicon.ico";
+              updateInterval = 24 * 60 * 60 * 1000;
+              definedAliases = [ "@w" ];
+              urls = [
+                {
+                  template = "http://localhost:5000/search";
+                  params = [
+                    {
+                      name = "q";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+            };
+          };
+        };
         environment.systemPackages = with pkgs; [
           libreoffice
           git-agecrypt
