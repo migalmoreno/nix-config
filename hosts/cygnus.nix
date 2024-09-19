@@ -66,17 +66,6 @@ nixpkgs.lib.nixosSystem {
             ports = [ "3000:3000" ];
             extraOptions = [ "--network=host" ];
           };
-          whoogle-search = {
-            image = "benbusby/whoogle-search";
-            ports = [ "5000:5000" ];
-            extraOptions = [ "--network=host" ];
-            environment = {
-              WHOOGLE_MINIMAL = "1";
-              WHOOGLE_CONFIG_VIEW_IMAGE = "1";
-              WHOOGLE_RESULTS_PER_PAGE = "50";
-              WHOOGLE_CONFIG_SEARCH_LANGUAGE = "lang_en";
-            };
-          };
         };
         services.nginx = {
           appendHttpConfig = ''
@@ -108,20 +97,12 @@ nixpkgs.lib.nixosSystem {
                 '';
                 locations."/robots.txt" = robotsTxt;
               };
-              "git.migalmoreno.com" = {
-                enableACME = true;
-                forceSSL = true;
-                locations."/" = {
-                  proxyPass = "http://auriga:80";
-                };
-                locations."/robots.txt" = robotsTxt;
-              };
               "whoogle.migalmoreno.com" = {
                 enableACME = true;
                 forceSSL = true;
                 extraConfig = crawlersBlock;
                 locations."/" = {
-                  proxyPass = "http://localhost:5000";
+                  proxyPass = "http://auriga:5000";
                 };
                 locations."/robots.txt" = robotsTxt;
               };
@@ -137,8 +118,18 @@ nixpkgs.lib.nixosSystem {
               "jellyseerr.migalmoreno.com" = {
                 enableACME = true;
                 forceSSL = true;
+                extraConfig = crawlersBlock;
                 locations."/" = {
                   proxyPass = "http://auriga:5055";
+                };
+                locations."/robots.txt" = robotsTxt;
+              };
+              "git.migalmoreno.com" = {
+                enableACME = true;
+                forceSSL = true;
+                extraConfig = crawlersBlock;
+                locations."/" = {
+                  proxyPass = "http://auriga:80";
                 };
                 locations."/robots.txt" = robotsTxt;
               };
