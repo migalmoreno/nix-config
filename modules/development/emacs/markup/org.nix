@@ -25,7 +25,6 @@
           (setq org-startup-folded 'content)
           (setq org-startup-indented t)
           (setq org-startup-with-inline-images t)
-          (setq org-startup-with-latex-preview t)
           (setq org-extend-today-until 0)
           (setq org-use-fast-todo-selection 'expert)
           (setq org-log-done 'time)
