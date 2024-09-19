@@ -46,6 +46,25 @@ in
     };
   };
   config = {
+    stylix.fonts = {
+      sizes.applications = 10;
+      serif = {
+        package = config.fonts.serif.package;
+        name = config.fonts.serif.name;
+      };
+      sansSerif = {
+        package = config.fonts.sans.package;
+        name = config.fonts.sans.name;
+      };
+      monospace = {
+        package = config.fonts.monospace.package;
+        name = config.fonts.monospace.name;
+      };
+      emoji = {
+        package = config.fonts.unicode.package;
+        name = config.fonts.unicode.name;
+      };
+    };
     home-manager.users.${config.user} = {
       fonts.fontconfig = {
         enable = true;
@@ -63,6 +82,7 @@ in
         config.fonts.unicode.package
         dejavu_fonts
         unifont
+        font-awesome
       ];
       programs.emacs = {
         extraPackages = epkgs: with epkgs; [ fontaine ];
