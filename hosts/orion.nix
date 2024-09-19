@@ -46,6 +46,7 @@ nixpkgs.lib.nixosSystem {
         environment.systemPackages = with pkgs; [
           libreoffice
           git-agecrypt
+          pavucontrol
         ];
         nixpkgs.overlays = [ nix-rice.overlays.default ];
         networking.hostName = "orion";
