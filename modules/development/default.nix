@@ -1,6 +1,0 @@
-{
-  imports = [
-    ./emacs
-    ./git.nix
-  ];
-}

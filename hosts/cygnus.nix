@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, overlays, ... }:
 
 with inputs;
 
@@ -6,6 +6,7 @@ nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
   modules = [
     home-manager.nixosModules.home-manager
+    ordenada.nixosModules.ordenada
     (
       {
         config,
@@ -14,10 +15,10 @@ nixpkgs.lib.nixosSystem {
         ...
       }:
       {
-        user = "deneb";
         networking.hostName = "cygnus";
         networking.firewall.enable = true;
         time.timeZone = "Europe/Madrid";
+        nixpkgs.overlays = overlays;
         boot = {
           initrd.availableKernelModules = [
             "ahci"
@@ -40,15 +41,25 @@ nixpkgs.lib.nixosSystem {
           git
           rsync
         ];
-        users.users.${config.user} = {
-          isNormalUser = true;
-          extraGroups = [ "wheel" ];
-        };
-        users.users.root = {
-          openssh.authorizedKeys.keys = [
-            config.secrets.personal.publicSshKey
-            config.secrets.work.publicSshKey
-          ];
+        ordenada = {
+          users = {
+            deneb = { };
+          };
+          features = {
+            userInfo.username = "deneb";
+            home.enable = true;
+            networking.enable = true;
+            ssh = {
+              enable = true;
+              rootAuthorizedKeys = [
+                pkgs.secrets.personal.publicSshKey
+                pkgs.secrets.work.publicSshKey
+              ];
+            };
+            tailscale.enable = true;
+            nginx.enable = true;
+            nix.enable = true;
+          };
         };
         fileSystems = {
           "/" = {
@@ -86,84 +97,68 @@ nixpkgs.lib.nixosSystem {
                 }
               '';
             in
-            {
-              "migalmoreno.com" = {
-                enableACME = true;
-                forceSSL = true;
-                root = "/srv/http/migalmoreno.com";
-                extraConfig = ''
-                  error_page 404 = /404.html;
-                  ${crawlersBlock}
-                '';
-                locations."/robots.txt" = robotsTxt;
-              };
-              "whoogle.migalmoreno.com" = {
-                enableACME = true;
-                forceSSL = true;
-                extraConfig = crawlersBlock;
-                locations."/" = {
-                  proxyPass = "http://auriga:5000";
-                };
-                locations."/robots.txt" = robotsTxt;
-              };
-              "jellyfin.migalmoreno.com" = {
-                enableACME = true;
-                forceSSL = true;
-                extraConfig = crawlersBlock;
-                locations."/" = {
-                  proxyPass = "http://auriga:8096";
-                };
-                locations."/robots.txt" = robotsTxt;
-              };
-              "jellyseerr.migalmoreno.com" = {
-                enableACME = true;
-                forceSSL = true;
-                extraConfig = crawlersBlock;
-                locations."/" = {
-                  proxyPass = "http://auriga:5055";
-                };
-                locations."/robots.txt" = robotsTxt;
-              };
-              "git.migalmoreno.com" = {
-                enableACME = true;
-                forceSSL = true;
-                extraConfig = crawlersBlock;
-                locations."/" = {
-                  proxyPass = "http://auriga:80";
-                };
-                locations."/robots.txt" = robotsTxt;
-              };
-              "tubo.migalmoreno.com" = {
-                enableACME = true;
-                forceSSL = true;
-                extraConfig = crawlersBlock;
-                locations."/" = {
-                  return = "301 https://tubo.media$request_uri";
-                };
-                locations."/robots.txt" = robotsTxt;
-              };
-              "tubo.media" = {
-                enableACME = true;
-                forceSSL = true;
-                locations."/" = {
-                  proxyPass = "http://localhost:3000";
+            lib.mkMerge [
+              {
+                "migalmoreno.com" = {
+                  enableACME = true;
+                  forceSSL = true;
+                  root = "/srv/http/migalmoreno.com";
                   extraConfig = ''
-                    limit_req zone=ip burst=20 nodelay;
+                    error_page 404 = /404.html;
                     ${crawlersBlock}
                   '';
+                  locations."/robots.txt" = robotsTxt;
                 };
-                locations."/robots.txt" = robotsTxt;
-              };
-            };
+                "tubo.migalmoreno.com" = {
+                  enableACME = true;
+                  forceSSL = true;
+                  extraConfig = crawlersBlock;
+                  locations."/" = {
+                    return = "301 https://tubo.media$request_uri";
+                  };
+                  locations."/robots.txt" = robotsTxt;
+                };
+                "tubo.media" = {
+                  enableACME = true;
+                  forceSSL = true;
+                  locations."/" = {
+                    proxyPass = "http://localhost:3000";
+                    extraConfig = ''
+                      limit_req zone=ip burst=20 nodelay;
+                      ${crawlersBlock}
+                    '';
+                  };
+                  locations."/robots.txt" = robotsTxt;
+                };
+              }
+              (lib.mkMerge (
+                lib.attrsets.mapAttrsToList
+                  (name: value: {
+                    ${name} = {
+                      enableACME = true;
+                      forceSSL = true;
+                      extraConfig = crawlersBlock;
+                      locations."/" = {
+                        proxyPass = value;
+                      };
+                      locations."/robots.txt" = robotsTxt;
+                    };
+                  })
+                  {
+                    "whoogle.migalmoreno.com" = "http://localhost:5055";
+                    "tubo.media" = "http://localhost:3000";
+                    "git.migalmoreno.com" = "http://auriga:80";
+                    "jellyseerr.migalmoreno.com" = "http://localhost:5055";
+                    "jellyfin.migalmoreno.com" = "http://localhost:8096";
+                  }
+              ))
+            ];
+        };
+        security.acme = {
+          acceptTerms = true;
+          defaults.email = pkgs.secrets.personal.email;
         };
       }
     )
-    ../modules/home.nix
-    ../modules/networking
-    ../modules/networking/ssh.nix
-    ../modules/networking/tailscale.nix
-    ../modules/nginx.nix
-    ../modules/nix.nix
-    ../modules/secrets.nix
   ];
 }

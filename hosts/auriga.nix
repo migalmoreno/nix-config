@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, overlays, ... }:
 
 with inputs;
 
@@ -9,6 +9,7 @@ nixpkgs.lib.nixosSystem {
     home-manager.nixosModules.home-manager
     nixarr.nixosModules.default
     sops-nix.nixosModules.sops
+    ordenada.nixosModules.ordenada
     (
       {
         config,
@@ -17,7 +18,6 @@ nixpkgs.lib.nixosSystem {
         ...
       }:
       {
-        user = "capella";
         hardware = {
           enableRedistributableFirmware = true;
           raspberry-pi."4" = {
@@ -29,6 +29,7 @@ nixpkgs.lib.nixosSystem {
         networking.hostName = "auriga";
         networking.interfaces.wlan0.useDHCP = true;
         networking.firewall.enable = true;
+        nixpkgs.overlays = overlays;
         boot = {
           kernelPackages = pkgs.linuxKernel.packages.linux_rpi4;
           kernelModules = [ "v4l2loopback" ];
@@ -68,28 +69,30 @@ nixpkgs.lib.nixosSystem {
           git
           rsync
         ];
-        users.users.root = {
-          openssh.authorizedKeys.keys = [
-            config.secrets.personal.publicSshKey
-            config.secrets.work.publicSshKey
-          ];
+        nixarr = {
+          enable = true;
+          jellyfin.enable = true;
+          radarr.enable = true;
+          sonarr.enable = true;
+          prowlarr.enable = true;
+          transmission.enable = true;
         };
-        users.users.${config.user} = {
-          isNormalUser = true;
-          extraGroups = [ "wheel" ];
-          openssh.authorizedKeys.keys = [
-            config.secrets.personal.publicSshKey
-            config.secrets.work.publicSshKey
-          ];
+        users.users.streamer.extraGroups = [ "video" ];
+        services.jellyseerr = {
+          enable = true;
+          openFirewall = true;
         };
         sops = {
+          defaultSopsFile = ../secrets.yaml;
           age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
           secrets = {
             "hosts/auriga/syncthing/key" = { };
             "hosts/auriga/syncthing/cert" = { };
           };
         };
+        systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true";
         services.syncthing = {
+          enable = true;
           key = config.sops.secrets."hosts/auriga/syncthing/key".path;
           cert = config.sops.secrets."hosts/auriga/syncthing/cert".path;
           overrideDevices = true;
@@ -118,11 +121,33 @@ nixpkgs.lib.nixosSystem {
             };
           };
         };
+        ordenada = {
+          users = {
+            capella = { };
+          };
+          features = {
+            userInfo.username = "capella";
+            bash.enable = true;
+            home.enable = true;
+            networking.enable = true;
+            ssh = {
+              enable = true;
+              rootAuthorizedKeys = [
+                pkgs.secrets.personal.publicSshKey
+                pkgs.secrets.work.publicSshKey
+              ];
+            };
+            tailscale.enable = true;
+            nix.enable = true;
+            docker.enable = true;
+            nginx.enable = true;
+          };
+        };
         services.gitolite = {
           enable = true;
           user = "git";
           group = "git";
-          adminPubkey = config.secrets.personal.publicSshKey;
+          adminPubkey = pkgs.secrets.personal.publicSshKey;
           extraGitoliteRc = ''
             $RC{UMASK} = 0027;
             $RC{GIT_CONFIG_KEYS} = "gitweb\..*";
@@ -159,6 +184,9 @@ nixpkgs.lib.nixosSystem {
             readme=:README.org
           '';
         };
+        users.users.${config.services.cgit."git.migalmoreno.com".user} = {
+          extraGroups = [ "git" ];
+        };
         virtualisation.oci-containers.containers = {
           tubo = {
             image = "migalmoreno/tubo";
@@ -194,9 +222,6 @@ nixpkgs.lib.nixosSystem {
             '';
           };
         };
-        users.users.${config.services.cgit."git.migalmoreno.com".user} = {
-          extraGroups = [ "git" ];
-        };
         nix.gc = {
           automatic = true;
           options = "--delete-older-than 30d";
@@ -204,17 +229,5 @@ nixpkgs.lib.nixosSystem {
         system.stateVersion = "24.05";
       }
     )
-    ../modules/bash.nix
-    ../modules/home.nix
-    ../modules/multimedia
-    ../modules/networking
-    ../modules/networking/ssh.nix
-    ../modules/networking/syncthing.nix
-    ../modules/networking/tailscale.nix
-    ../modules/nix.nix
-    ../modules/nginx.nix
-    ../modules/secrets.nix
-    ../modules/sops.nix
-    ../modules/virtualisation/docker.nix
   ];
 }

@@ -19,7 +19,7 @@
       url = "github:mobile-nixos/mobile-nixos";
       flake = false;
     };
-    stylix.url = "github:danth/stylix";
+    ordenada.url = "github:migalmoreno/ordenada";
     nix-rice.url = "github:bertof/nix-rice";
     systems.url = "github:nix-systems/default";
   };
@@ -45,6 +45,7 @@
           ];
         };
       });
+      lib = nixpkgs.lib.extend (self: super: { myFetcher = args: throw "implementation"; });
       nixosConfigurations =
         let
           overlays = [ inputs.nix-rice.overlays.default ];
