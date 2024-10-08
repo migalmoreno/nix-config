@@ -28,6 +28,10 @@
     let
       eachSystem =
         f: nixpkgs.lib.genAttrs (import systems) (system: f (import nixpkgs { inherit system; }));
+      inherit (nixpkgs) lib;
+      readDirFilenames =
+        dir:
+        (builtins.filter (path: lib.hasSuffix ".nix" path) (builtins.attrNames (builtins.readDir dir)));
     in
     rec {
       images = {
@@ -45,24 +49,32 @@
           ];
         };
       });
-      lib = nixpkgs.lib.extend (self: super: { myFetcher = args: throw "implementation"; });
       nixosConfigurations =
         let
-          overlays = [ inputs.nix-rice.overlays.default ];
+          secrets = builtins.fromJSON (builtins.readFile ./secrets/secrets.json);
+          overlays = [
+            inputs.nix-rice.overlays.default
+            (final: prev: { inherit secrets; })
+          ];
           pkgs = import nixpkgs { inherit overlays; };
         in
-        {
-          auriga = import ./hosts/auriga.nix { inherit inputs; };
-          cygnus = import ./hosts/cygnus.nix { inherit inputs; };
-          lyra = import ./hosts/lyra.nix { inherit inputs pkgs; };
-          orion = import ./hosts/orion.nix { inherit inputs pkgs; };
-          taurus = import ./hosts/taurus.nix { inherit inputs; };
-        };
-      homeConfigurations = with nixosConfigurations.nixos.config.home-manager.users; {
-        capella = capella.home;
-        maia = maia.home;
-        saiph = saiph.home;
-        vega = vega.home;
-      };
+        builtins.listToAttrs (
+          map (path: {
+            name = lib.removeSuffix ".nix" path;
+            value = import (./hosts + "/${path}") { inherit inputs pkgs overlays; };
+          }) (readDirFilenames ./hosts)
+        );
+      homeConfigurations = builtins.listToAttrs (
+        map
+          (user: {
+            name = user;
+            value = user.home;
+          })
+          (
+            nixpkgs.lib.lists.concatMap (
+              host: (builtins.attrNames nixosConfigurations.${host}.config.home-manager.users)
+            ) (builtins.attrNames nixosConfigurations)
+          )
+      );
     };
 }
