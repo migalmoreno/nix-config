@@ -22,8 +22,14 @@ nixpkgs.lib.nixosSystem {
           saiph = { };
         };
         ordenada.features = {
-          userInfo = {
-            username = "saiph";
+          userInfo.username = "saiph";
+          keyboard.layout = {
+            name = "us,es";
+            options = [
+              "grp:shifts_toggle"
+              "caps:ctrl_modifier"
+              "altwin:prtsc_rwin"
+            ];
           };
           theme.enable = true;
           theme.polarity = "dark";
@@ -200,7 +206,7 @@ nixpkgs.lib.nixosSystem {
           };
           xdg = {
             enable = true;
-            userDirs = homeDirectory: {
+            userDirs = with config.ordenada.features.userInfo; {
               enable = true;
               createDirectories = true;
               desktop = null;
@@ -234,7 +240,6 @@ nixpkgs.lib.nixosSystem {
             KillMode = "mixed";
           };
         };
-        system.stateVersion = "22.05";
         users.extraGroups.docker.members = [ "saiph" ];
         time.timeZone = "Europe/Madrid";
         hardware.graphics.enable = true;
@@ -329,6 +334,7 @@ nixpkgs.lib.nixosSystem {
             };
           };
         };
+        system.stateVersion = "22.05";
       }
     )
   ];
