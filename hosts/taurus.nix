@@ -6,6 +6,7 @@ nixpkgs.lib.nixosSystem {
   system = "aarch64-linux";
   modules = [
     home-manager.nixosModules.home-manager
+    ordenada.nixosModules.ordenada
     (import "${mobile-nixos}/lib/configuration.nix" { device = "oneplus-enchilada"; })
     (
       {
@@ -56,12 +57,10 @@ nixpkgs.lib.nixosSystem {
             nix.enable = true;
             ssh = {
               enable = true;
-              userAuthorizedKeys = {
-                maia = [
-                  pkgs.secrets.personal.publicSshKey
-                  pkgs.secrets.work.publicSshKey
-                ];
-              };
+              userAuthorizedKeys = [
+                pkgs.secrets.personal.publicSshKey
+                pkgs.secrets.work.publicSshKey
+              ];
             };
           };
         };
