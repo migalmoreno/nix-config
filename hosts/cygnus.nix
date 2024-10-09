@@ -146,7 +146,6 @@ nixpkgs.lib.nixosSystem {
                   })
                   {
                     "whoogle.migalmoreno.com" = "http://localhost:5055";
-                    "tubo.media" = "http://localhost:3000";
                     "git.migalmoreno.com" = "http://auriga:80";
                     "jellyseerr.migalmoreno.com" = "http://localhost:5055";
                     "jellyfin.migalmoreno.com" = "http://localhost:8096";
