@@ -393,21 +393,7 @@ nixpkgs.lib.nixosSystem {
             };
             networking.enable = true;
             tailscale.enable = true;
-            xdg = {
-              enable = true;
-              userDirs = with config.ordenada.features.userInfo; {
-                enable = true;
-                createDirectories = true;
-                desktop = null;
-                documents = "${homeDirectory}/documents";
-                download = "${homeDirectory}/downloads";
-                music = "${homeDirectory}/music";
-                pictures = "${homeDirectory}/pictures";
-                publicShare = "${homeDirectory}/public";
-                templates = null;
-                videos = "${homeDirectory}/videos";
-              };
-            };
+            xdg.enable = true;
           };
         };
         virtualisation.oci-containers.containers = {
