@@ -69,6 +69,26 @@ nixpkgs.lib.nixosSystem {
           git
           rsync
         ];
+        ordenada = {
+          users.capella = { };
+          features = {
+            userInfo.username = "capella";
+            home.enable = true;
+            bash.enable = true;
+            networking.enable = true;
+            ssh = {
+              enable = true;
+              rootAuthorizedKeys = [
+                pkgs.secrets.personal.publicSshKey
+                pkgs.secrets.work.publicSshKey
+              ];
+            };
+            tailscale.enable = true;
+            nix.enable = true;
+            docker.enable = true;
+            nginx.enable = true;
+          };
+        };
         nixarr = {
           enable = true;
           jellyfin.enable = true;
@@ -119,28 +139,6 @@ nixpkgs.lib.nixosSystem {
                 devices = [ "lyra" ];
               };
             };
-          };
-        };
-        ordenada = {
-          users = {
-            capella = { };
-          };
-          features = {
-            userInfo.username = "capella";
-            bash.enable = true;
-            home.enable = true;
-            networking.enable = true;
-            ssh = {
-              enable = true;
-              rootAuthorizedKeys = [
-                pkgs.secrets.personal.publicSshKey
-                pkgs.secrets.work.publicSshKey
-              ];
-            };
-            tailscale.enable = true;
-            nix.enable = true;
-            docker.enable = true;
-            nginx.enable = true;
           };
         };
         services.gitolite = {
