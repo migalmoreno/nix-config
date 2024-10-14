@@ -42,9 +42,7 @@ nixpkgs.lib.nixosSystem {
           rsync
         ];
         ordenada = {
-          users = {
-            deneb = { };
-          };
+          users.deneb = { };
           features = {
             userInfo.username = "deneb";
             home.enable = true;
@@ -145,10 +143,10 @@ nixpkgs.lib.nixosSystem {
                     };
                   })
                   {
-                    "whoogle.migalmoreno.com" = "http://localhost:5055";
+                    "whoogle.migalmoreno.com" = "http://auriga:5000";
                     "git.migalmoreno.com" = "http://auriga:80";
-                    "jellyseerr.migalmoreno.com" = "http://localhost:5055";
-                    "jellyfin.migalmoreno.com" = "http://localhost:8096";
+                    "jellyseerr.migalmoreno.com" = "http://auriga:5055";
+                    "jellyfin.migalmoreno.com" = "http://auriga:8096";
                   }
               ))
             ];
