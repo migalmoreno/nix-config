@@ -1,7 +1,7 @@
 # -*- mode: org; org-html-head-include-default-style: nil; org-html-postamble: nil; org-export-with-author: nil; org-export-with-date: nil; -*-
 #+OPTIONS: toc:nil num:nil
 * Nix Configuration
-This is my personal set of configuration files built around the [[https://nixos.org/][Nix]] package manager and the [[https://git.migalmoreno.com/ordenada][Ordenada]] tool to easily build multi-user desktop environments.
+This is my personal set of configuration files built around the [[https://nixos.org/][Nix]] package manager and the [[https://git.migalmoreno.com/ordenada][Ordenada]] configuration framework to easily build multi-user development environments.
 
 This repository makes use of [[https://nix.dev/concepts/flakes.html][Flakes]] to manage and pin its dependencies. You can rebuild the current hostname's entire system configuration and home configuration with this command:
 
