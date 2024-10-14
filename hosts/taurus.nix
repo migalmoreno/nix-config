@@ -38,9 +38,7 @@ nixpkgs.lib.nixosSystem {
           portfolio-filemanager
         ];
         ordenada = {
-          users = {
-            maia = { };
-          };
+          users.maia = { };
           features = {
             userInfo.username = "maia";
             home = {
@@ -50,7 +48,6 @@ nixpkgs.lib.nixosSystem {
                 "feedbackd"
                 "video"
                 "wheel"
-                "networkmanager"
               ];
             };
             networking.enable = true;
