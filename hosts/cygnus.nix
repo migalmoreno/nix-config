@@ -155,6 +155,7 @@ nixpkgs.lib.nixosSystem {
           acceptTerms = true;
           defaults.email = pkgs.secrets.personal.email;
         };
+        system.stateVersion = "24.11";
       }
     )
   ];
