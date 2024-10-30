@@ -2,9 +2,15 @@
 
 {
   ordenada.features = {
+    userInfo = {
+      fullName = "Miguel Ángel Moreno";
+      email = "mail@migalmoreno.com";
+    };
     home.enable = true;
-    theme.enable = true;
-    theme.polarity = "dark";
+    theme = {
+      enable = true;
+      polarity = "dark";
+    };
     keyboard.layout = {
       name = "us,es";
       options = [
@@ -33,6 +39,19 @@
     emacs = {
       enable = true;
       advancedUser = true;
+      extraConfig = ''
+        (winner-mode)
+        (keymap-set ctl-x-map "C-b" #'ibuffer)
+        (with-eval-after-load 'ibuffer
+          (setopt ibuffer-expert t))
+        (with-eval-after-load 'image-mode
+          (keymap-set image-mode-map "q" #'image-kill-buffer)
+          (setopt image-use-external-converter t))
+        (with-eval-after-load 'mhtml-mode
+          (keymap-set html-mode-map "M-o" nil))
+        (with-eval-after-load 'ange-ftp
+          (setopt ange-ftp-try-passive-mode t))
+      '';
       extraPackages = with pkgs.emacsPackages; [
         wgrep
         emacs-conflict
@@ -41,7 +60,10 @@
       all-the-icons.enable = true;
       appearance.enable = true;
       modus-themes.enable = true;
-      org.enable = true;
+      org = {
+        enable = true;
+        orgModern = true;
+      };
       org-roam = {
         enable = true;
         todoIntegration = true;
@@ -61,7 +83,10 @@
           "bibtex-mode-hook"
         ];
       };
-      dired.enable = true;
+      dired = {
+        enable = true;
+        killOnNewBuffer = true;
+      };
       embark.enable = true;
       corfu = {
         enable = true;
@@ -79,6 +104,10 @@
       eshell.enable = true;
       help.enable = true;
       daemons.enable = true;
+      calendar = {
+        enable = true;
+        weekNumbers = true;
+      };
       apheleia.enable = true;
       flymake.enable = true;
       rainbow-delimiters.enable = true;
@@ -115,10 +144,22 @@
     bemenu.enable = true;
     firefox = {
       enable = true;
-      extensions = with config.nur.repos.rycee.firefox-addons; [
-        ublock-origin
-        multi-account-containers
-      ];
+      extraSettings = {
+        "accessibility.typeaheadfind.enablesound" = false;
+        "browser.ctrlTab.sortByRecentlyUsed" = true;
+        "browser.sessionstore" = false;
+        "browser.sessionstore.max_tabs_undo" = 0;
+        "browser.sessionstore.resume_session_once" = true;
+        "browser.toolbars.bookmarks.visibility" = "never";
+        "browser.topsites.contile.enabled" = false;
+        "browser.translations.enable" = false;
+        "general.smoothScroll" = false;
+        "general.autoScroll" = true;
+        "identity.fxaccounts.enabled" = false;
+        "network.protocol-handler.external.mailto" = false;
+        "privacy.trackingprotection.enabled" = true;
+        "privacy.trackingprotection.socialtracking.enabled" = true;
+      };
       extraSearchConfig = {
         default = "Whoogle";
         privateDefault = "Whoogle";
