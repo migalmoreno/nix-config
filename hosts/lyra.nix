@@ -200,6 +200,7 @@ nixpkgs.lib.nixosSystem {
             };
             networking.enable = true;
             tailscale.enable = true;
+            qemu.enable = true;
           };
         };
         services.guix.enable = true;
