@@ -94,8 +94,6 @@ nixpkgs.lib.nixosSystem {
           features = {
             userInfo.username = "vega";
             git = {
-              username = "Miguel Ángel Moreno";
-              email = "mail@migalmoreno.com";
               signingKey = "5F23F458";
               signCommits = true;
             };
