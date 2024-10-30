@@ -167,27 +167,35 @@ nixpkgs.lib.nixosSystem {
             };
             emacs = {
               org-roam = {
-                captureTemplates = ''
-                  `(("w" "work" plain "%?"
+                captureTemplates = [
+                  ''
+                    ("w" "work" plain "%?"
                      :if-new (file+head "work/%<%Y%m%d%H%M%S>-''${slug}.org"
                                         "#+title: ''${title}\n#+filetags: :''${Topic}:\n")
                      :unnarrowed t)
+                  ''
+                  ''
                     ("p" "personal" plain "%?"
                      :if-new (file+head "personal/%<%Y%m%d%H%M%S>-''${slug}.org"
                                         "#+title: ''${title}\n#+filetags: :''${Topic}:\n")
-                     :unnarrowed t))
-                '';
+                     :unnarrowed t)
+                  ''
+                ];
                 dailiesDirectory = "./";
-                dailiesCaptureTemplates = ''
-                  '(("w" "work" entry
+                dailiesCaptureTemplates = [
+                  ''
+                    ("w" "work" entry
                      "* %?"
                      :if-new (file+head "work/daily/%<%Y-%m-%d>.org"
                                         "#+title: %<%Y-%m-%d>\n"))
+                  ''
+                  ''
                     ("p" "personal" entry
                      "* %?"
                      :if-new (file+head "personal/daily/%<%Y-%m-%d>.org"
-                                        "#+title: %<%Y-%m-%d>\n")))
-                '';
+                                        "#+title: %<%Y-%m-%d>\n"))
+                  ''
+                ];
               };
             };
             networking.enable = true;
