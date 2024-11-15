@@ -55,7 +55,6 @@ nixpkgs.lib.nixosSystem {
               ];
             };
             tailscale.enable = true;
-            nginx.enable = true;
             nix.enable = true;
           };
         };
@@ -76,7 +75,17 @@ nixpkgs.lib.nixosSystem {
             extraOptions = [ "--network=host" ];
           };
         };
+        networking.firewall.allowedTCPPorts = [
+          80
+          443
+        ];
         services.nginx = {
+          enable = true;
+          enableReload = true;
+          recommendedOptimisation = true;
+          recommendedGzipSettings = true;
+          recommendedProxySettings = true;
+          recommendedTlsSettings = true;
           appendHttpConfig = ''
             limit_req_zone $binary_remote_addr zone=ip:20m rate=10r/s;
             limit_req_status 429;
