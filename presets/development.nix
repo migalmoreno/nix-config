@@ -7,10 +7,7 @@
       email = "mail@migalmoreno.com";
     };
     home.enable = true;
-    theme = {
-      enable = true;
-      polarity = "dark";
-    };
+    theme.polarity = "dark";
     keyboard.layout = {
       name = "us,es";
       options = [
