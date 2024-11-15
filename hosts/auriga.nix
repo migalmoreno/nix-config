@@ -141,6 +141,11 @@ nixpkgs.lib.nixosSystem {
             };
           };
         };
+        services.soju = {
+          enable = true;
+          listen = [ "irc+insecure://" ];
+        };
+        networking.firewall.allowedTCPPorts = [ 6667 ];
         services.gitolite = {
           enable = true;
           user = "git";
