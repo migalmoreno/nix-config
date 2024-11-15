@@ -32,6 +32,7 @@
       enable = true;
       advancedUser = true;
       extraConfig = ''
+        (setq-default tab-width 2)
         (winner-mode)
         (keymap-set ctl-x-map "C-b" #'ibuffer)
         (with-eval-after-load 'ibuffer
@@ -43,10 +44,12 @@
           (keymap-set html-mode-map "M-o" nil))
         (with-eval-after-load 'ange-ftp
           (setopt ange-ftp-try-passive-mode t))
+        (add-hook 'after-save-hook #'delete-trailing-whitespace)
       '';
       extraPackages = with pkgs.emacsPackages; [
         wgrep
         emacs-conflict
+        nginx-mode
       ];
       ace-window.enable = true;
       all-the-icons.enable = true;
