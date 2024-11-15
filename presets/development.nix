@@ -18,13 +18,7 @@
     };
     fontutils.enable = true;
     bash.enable = true;
-    clojure = {
-      enable = true;
-      cider = {
-        popReplOnConnect = false;
-        replInCurrentWindow = true;
-      };
-    };
+    clojure.enable = true;
     pipewire.enable = true;
     bluetooth.enable = true;
     gtk.enable = true;
@@ -64,6 +58,10 @@
       org-roam = {
         enable = true;
         todoIntegration = true;
+      };
+      cider = {
+        popReplOnConnect = false;
+        replInCurrentWindow = true;
       };
       spelling = {
         enable = true;
