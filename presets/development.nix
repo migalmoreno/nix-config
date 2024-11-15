@@ -124,7 +124,10 @@
           "comint-mode-hook"
           "cider-repl-mode-hook"
         ];
-        strictHooks = [ "clojure-mode-hook" ];
+        strictHooks = [
+          "clojure-mode-hook"
+          "scheme-mode-hook"
+        ];
       };
       tramp.enable = true;
     };
