@@ -208,23 +208,6 @@ nixpkgs.lib.nixosSystem {
             };
           };
         };
-        services.nginx.virtualHosts."_" = {
-          listen = [
-            {
-              port = 8080;
-              addr = "0.0.0.0";
-            }
-          ];
-          root = "/srv/http/migalmoreno.com";
-          extraConfig = ''
-            error_page 404 = /404.html;
-          '';
-          locations."/" = {
-            extraConfig = ''
-              try_files $uri $uri/ $uri/index.html $uri;
-            '';
-          };
-        };
         nix.gc = {
           automatic = true;
           options = "--delete-older-than 30d";
