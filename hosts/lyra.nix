@@ -186,6 +186,85 @@ nixpkgs.lib.nixosSystem {
               ];
             };
             emacs = {
+              gnus = {
+                enable = true;
+                topicGroups = {
+                  "Personal" = [
+                    "nnmaildir+personal:Inbox"
+                    "nnmaildir+personal:Drafts"
+                    "nnmaildir+personal:Sent"
+                    "nnmaildir+personal:Archive"
+                    "nnmaildir+personal:Junk"
+                    "nnmaildir+personal:Trash"
+                  ];
+                  "Bug Trackers" = [
+                    "nntp+gwene:gmane.comp.gnu.guix.bugs"
+                    "nntp+gwene:gmane.comp.gnu.guix.patches"
+                  ];
+                  "News" = [
+                    "nntp+gwene:gwene.rs.lobste"
+                    "nntp+gwene:gwene.org.hnrss.newest.points"
+                    "nntp+gwene:gwene.net.lwn.headlines.newrss"
+                  ];
+                  "Inbox" = [ ];
+                  "Gnus" = [ ];
+                };
+                topicTopology = [
+                  ''
+                    ("Gnus" visible)
+                  ''
+                  ''
+                    (("Inbox" visible)
+                     (("Personal" visible nil)))
+                  ''
+                  ''
+                    (("Bug Trackers" visible nil))
+                  ''
+                  ''
+                    (("News" visible nil))
+                  ''
+                ];
+                messageArchiveMethod = [
+                  "nnmaildir"
+                  "personal"
+                ];
+                messageArchiveGroup = [
+                  ''
+                    (".*" "Sent")
+                  ''
+                ];
+                groupParameters = {
+                  "^nnmaildir" = {
+                    "gcc-self" = "nnmaildir+personal:sent";
+                    "display" = 1000;
+                  };
+                  "^nntp" = {
+                    "display" = 1000;
+                  };
+                };
+                postingStyles = with userInfo; [
+                  ''
+                    (".*"
+                     (cc "${email}"))
+                  ''
+                  ''
+                    ((header "cc" ".*@debbugs.gnu.org")
+                     (To ordenada-gnus-get-article-participants)
+                     (cc nil))
+                  ''
+                  ''
+                    ((header "to" ".*@lists.sr.ht")
+                     (To ordenada-gnus-get-article-participants)
+                     (cc "${email}"))
+                  ''
+                  ''
+                    ("^nntp.+:"
+                     (To ordenada-gnus-get-article-participants)
+                     (cc "${email}"))
+                  ''
+                ];
+              };
+              message.enable = true;
               org-roam = {
                 captureTemplates = [
                   ''
