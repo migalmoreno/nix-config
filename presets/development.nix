@@ -107,6 +107,19 @@
         enable = true;
         weekNumbers = true;
       };
+      erc = {
+        autoQuery = "bury";
+        queryDisplay = "buffer";
+        joinBuffer = "buffer";
+        autojoinChannels = {
+          "Libera.chat" = [
+            "#nyxt"
+            "#emacs"
+            "#newpipe"
+          ];
+          OFTC = [ "#postmarketos" ];
+        };
+      };
       apheleia.enable = true;
       flymake.enable = true;
       rainbow-delimiters.enable = true;
@@ -188,6 +201,25 @@
               }
             ];
           };
+        };
+      };
+    };
+    irc = {
+      enable = true;
+      accounts = {
+        soju = {
+          nick = "migalmoreno";
+          port = 6667;
+          tls = false;
+          bouncer = true;
+        };
+        libera = {
+          network = "irc.libera.chat";
+          nick = "migalmoreno";
+        };
+        oftc = {
+          network = "irc.oftc.net";
+          nick = "migalmoreno";
         };
       };
     };
