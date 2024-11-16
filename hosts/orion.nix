@@ -55,6 +55,7 @@ nixpkgs.lib.nixosSystem {
               enable = true;
               identitiesFile = "${userInfo.homeDirectory}/.ssh/id_ed25519";
             };
+            irc.accounts.soju.network = pkgs.secrets.hosts.auriga.address;
           };
         };
         security.pki.certificateFiles = [ ../secrets/ca-bundle.crt ];
