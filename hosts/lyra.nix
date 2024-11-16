@@ -91,12 +91,12 @@ nixpkgs.lib.nixosSystem {
         '';
         ordenada = {
           users.vega = { };
-          features = {
-            userInfo.username = "vega";
-            git = {
-              signingKey = "5F23F458";
-              signCommits = true;
+          features = with config.ordenada.features; {
+            userInfo = {
+              username = "vega";
+              gpgPrimaryKey = "5F23F458";
             };
+            git.signCommits = true;
             gnupg = {
               enable = true;
               sshKeys = [ "D6B4894600BB392AB2AEDE499CBBCF3E0620B7F6" ];
