@@ -102,6 +102,25 @@ nixpkgs.lib.nixosSystem {
               sshKeys = [ "D6B4894600BB392AB2AEDE499CBBCF3E0620B7F6" ];
             };
             password-store.enable = true;
+            mail = {
+              enable = false;
+              accounts = {
+                personal = {
+                  primary = true;
+                  fqda = "mail@migalmoreno.com";
+                  extraConfig = {
+                    imap = {
+                      host = "mail.gandi.net";
+                      port = 993;
+                    };
+                    smtp = {
+                      host = "mail.gandi.net";
+                      port = 465;
+                    };
+                  };
+                };
+              };
+            };
             sway = {
               autoStartTty = "/dev/tty1";
               modifier = "Mod4";
