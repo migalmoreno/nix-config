@@ -102,6 +102,7 @@ nixpkgs.lib.nixosSystem {
               sshKeys = [ "D6B4894600BB392AB2AEDE499CBBCF3E0620B7F6" ];
             };
             password-store.enable = true;
+            irc.accounts.soju.network = "auriga";
             mail = {
               enable = false;
               accounts = {
