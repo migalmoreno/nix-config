@@ -26,9 +26,8 @@
   outputs =
     inputs@{ nixpkgs, systems, ... }:
     let
-      eachSystem =
-        f: nixpkgs.lib.genAttrs (import systems) (system: f (import nixpkgs { inherit system; }));
       inherit (nixpkgs) lib;
+      eachSystem = f: lib.genAttrs (import systems) (system: f (import nixpkgs { inherit system; }));
       readDirFilenames =
         dir:
         (builtins.filter (path: lib.hasSuffix ".nix" path) (builtins.attrNames (builtins.readDir dir)));
@@ -71,9 +70,9 @@
             value = user.home;
           })
           (
-            nixpkgs.lib.lists.concatMap (
-              host: (builtins.attrNames nixosConfigurations.${host}.config.home-manager.users)
-            ) (builtins.attrNames nixosConfigurations)
+            lib.concatMap (host: (builtins.attrNames nixosConfigurations.${host}.config.home-manager.users)) (
+              builtins.attrNames nixosConfigurations
+            )
           )
       );
     };
