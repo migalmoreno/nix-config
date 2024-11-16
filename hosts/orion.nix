@@ -33,7 +33,7 @@ nixpkgs.lib.nixosSystem {
         ];
         ordenada = {
           users.saiph = { };
-          features = {
+          features = with config.ordenada.features; {
             userInfo.username = "saiph";
             git = with pkgs.secrets.work; {
               username = fullname;
@@ -46,6 +46,14 @@ nixpkgs.lib.nixosSystem {
             sway = {
               autoStartTty = "/dev/pts/0";
               modifier = "Mod2";
+            };
+            age = {
+              enable = true;
+              identities = [ "${userInfo.homeDirectory}/.ssh/id_ed25519" ];
+            };
+            passage = {
+              enable = true;
+              identitiesFile = "${userInfo.homeDirectory}/.ssh/id_ed25519";
             };
           };
         };
