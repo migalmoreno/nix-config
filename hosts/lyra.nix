@@ -104,7 +104,7 @@ nixpkgs.lib.nixosSystem {
             password-store.enable = true;
             irc.accounts.soju.network = "auriga";
             mail = {
-              enable = false;
+              enable = true;
               accounts = {
                 personal = {
                   primary = true;
