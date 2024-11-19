@@ -103,6 +103,8 @@
       eshell.enable = true;
       help.enable = true;
       daemons.enable = true;
+      which-key.enable = true;
+      time.enable = true;
       calendar = {
         enable = true;
         weekNumbers = true;
