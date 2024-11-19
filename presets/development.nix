@@ -208,6 +208,7 @@
           port = 6667;
           tls = false;
           bouncer = true;
+          client = config.networking.hostName;
         };
         libera = {
           network = "irc.libera.chat";
