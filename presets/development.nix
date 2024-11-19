@@ -148,6 +148,7 @@
         "${modifier}+Next" = "exec ${pkgs.pamixer}/bin/pamixer --unmute --decrease 5";
         "${modifier}+x" = "exec ${pkgs.swaylock-effects}/bin/swaylock";
         "${modifier}+n" = "exec ${pkgs.swaynotificationcenter}/bin/swaync-client -t -sw";
+        "${modifier}+p" = "exec ${pkgs.wlogout}/bin/wlogout";
         "${modifier}+Insert" = "exec pkill -SIGINT -f wf-recorder";
       };
     };
