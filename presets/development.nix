@@ -113,14 +113,7 @@
         autoQuery = "bury";
         queryDisplay = "buffer";
         joinBuffer = "buffer";
-        autojoinChannels = {
-          "Libera.chat" = [
-            "#nyxt"
-            "#emacs"
-            "#newpipe"
-          ];
-          OFTC = [ "#postmarketos" ];
-        };
+        autojoin = false;
       };
       apheleia.enable = true;
       flymake.enable = true;
