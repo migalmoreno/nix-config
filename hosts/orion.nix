@@ -47,6 +47,10 @@ nixpkgs.lib.nixosSystem {
               autoStartTty = "/dev/pts/0";
               modifier = "Mod2";
             };
+            ssh = {
+              enable = true;
+              daemon = false;
+            };
             age = {
               enable = true;
               identities = [ "${userInfo.homeDirectory}/.ssh/id_ed25519" ];
