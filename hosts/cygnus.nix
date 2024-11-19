@@ -139,7 +139,7 @@ nixpkgs.lib.nixosSystem {
                 };
               }
               (lib.mkMerge (
-                lib.attrsets.mapAttrsToList
+                lib.mapAttrsToList
                   (name: value: {
                     ${name} = {
                       enableACME = true;
