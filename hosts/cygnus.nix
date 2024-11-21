@@ -55,7 +55,6 @@ nixpkgs.lib.nixosSystem {
                 pkgs.secrets.work.publicSshKey
               ];
             };
-            tailscale.enable = true;
             nix.enable = true;
           };
         };
@@ -105,61 +104,49 @@ nixpkgs.lib.nixosSystem {
                 }
               '';
             in
-            lib.mkMerge [
-              {
-                "migalmoreno.com" = {
-                  enableACME = true;
-                  forceSSL = true;
-                  root = "/srv/http/migalmoreno.com";
+            {
+              "migalmoreno.com" = {
+                enableACME = true;
+                forceSSL = true;
+                root = "/srv/http/migalmoreno.com";
+                extraConfig = ''
+                  error_page 404 = /404.html;
+                  ${crawlersBlock}
+                '';
+                locations."/robots.txt" = robotsTxt;
+              };
+              "tubo.migalmoreno.com" = {
+                enableACME = true;
+                forceSSL = true;
+                extraConfig = crawlersBlock;
+                locations."/" = {
+                  return = "301 https://tubo.media$request_uri";
+                };
+                locations."/robots.txt" = robotsTxt;
+              };
+              "tubo.media" = {
+                enableACME = true;
+                forceSSL = true;
+                locations."/" = {
+                  proxyPass = "http://localhost:3000";
                   extraConfig = ''
-                    error_page 404 = /404.html;
+                    limit_req zone=ip burst=20 nodelay;
                     ${crawlersBlock}
                   '';
-                  locations."/robots.txt" = robotsTxt;
                 };
-                "tubo.migalmoreno.com" = {
-                  enableACME = true;
-                  forceSSL = true;
-                  extraConfig = crawlersBlock;
-                  locations."/" = {
-                    return = "301 https://tubo.media$request_uri";
-                  };
-                  locations."/robots.txt" = robotsTxt;
+                locations."/robots.txt" = robotsTxt;
+              };
+              "git.migalmoreno.com" = {
+                enableACME = true;
+                forceSSL = true;
+                extraConfig = ''
+                  ${crawlersBlock}
+                '';
+                locations."/" = {
+                  proxyPass = "http://localhost:80";
                 };
-                "tubo.media" = {
-                  enableACME = true;
-                  forceSSL = true;
-                  locations."/" = {
-                    proxyPass = "http://localhost:3000";
-                    extraConfig = ''
-                      limit_req zone=ip burst=20 nodelay;
-                      ${crawlersBlock}
-                    '';
-                  };
-                  locations."/robots.txt" = robotsTxt;
-                };
-              }
-              (lib.mkMerge (
-                lib.mapAttrsToList
-                  (name: value: {
-                    ${name} = {
-                      enableACME = true;
-                      forceSSL = true;
-                      extraConfig = crawlersBlock;
-                      locations."/" = {
-                        proxyPass = value;
-                      };
-                      locations."/robots.txt" = robotsTxt;
-                    };
-                  })
-                  {
-                    "whoogle.migalmoreno.com" = "http://auriga:5000";
-                    "git.migalmoreno.com" = "http://auriga:80";
-                    "jellyseerr.migalmoreno.com" = "http://auriga:5055";
-                    "jellyfin.migalmoreno.com" = "http://auriga:8096";
-                  }
-              ))
-            ];
+              };
+            };
         };
         security.acme = {
           acceptTerms = true;
