@@ -10,6 +10,7 @@ nixpkgs.lib.nixosSystem {
     nixarr.nixosModules.default
     sops-nix.nixosModules.sops
     ordenada.nixosModules.ordenada
+    ../services/cgit.nix
     (
       {
         config,
@@ -86,7 +87,6 @@ nixpkgs.lib.nixosSystem {
             tailscale.enable = true;
             nix.enable = true;
             docker.enable = true;
-            nginx.enable = true;
           };
         };
         nixarr = {
@@ -146,50 +146,6 @@ nixpkgs.lib.nixosSystem {
           listen = [ "irc+insecure://" ];
         };
         networking.firewall.allowedTCPPorts = [ 6667 ];
-        services.gitolite = {
-          enable = true;
-          user = "git";
-          group = "git";
-          adminPubkey = pkgs.secrets.personal.publicSshKey;
-          extraGitoliteRc = ''
-            $RC{UMASK} = 0027;
-            $RC{GIT_CONFIG_KEYS} = "gitweb\..*";
-          '';
-        };
-        services.cgit."git.migalmoreno.com" = {
-          enable = true;
-          scanPath = "/var/lib/gitolite/repositories";
-          settings = {
-            project-list = "/var/lib/gitolite/projects.list";
-            section-from-path = true;
-            repository-directory = "/var/lib/gitolite/repositories";
-            repository-sort = "name";
-            case-sensitive-sort = false;
-            root-desc = "Miguel Ángel Moreno's Git repositories";
-            enable-git-config = true;
-            enable-index-links = false;
-            enable-index-owner = false;
-            enable-commit-graph = true;
-            enable-log-filecount = true;
-            enable-log-linecount = true;
-            readme = ":README";
-            remove-suffix = true;
-            clone-url = "https://git.migalmoreno.com/$CGIT_REPO_URL";
-            about-filter = "${
-              config.services.cgit."git.migalmoreno.com".package
-            }/lib/cgit/filters/about-formatting.sh";
-            source-filter = "${
-              config.services.cgit."git.migalmoreno.com".package
-            }/lib/cgit/filters/syntax-highlighting.py";
-          };
-          extraConfig = ''
-            readme=:README.md
-            readme=:README.org
-          '';
-        };
-        users.users.${config.services.cgit."git.migalmoreno.com".user} = {
-          extraGroups = [ "git" ];
-        };
         virtualisation.oci-containers.containers = {
           tubo = {
             image = "migalmoreno/tubo";

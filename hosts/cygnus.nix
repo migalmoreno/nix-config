@@ -7,6 +7,7 @@ nixpkgs.lib.nixosSystem {
   modules = [
     home-manager.nixosModules.home-manager
     ordenada.nixosModules.ordenada
+    ../services/cgit.nix
     (
       {
         config,
