@@ -98,8 +98,16 @@ nixpkgs.lib.nixosSystem {
                   return 200 "User-agent: *\nDisallow: /";
                 '';
               };
+              botNames = [
+                "Bytespider"
+                "AmazonBot"
+                "MJ12bot"
+                "DotBot"
+                "FriendlyCrawler"
+                "GPTBot"
+              ];
               crawlersBlock = ''
-                if ($http_user_agent ~* (Bytespider|Amazonbot|MJ12bot|DotBot|FriendlyCrawler)) {
+                if ($http_user_agent ~* (${lib.concatStringsSep "|" botNames})) {
                   return 403;
                 }
               '';
