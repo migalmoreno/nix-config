@@ -148,6 +148,7 @@ nixpkgs.lib.nixosSystem {
                 enableACME = true;
                 forceSSL = true;
                 extraConfig = ''
+                  limit_req zone=ip burst=20 nodelay;
                   ${crawlersBlock}
                 '';
                 locations."/" = {
