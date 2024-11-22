@@ -163,7 +163,8 @@ in
             sha256 = "nlOkEO0QWr6dhIgCfeB+IECzcLWuTEZ7CNrCAsJmk/w=";
           }}"}
           hljs.registerAliases(["elisp"], { languageName: "lisp" });
-          hljs.registerAliases(["sh", "conf-colon"], { languageName: "bash" });
+          hljs.registerAliases(["sh"], { languageName: "bash" });
+          hljs.registerAliases(["conf-colon"], { languageName: "plaintext" });
           hljs.configure({ cssSelector: 'pre code[class*="lang"]' });
           hljs.highlightAll();
         ''};
