@@ -58,7 +58,7 @@ let
     	*.rst) exec ./rst2html; ;;
     	*.[1-9]) exec ./man2html; ;;
     	*.htm|*.html) exec cat; ;;
-    	*.txt|*) exec ./txt2html; ;;
+    	*.txt) exec ./txt2html; ;;
     esac
   '';
 in
