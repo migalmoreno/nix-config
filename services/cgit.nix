@@ -115,11 +115,18 @@ in
           }}"}
           ${builtins.readFile "${package}/cgit/cgit.css"}
 
-          pre {
+          pre:has(code.hljs){
+            background: none !important;
             padding: 0 !important;
           }
 
-          @media only all and (prefers-color-scheme: light) and (prefers-color-scheme: no-preference) {
+          pre code.hljs {
+            background: inherit !important;
+            padding: 1em !important;
+            display: block;
+          }
+
+          @media only all and (prefers-color-scheme: light), (prefers-color-scheme: no-preference) {
             ${builtins.readFile "${pkgs.fetchurl {
               url = "https://unpkg.com/@highlightjs/cdn-assets@11.10.0/styles/stackoverflow-light.min.css";
               sha256 = "L+76i0kfkr5WR7T97FBEaxeeyvDBvEY6U6RdNSDXFQ0=";
@@ -131,9 +138,6 @@ in
               url = "https://unpkg.com/@highlightjs/cdn-assets@11.10.0/styles/stackoverflow-dark.min.css";
               sha256 = "SQJYhu5P1AX7OWSN5VkiR/6PNXHa1zFH1pU4aFwN4GM=";
             }}"}
-            pre {
-              color: #444 !important;
-            }
           }
         ''};
       '';
