@@ -46,8 +46,9 @@ let
     '';
     buildInputs = [ pkgs.makeWrapper ];
   };
+  package = config.services.cgit."git.migalmoreno.com".package;
   about-formatting = pkgs.writeShellScriptBin "about-formatting" ''
-    cd "${cgit}/lib/cgit/filters/html-converters"
+    cd "${package}/lib/cgit/filters/html-converters"
     if [ ! -d /var/cache/cgit/org2html ]; then
       mkdir -p /var/cache/cgit/org2html
     fi
@@ -60,7 +61,6 @@ let
     	*.txt|*) exec ./txt2html; ;;
     esac
   '';
-  package = config.services.cgit."git.migalmoreno.com".package;
 in
 {
   services.gitolite = {
