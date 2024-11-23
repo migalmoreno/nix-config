@@ -45,6 +45,8 @@
         (with-eval-after-load 'ange-ftp
           (setopt ange-ftp-try-passive-mode t))
         (add-hook 'after-save-hook #'delete-trailing-whitespace)
+        (with-eval-after-load 'nginx-mode
+          (setopt nginx-indent-level 2))
       '';
       extraPackages = with pkgs.emacsPackages; [
         wgrep
