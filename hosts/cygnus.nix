@@ -87,7 +87,7 @@ nixpkgs.lib.nixosSystem {
           recommendedProxySettings = true;
           recommendedTlsSettings = true;
           appendHttpConfig = ''
-            limit_req_zone $binary_remote_addr zone=ip:20m rate=10r/s;
+            limit_req_zone $binary_remote_addr zone=ip:10m rate=5r/s;
             limit_req_status 429;
           '';
           virtualHosts =
@@ -121,38 +121,33 @@ nixpkgs.lib.nixosSystem {
                   error_page 404 = /404.html;
                   ${crawlersBlock}
                 '';
-                locations."/robots.txt" = robotsTxt;
-              };
-              "tubo.migalmoreno.com" = {
-                enableACME = true;
-                forceSSL = true;
-                extraConfig = crawlersBlock;
-                locations."/" = {
-                  return = "301 https://tubo.media$request_uri";
-                };
-                locations."/robots.txt" = robotsTxt;
-              };
-              "tubo.media" = {
-                enableACME = true;
-                forceSSL = true;
-                locations."/" = {
-                  proxyPass = "http://localhost:3000";
-                  extraConfig = ''
-                    limit_req zone=ip burst=20 nodelay;
-                    ${crawlersBlock}
-                  '';
-                };
-                locations."/robots.txt" = robotsTxt;
               };
               "git.migalmoreno.com" = {
                 enableACME = true;
                 forceSSL = true;
-                extraConfig = ''
-                  limit_req zone=ip burst=20 nodelay;
-                  ${crawlersBlock}
-                '';
-                locations."/" = {
-                  proxyPass = "http://localhost:80";
+                extraConfig = crawlersBlock;
+                locations = {
+                  "/" = {
+                    proxyPass = "http://localhost:80";
+                    extraConfig = ''
+                      limit_req zone=ip burst=5 nodelay;
+                    '';
+                  };
+                  "/robots.txt" = robotsTxt;
+                };
+              };
+              "tubo.media" = {
+                enableACME = true;
+                forceSSL = true;
+                extraConfig = crawlersBlock;
+                locations = {
+                  "/" = {
+                    proxyPass = "http://localhost:3000";
+                    extraConfig = ''
+                      limit_req zone=ip burst=10 nodelay;
+                    '';
+                  };
+                  "/robots.txt" = robotsTxt;
                 };
               };
             };
