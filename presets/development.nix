@@ -174,6 +174,7 @@
         "privacy.trackingprotection.enabled" = true;
         "privacy.trackingprotection.socialtracking.enabled" = true;
       };
+      extraAddons = with config.nur.repos.rycee.firefox-addons; [ react-devtools ];
       extraSearchConfig = {
         default = "Whoogle";
         privateDefault = "Whoogle";
