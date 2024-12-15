@@ -105,6 +105,7 @@ nixpkgs.lib.nixosSystem {
                 "DotBot"
                 "FriendlyCrawler"
                 "GPTBot"
+                "AhrefsBot"
               ];
               crawlersBlock = ''
                 if ($http_user_agent ~* (${lib.concatStringsSep "|" botNames})) {
