@@ -268,14 +268,14 @@ nixpkgs.lib.nixosSystem {
               org-roam = {
                 captureTemplates = [
                   ''
-                    ("w" "work" plain "%?"
-                     :if-new (file+head "work/%<%Y%m%d%H%M%S>-''${slug}.org"
+                    ("b" "public" plain "%?"
+                     :if-new (file+head "public/%<%Y%m%d%H%M%S>-''${slug}.org"
                                         "#+title: ''${title}\n#+filetags: :''${Topic}:\n")
                      :unnarrowed t)
                   ''
                   ''
-                    ("p" "personal" plain "%?"
-                     :if-new (file+head "personal/%<%Y%m%d%H%M%S>-''${slug}.org"
+                    ("t" "private" plain "%?"
+                     :if-new (file+head "private/%<%Y%m%d%H%M%S>-''${slug}.org"
                                         "#+title: ''${title}\n#+filetags: :''${Topic}:\n")
                      :unnarrowed t)
                   ''
