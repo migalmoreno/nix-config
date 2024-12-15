@@ -65,6 +65,7 @@
         enable = true;
         todoIntegration = true;
       };
+      pdf-tools.enable = true;
       cider = {
         popReplOnConnect = false;
         replInCurrentWindow = true;
