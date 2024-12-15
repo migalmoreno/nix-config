@@ -87,7 +87,7 @@ nixpkgs.lib.nixosSystem {
           recommendedProxySettings = true;
           recommendedTlsSettings = true;
           appendHttpConfig = ''
-            limit_req_zone $binary_remote_addr zone=ip:10m rate=5r/s;
+            limit_req_zone $binary_remote_addr zone=ip:20m rate=10r/s;
             limit_req_status 429;
           '';
           virtualHosts =
@@ -144,7 +144,7 @@ nixpkgs.lib.nixosSystem {
                   "/" = {
                     proxyPass = "http://localhost:3000";
                     extraConfig = ''
-                      limit_req zone=ip burst=10 nodelay;
+                      limit_req zone=ip burst=20 nodelay;
                     '';
                   };
                   "/robots.txt" = robotsTxt;
