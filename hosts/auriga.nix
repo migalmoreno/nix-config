@@ -147,6 +147,11 @@ nixpkgs.lib.nixosSystem {
         };
         networking.firewall.allowedTCPPorts = [ 6667 ];
         virtualisation.oci-containers.containers = {
+          redlib = {
+            image = "quay.io/redlib/redlib";
+            ports = [ "8080:8080" ];
+            extraOptions = [ "--network=host" ];
+          };
           tubo = {
             image = "migalmoreno/tubo";
             ports = [ "3000:3000" ];
