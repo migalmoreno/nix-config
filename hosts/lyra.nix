@@ -341,10 +341,7 @@ nixpkgs.lib.nixosSystem {
               };
               notes = {
                 path = "~/notes";
-                devices = [
-                  "auriga"
-                  "beryllium"
-                ];
+                devices = [ "auriga" ];
               };
               videos = {
                 path = "~/videos";
@@ -354,13 +351,16 @@ nixpkgs.lib.nixosSystem {
                 path = "~/src/work";
                 devices = [ "orion" ];
               };
-              work-notes = {
-                path = "~/notes/work";
+              public-notes = {
+                path = "~/notes/public";
                 devices = [ "orion" ];
               };
               work-documents = {
                 path = "~/documents/work";
-                devices = [ "orion" ];
+                devices = [
+                  "orion"
+                  "beryllium"
+                ];
               };
             };
           };

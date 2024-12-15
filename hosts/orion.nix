@@ -104,7 +104,7 @@ nixpkgs.lib.nixosSystem {
                 path = "~/src/work";
                 devices = [ "lyra" ];
               };
-              work-notes = {
+              public-notes = {
                 path = "~/notes";
                 devices = [ "lyra" ];
               };
