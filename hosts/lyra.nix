@@ -235,7 +235,7 @@ nixpkgs.lib.nixosSystem {
                 ];
                 groupParameters = {
                   "^nnmaildir" = {
-                    "gcc-self" = "nnmaildir+personal:sent";
+                    "gcc-self" = "nnmaildir+personal:Sent";
                     "display" = 1000;
                   };
                   "^nntp" = {
