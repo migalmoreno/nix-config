@@ -145,7 +145,10 @@ nixpkgs.lib.nixosSystem {
           enable = true;
           listen = [ "irc+insecure://" ];
         };
-        networking.firewall.allowedTCPPorts = [ 6667 ];
+        networking.firewall.allowedTCPPorts = [
+          6667
+          3000
+        ];
         virtualisation.oci-containers.containers = {
           redlib = {
             image = "quay.io/redlib/redlib";
