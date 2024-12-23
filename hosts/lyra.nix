@@ -283,15 +283,15 @@ nixpkgs.lib.nixosSystem {
                 dailiesDirectory = "./";
                 dailiesCaptureTemplates = [
                   ''
-                    ("w" "work" entry
+                    ("b" "public" entry
                      "* %?"
-                     :if-new (file+head "work/daily/%<%Y-%m-%d>.org"
+                     :if-new (file+head "public/daily/%<%Y-%m-%d>.org"
                                         "#+title: %<%Y-%m-%d>\n"))
                   ''
                   ''
-                    ("p" "personal" entry
+                    ("t" "private" entry
                      "* %?"
-                     :if-new (file+head "personal/daily/%<%Y-%m-%d>.org"
+                     :if-new (file+head "private/daily/%<%Y-%m-%d>.org"
                                         "#+title: %<%Y-%m-%d>\n"))
                   ''
                 ];
