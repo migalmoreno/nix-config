@@ -9,7 +9,7 @@ nixpkgs.lib.nixosSystem {
     home-manager.nixosModules.home-manager
     sops-nix.nixosModules.sops
     ordenada.nixosModules.ordenada
-    ../presets/development.nix
+    ../profiles/development.nix
     (
       {
         lib,
