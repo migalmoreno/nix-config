@@ -64,6 +64,15 @@
       org-roam = {
         enable = true;
         todoIntegration = true;
+        package = pkgs.emacsPackages.melpaPackages.org-roam.overrideAttrs (_: {
+          version = "20241007.1704";
+          src = pkgs.fetchFromGitHub {
+            owner = "org-roam";
+            repo = "org-roam";
+            rev = "2a630476b3d49d7106f582e7f62b515c62430714";
+            sha256 = "7IhZeNxyQXBEL/y0oHhdSLT375FdTS3ZYS2Wt/KjtOo=";
+          };
+        });
       };
       pdf-tools.enable = true;
       cider = {
