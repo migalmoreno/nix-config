@@ -302,7 +302,6 @@ nixpkgs.lib.nixosSystem {
             qemu.enable = true;
           };
         };
-        services.guix.enable = true;
         sops = {
           defaultSopsFile = ../secrets.yaml;
           age.sshKeyPaths = [ "${config.home-manager.users.vega.home.homeDirectory}/.ssh/id_ed25519" ];
