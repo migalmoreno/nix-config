@@ -155,6 +155,10 @@ in
             sha256 = "ngx+LnaCPvChB7mYlb0anglQ3+BQbxQ4ZMNpa/1vUwM=";
           }}"}
           ${builtins.readFile "${pkgs.fetchurl {
+            url = "https://unpkg.com/@highlightjs/cdn-assets@11.10.0/languages/clojure.min.js";
+            sha256 = "v9aItax3xstVlHf1L3yNmyrYr4wrm0b/7TwD/LV6bFU=";
+          }}"}
+          ${builtins.readFile "${pkgs.fetchurl {
             url = "https://unpkg.com/@highlightjs/cdn-assets@11.10.0/languages/nix.min.js";
             sha256 = "PakQNH1D1sJgzZqiEUf0rLbLlFe61NFgathuzMx9I+U=";
           }}"}
