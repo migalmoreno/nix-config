@@ -299,7 +299,7 @@ nixpkgs.lib.nixosSystem {
             };
             networking.enable = true;
             tailscale.enable = true;
-            qemu.enable = true;
+            qemu.enable = false;
           };
         };
         sops = {
