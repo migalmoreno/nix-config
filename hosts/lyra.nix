@@ -5,7 +5,7 @@ with inputs;
 nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
   modules = [
-    nur.nixosModules.nur
+    nur.modules.nixos.default
     home-manager.nixosModules.home-manager
     sops-nix.nixosModules.sops
     ordenada.nixosModules.ordenada
