@@ -108,6 +108,7 @@ nixpkgs.lib.nixosSystem {
                 "AhrefsBot"
                 "bingbot"
                 "ClaudeBot"
+                "Googlebot"
               ];
               crawlersBlock = ''
                 if ($http_user_agent ~* (${lib.concatStringsSep "|" botNames})) {
