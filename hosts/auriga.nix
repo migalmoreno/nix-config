@@ -93,7 +93,10 @@ nixpkgs.lib.nixosSystem {
           enable = true;
           jellyfin.enable = true;
           radarr.enable = true;
-          sonarr.enable = true;
+          sonarr = {
+            enable = true;
+            package = pkgs.sonarr.overrideAttrs (lib.const { doCheck = false; });
+          };
           prowlarr.enable = true;
           transmission.enable = true;
         };
@@ -176,6 +179,12 @@ nixpkgs.lib.nixosSystem {
           automatic = true;
           options = "--delete-older-than 30d";
         };
+        nixpkgs.config.permittedInsecurePackages = [
+          "aspnetcore-runtime-wrapped-6.0.36"
+          "aspnetcore-runtime-6.0.36"
+          "dotnet-sdk-wrapped-6.0.428"
+          "dotnet-sdk-6.0.428"
+        ];
         system.stateVersion = "24.05";
       }
     )
