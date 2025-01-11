@@ -244,10 +244,6 @@ nixpkgs.lib.nixosSystem {
                 };
                 postingStyles = with userInfo; [
                   ''
-                    (".*"
-                     (cc "${email}"))
-                  ''
-                  ''
                     ((header "cc" ".*@debbugs.gnu.org")
                      (To ordenada-gnus-get-article-participants)
                      (cc nil))
