@@ -144,35 +144,31 @@ nixpkgs.lib.nixosSystem {
             };
           };
         };
+        services.redlib.enable = true;
         services.soju = {
           enable = true;
           listen = [ "irc+insecure://" ];
+        };
+        services.whoogle-search = {
+          enable = true;
+          listenAddress = "0.0.0.0";
+          extraEnv = {
+            WHOOGLE_CONFIG_SEARCH_LANGUAGE = "lang_en";
+            WHOOGLE_CONFIG_VIEW_IMAGE = "1";
+            WHOOGLE_MINIMAL = "1";
+            WHOOGLE_RESULTS_PER_PAGE = "50";
+            WHOOGLE_SHOW_FAVICONS = "0";
+          };
         };
         networking.firewall.allowedTCPPorts = [
           6667
           3000
         ];
         virtualisation.oci-containers.containers = {
-          redlib = {
-            image = "quay.io/redlib/redlib";
-            ports = [ "8080:8080" ];
-            extraOptions = [ "--network=host" ];
-          };
           tubo = {
             image = "migalmoreno/tubo";
             ports = [ "3000:3000" ];
             extraOptions = [ "--network=host" ];
-          };
-          whoogle-search = {
-            image = "benbusby/whoogle-search";
-            ports = [ "5000:5000" ];
-            extraOptions = [ "--network=host" ];
-            environment = {
-              WHOOGLE_MINIMAL = "1";
-              WHOOGLE_CONFIG_VIEW_IMAGE = "1";
-              WHOOGLE_RESULTS_PER_PAGE = "50";
-              WHOOGLE_CONFIG_SEARCH_LANGUAGE = "lang_en";
-            };
           };
         };
         nix.gc = {
