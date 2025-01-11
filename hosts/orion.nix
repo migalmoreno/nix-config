@@ -118,6 +118,7 @@ nixpkgs.lib.nixosSystem {
         wsl = {
           enable = true;
           defaultUser = "saiph";
+          interop.register = true;
           wslConf = {
             network.generateResolvConf = true;
             network.generateHosts = true;
