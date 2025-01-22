@@ -177,8 +177,6 @@
       };
       extraAddons = with pkgs.nur.repos.rycee.firefox-addons; [ react-devtools ];
       extraSearchConfig = {
-        default = "Whoogle";
-        privateDefault = "Whoogle";
         order = [
           "Whoogle"
           "Google"
