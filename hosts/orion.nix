@@ -11,6 +11,7 @@ nixpkgs.lib.nixosSystem {
     ordenada.nixosModules.ordenada
     sops-nix.nixosModules.sops
     ../profiles/development.nix
+    ../services/whoogle-search.nix
     (
       {
         lib,

@@ -11,6 +11,7 @@ nixpkgs.lib.nixosSystem {
     sops-nix.nixosModules.sops
     ordenada.nixosModules.ordenada
     ../services/cgit.nix
+    ../services/whoogle-search.nix
     (
       {
         config,
