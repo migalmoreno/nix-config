@@ -30,6 +30,31 @@ nixpkgs.lib.nixosSystem {
           emacs
           git
           git-agecrypt
+          (texlive.combine {
+            inherit (pkgs.texlive)
+              scheme-basic
+              wrapfig
+              capt-of
+              hyperref
+              ec
+              geometry
+              xcolor
+              ulem
+              preview
+              amsfonts
+              etoolbox
+              grfext
+              natbib
+              titling
+              titlesec
+              fontspec
+              enumitem
+              plex
+              xkeyval
+              fontaxes
+              metafont
+              ;
+          })
         ];
         boot = {
           initrd.availableKernelModules = [
