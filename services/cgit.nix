@@ -105,77 +105,83 @@ in
       readme=:README.org
     '';
   };
-  services.nginx.virtualHosts."git.migalmoreno.com".locations = {
-    "= /cgit.css" = {
-      extraConfig = lib.mkForce ''
-        alias ${pkgs.writeText "cgit.css" ''
-          ${builtins.readFile "${pkgs.fetchurl {
-            url = "https://raw.githubusercontent.com/MatejaMaric/responsive-cgit-css/master/cgit.css";
-            sha256 = "07l53sik7c6r3xj0fxc4gl9aw8315qgl5hhyh570l89fj4vy7yhc";
-          }}"}
-          ${builtins.readFile "${package}/cgit/cgit.css"}
-
-          pre:has(code.hljs){
-            background: none !important;
-            padding: 0 !important;
-          }
-
-          pre code.hljs {
-            background: inherit !important;
-            padding: 1em !important;
-            display: block;
-          }
-
-          @media only all and (prefers-color-scheme: light), (prefers-color-scheme: no-preference) {
+  services.nginx.virtualHosts."git.migalmoreno.com" = {
+    listen = [
+      {
+        addr = "0.0.0.0";
+        port = 4040;
+      }
+    ];
+    locations = {
+      "= /cgit.css" = {
+        extraConfig = lib.mkForce ''
+          alias ${pkgs.writeText "cgit.css" ''
             ${builtins.readFile "${pkgs.fetchurl {
-              url = "https://unpkg.com/@highlightjs/cdn-assets@11.10.0/styles/stackoverflow-light.min.css";
-              sha256 = "L+76i0kfkr5WR7T97FBEaxeeyvDBvEY6U6RdNSDXFQ0=";
+              url = "https://raw.githubusercontent.com/MatejaMaric/responsive-cgit-css/master/cgit.css";
+              sha256 = "07l53sik7c6r3xj0fxc4gl9aw8315qgl5hhyh570l89fj4vy7yhc";
             }}"}
-          }
+            ${builtins.readFile "${package}/cgit/cgit.css"}
 
-          @media only all and (prefers-color-scheme: dark) {
+            pre:has(code.hljs){
+              background: none !important;
+              padding: 0 !important;
+            }
+
+            pre code.hljs {
+              background: inherit !important;
+              padding: 1em !important;
+              display: block;
+            }
+
+            @media only all and (prefers-color-scheme: light), (prefers-color-scheme: no-preference) {
+              ${builtins.readFile "${pkgs.fetchurl {
+                url = "https://unpkg.com/@highlightjs/cdn-assets@11.10.0/styles/stackoverflow-light.min.css";
+                sha256 = "L+76i0kfkr5WR7T97FBEaxeeyvDBvEY6U6RdNSDXFQ0=";
+              }}"}
+            }
+
+            @media only all and (prefers-color-scheme: dark) {
+              ${builtins.readFile "${pkgs.fetchurl {
+                url = "https://unpkg.com/@highlightjs/cdn-assets@11.10.0/styles/stackoverflow-dark.min.css";
+                sha256 = "SQJYhu5P1AX7OWSN5VkiR/6PNXHa1zFH1pU4aFwN4GM=";
+              }}"}
+            }
+          ''};
+        '';
+      };
+      "= /cgit.js" = {
+        extraConfig = ''
+          alias ${pkgs.writeText "cgit.js" ''
+            ${builtins.readFile "${package}/cgit/cgit.js"}
             ${builtins.readFile "${pkgs.fetchurl {
-              url = "https://unpkg.com/@highlightjs/cdn-assets@11.10.0/styles/stackoverflow-dark.min.css";
-              sha256 = "SQJYhu5P1AX7OWSN5VkiR/6PNXHa1zFH1pU4aFwN4GM=";
+              url = "https://unpkg.com/@highlightjs/cdn-assets@11.10.0/highlight.min.js";
+              sha256 = "Rx75rpDEB69ED83Ejt/utWIQazJnvRLZkHHBYvtS7TI=";
             }}"}
-          }
-        ''};
-      '';
-    };
-    "= /cgit.js" = {
-      extraConfig = ''
-        alias ${pkgs.writeText "cgit.js" ''
-          ${builtins.readFile "${package}/cgit/cgit.js"}
-          ${builtins.readFile "${pkgs.fetchurl {
-            url = "https://unpkg.com/@highlightjs/cdn-assets@11.10.0/highlight.min.js";
-            sha256 = "Rx75rpDEB69ED83Ejt/utWIQazJnvRLZkHHBYvtS7TI=";
-          }}"}
-          ${builtins.readFile "${pkgs.fetchurl {
-            url = "https://unpkg.com/@highlightjs/cdn-assets@11.10.0/languages/lisp.min.js";
-            sha256 = "ngx+LnaCPvChB7mYlb0anglQ3+BQbxQ4ZMNpa/1vUwM=";
-          }}"}
-          ${builtins.readFile "${pkgs.fetchurl {
-            url = "https://unpkg.com/@highlightjs/cdn-assets@11.10.0/languages/clojure.min.js";
-            sha256 = "v9aItax3xstVlHf1L3yNmyrYr4wrm0b/7TwD/LV6bFU=";
-          }}"}
-          ${builtins.readFile "${pkgs.fetchurl {
-            url = "https://unpkg.com/@highlightjs/cdn-assets@11.10.0/languages/nix.min.js";
-            sha256 = "PakQNH1D1sJgzZqiEUf0rLbLlFe61NFgathuzMx9I+U=";
-          }}"}
-          ${builtins.readFile "${pkgs.fetchurl {
-            url = "https://unpkg.com/@highlightjs/cdn-assets@11.10.0/languages/nginx.min.js";
-            sha256 = "nlOkEO0QWr6dhIgCfeB+IECzcLWuTEZ7CNrCAsJmk/w=";
-          }}"}
-          hljs.registerAliases(["elisp"], { languageName: "lisp" });
-          hljs.registerAliases(["sh"], { languageName: "bash" });
-          hljs.registerAliases(["conf-colon"], { languageName: "plaintext" });
-          hljs.configure({ cssSelector: 'pre code[class*="lang"]' });
-          hljs.highlightAll();
-        ''};
-      '';
+            ${builtins.readFile "${pkgs.fetchurl {
+              url = "https://unpkg.com/@highlightjs/cdn-assets@11.10.0/languages/lisp.min.js";
+              sha256 = "ngx+LnaCPvChB7mYlb0anglQ3+BQbxQ4ZMNpa/1vUwM=";
+            }}"}
+            ${builtins.readFile "${pkgs.fetchurl {
+              url = "https://unpkg.com/@highlightjs/cdn-assets@11.10.0/languages/clojure.min.js";
+              sha256 = "v9aItax3xstVlHf1L3yNmyrYr4wrm0b/7TwD/LV6bFU=";
+            }}"}
+            ${builtins.readFile "${pkgs.fetchurl {
+              url = "https://unpkg.com/@highlightjs/cdn-assets@11.10.0/languages/nix.min.js";
+              sha256 = "PakQNH1D1sJgzZqiEUf0rLbLlFe61NFgathuzMx9I+U=";
+            }}"}
+            ${builtins.readFile "${pkgs.fetchurl {
+              url = "https://unpkg.com/@highlightjs/cdn-assets@11.10.0/languages/nginx.min.js";
+              sha256 = "nlOkEO0QWr6dhIgCfeB+IECzcLWuTEZ7CNrCAsJmk/w=";
+            }}"}
+            hljs.registerAliases(["elisp"], { languageName: "lisp" });
+            hljs.registerAliases(["sh"], { languageName: "bash" });
+            hljs.registerAliases(["conf-colon"], { languageName: "plaintext" });
+            hljs.configure({ cssSelector: 'pre code[class*="lang"]' });
+            hljs.highlightAll();
+          ''};
+        '';
+      };
     };
   };
-  users.users.${config.services.cgit."git.migalmoreno.com".user} = {
-    extraGroups = [ "git" ];
-  };
+  users.users.${config.services.cgit."git.migalmoreno.com".user}.extraGroups = [ "git" ];
 }
