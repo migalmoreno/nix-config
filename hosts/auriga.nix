@@ -165,6 +165,34 @@ nixpkgs.lib.nixosSystem {
           6667
           3000
         ];
+        services.grafana = {
+          enable = true;
+          settings = {
+            server = {
+              http_addr = "0.0.0.0";
+              http_port = 3030;
+            };
+          };
+        };
+        services.prometheus = {
+          enable = true;
+          exporters = {
+            node = {
+              enable = true;
+              enabledCollectors = [ "systemd" ];
+            };
+          };
+          scrapeConfigs = [
+            {
+              job_name = "node";
+              static_configs = [
+                {
+                  targets = [ "localhost:${toString config.services.prometheus.exporters.node.port}" ];
+                }
+              ];
+            }
+          ];
+        };
         services.webdav = {
           enable = true;
           user = "syncthing";
