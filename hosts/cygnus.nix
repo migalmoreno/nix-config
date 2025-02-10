@@ -132,7 +132,7 @@ nixpkgs.lib.nixosSystem {
                 extraConfig = crawlersBlock;
                 locations = {
                   "/" = {
-                    proxyPass = "http://localhost:80";
+                    proxyPass = "http://localhost:4040";
                     extraConfig = ''
                       limit_req zone=ip burst=5 nodelay;
                     '';
