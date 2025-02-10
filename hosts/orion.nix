@@ -25,6 +25,7 @@ nixpkgs.lib.nixosSystem {
         nixpkgs.overlays = overlays;
         networking.hostName = "orion";
         networking.firewall.enable = false;
+        boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
         environment.systemPackages = with pkgs; [
           libreoffice
           git-agecrypt
