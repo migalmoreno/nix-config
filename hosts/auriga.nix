@@ -149,13 +149,17 @@ nixpkgs.lib.nixosSystem {
             };
           };
         };
-        services.soju = {
         services.redlib = {
           enable = true;
-          listen = [ "irc+insecure://" ];
           port = 8000;
         };
+        services.soju = {
           enable = true;
+          listen = [
+            "irc+insecure://"
+            "ws+insecure://0.0.0.0:8080"
+          ];
+          httpOrigins = [ "*" ];
         };
         networking.firewall.allowedTCPPorts = [
           6667
@@ -203,6 +207,24 @@ nixpkgs.lib.nixosSystem {
                 password = "";
               }
             ];
+          };
+        };
+        services.nginx = {
+          enable = true;
+          enableReload = true;
+          recommendedOptimisation = true;
+          recommendedGzipSettings = true;
+          recommendedProxySettings = true;
+          virtualHosts = {
+            "irc.auriga" = {
+              root = "${pkgs.gamja}";
+              listen = [
+                {
+                  addr = "0.0.0.0";
+                  port = 4800;
+                }
+              ];
+            };
           };
         };
         virtualisation.oci-containers.containers = {
