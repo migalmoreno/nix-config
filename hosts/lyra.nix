@@ -346,7 +346,6 @@ nixpkgs.lib.nixosSystem {
             devices = {
               auriga.id = "FZVCCHW-DF2SVCK-6NFAH3K-A6TTZ6S-D44H3NZ-SHSC7FV-EQL3R2S-J2CR3QZ";
               orion.id = "JHG7EZC-D52KXLP-AN45CEX-ADKNSST-J4R3XDF-NDI26JH-JIJYZJ5-AEJHFQO";
-              beryllium.id = "ADJVBCC-P4HOACH-DETXLCO-TPO5CZK-4TL7VWI-DVSCKJK-JYVW3HJ-R5ML6AS";
             };
             folders = {
               documents = {
@@ -355,10 +354,7 @@ nixpkgs.lib.nixosSystem {
               };
               pictures = {
                 path = "~/pictures";
-                devices = [
-                  "auriga"
-                  "beryllium"
-                ];
+                devices = [ "auriga" ];
               };
               notes = {
                 path = "~/notes";
@@ -378,10 +374,7 @@ nixpkgs.lib.nixosSystem {
               };
               work-documents = {
                 path = "~/documents/work";
-                devices = [
-                  "orion"
-                  "beryllium"
-                ];
+                devices = [ "orion" ];
               };
             };
           };
