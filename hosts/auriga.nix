@@ -149,10 +149,11 @@ nixpkgs.lib.nixosSystem {
             };
           };
         };
-        services.redlib.enable = true;
         services.soju = {
+        services.redlib = {
           enable = true;
           listen = [ "irc+insecure://" ];
+          port = 8000;
         };
           enable = true;
         };
