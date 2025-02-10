@@ -165,6 +165,109 @@ nixpkgs.lib.nixosSystem {
           6667
           3000
         ];
+        services.homepage-dashboard = {
+          enable = true;
+          widgets = [
+            {
+              resources = {
+                cpu = true;
+                memory = true;
+                disk = "/";
+                cputemp = true;
+                uptime = true;
+                expanded = true;
+              };
+            }
+          ];
+          services = [
+            {
+              "Monitoring" = [
+                {
+                  "Grafana" = {
+                    icon = "grafana";
+                    href = "http://${config.networking.hostName}:${toString config.services.grafana.settings.server.http_port}";
+                  };
+                }
+              ];
+            }
+            {
+              "Communication" = [
+                {
+                  "Gamja" = {
+                    icon = "irc";
+                    href = "http://${config.networking.hostName}:4800";
+                  };
+                }
+              ];
+            }
+            {
+              "Privacy Clients" = [
+                {
+                  "Tubo" = {
+                    icon = "http://${config.networking.hostName}:3000/icons/tubo.svg";
+                    href = "http://${config.networking.hostName}:3000";
+                  };
+                }
+                {
+                  "Redlib" = {
+                    icon = "redlib";
+                    href = "http://${config.networking.hostName}:${toString config.services.redlib.port}";
+                  };
+                }
+                {
+                  "Whoogle" = {
+                    icon = "whoogle";
+                    href = "http://${config.networking.hostName}:${toString config.services.whoogle-search.port}";
+                  };
+                }
+              ];
+            }
+            {
+              "Development" = [
+                {
+                  "Cgit" = {
+                    icon = "git";
+                    href = "http://${config.networking.hostName}:4040";
+                  };
+                }
+              ];
+            }
+            {
+              "Media and Storage" = [
+                {
+                  "Jellyfin" = {
+                    icon = "jellyfin";
+                    href = "http://${config.networking.hostName}:8096";
+                  };
+                }
+                {
+                  "Jellyseerr" = {
+                    icon = "jellyseerr";
+                    href = "http://${config.networking.hostName}:5055";
+                  };
+                }
+                {
+                  "Radarr" = {
+                    icon = "radarr";
+                    href = "http://${config.networking.hostName}:7878";
+                  };
+                }
+                {
+                  "Sonarr" = {
+                    icon = "sonarr";
+                    href = "http://${config.networking.hostName}:8989";
+                  };
+                }
+                {
+                  "Filestash" = {
+                    icon = "filestash";
+                    href = "http://${config.networking.hostName}:8334";
+                  };
+                }
+              ];
+            }
+          ];
+        };
         services.grafana = {
           enable = true;
           settings = {
@@ -252,6 +355,15 @@ nixpkgs.lib.nixosSystem {
                   port = 4800;
                 }
               ];
+            };
+            "home.auriga" = {
+              listen = [
+                {
+                  addr = "0.0.0.0";
+                  port = 80;
+                }
+              ];
+              locations."/".proxyPass = "http://localhost:8082";
             };
           };
         };
