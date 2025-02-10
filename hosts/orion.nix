@@ -125,6 +125,7 @@ nixpkgs.lib.nixosSystem {
             network.generateResolvConf = true;
             network.generateHosts = true;
             user.default = "saiph";
+            wsl2.memory = "24GB";
           };
         };
         systemd.services.wsl-vpnkit = {
