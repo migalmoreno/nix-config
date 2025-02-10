@@ -22,6 +22,7 @@
     ordenada.url = "github:migalmoreno/ordenada";
     nix-rice.url = "github:bertof/nix-rice";
     systems.url = "github:nix-systems/default";
+    filestash-nix.url = "github:dermetfan/filestash.nix";
   };
   outputs =
     inputs@{ nixpkgs, systems, ... }:

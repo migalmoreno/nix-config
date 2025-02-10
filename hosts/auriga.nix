@@ -10,6 +10,7 @@ nixpkgs.lib.nixosSystem {
     nixarr.nixosModules.default
     sops-nix.nixosModules.sops
     ordenada.nixosModules.ordenada
+    filestash-nix.nixosModules.filestash
     ../services/cgit.nix
     ../services/whoogle-search.nix
     (
@@ -110,6 +111,9 @@ nixpkgs.lib.nixosSystem {
           defaultSopsFile = ../secrets.yaml;
           age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
           secrets = {
+            "hosts/auriga/filestash/admin_password" = {
+              owner = config.services.filestash.user;
+            };
             "hosts/auriga/syncthing/key" = { };
             "hosts/auriga/syncthing/cert" = { };
           };
@@ -165,6 +169,50 @@ nixpkgs.lib.nixosSystem {
           6667
           3000
         ];
+        services.webdav = {
+          enable = true;
+          user = "syncthing";
+          settings = {
+            address = "0.0.0.0";
+            port = 6065;
+            directory = "/var/lib/syncthing";
+            permissions = "CRUD";
+            debug = true;
+            cors = {
+              enabled = true;
+              credentials = true;
+              exposed_headers = [
+                "Content-Length"
+                "Content-Range"
+                "Origin"
+                "X-Requested-With"
+                "Content-Type"
+                "Accept"
+              ];
+            };
+          };
+        };
+        services.filestash = {
+          enable = true;
+          settings = {
+            general = {
+              fork_button = false;
+              display_hidden = true;
+              filepage_default_view = "list";
+              filepage_default_sort = "name";
+            };
+            auth.admin_file = config.sops.secrets."hosts/auriga/filestash/admin_password".path;
+            connections = [
+              {
+                label = "webdav";
+                type = "webdav";
+                url = with config.services.webdav.settings; "http://${address}:${toString port}";
+                username = "";
+                password = "";
+              }
+            ];
+          };
+        };
         virtualisation.oci-containers.containers = {
           tubo = {
             image = "migalmoreno/tubo";
