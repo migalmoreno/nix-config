@@ -25,11 +25,18 @@ nixpkgs.lib.nixosSystem {
         hardware.firmware = [ pkgs.sof-firmware ];
         hardware.enableRedistributableFirmware = true;
         hardware.graphics.enable = true;
+        hardware.keyboard.qmk.enable = true;
+        services.udev.packages = with pkgs; [
+          via
+          vial
+        ];
         nixpkgs.overlays = overlays;
         environment.systemPackages = with pkgs; [
           emacs
           git
           git-agecrypt
+          via
+          vial
           (texlive.combine {
             inherit (pkgs.texlive)
               scheme-basic
