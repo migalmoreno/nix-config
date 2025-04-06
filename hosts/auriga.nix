@@ -388,6 +388,7 @@ nixpkgs.lib.nixosSystem {
           enable = true;
           settings = {
             general = {
+              port = 8334;
               fork_button = false;
               display_hidden = true;
               filepage_default_view = "list";
