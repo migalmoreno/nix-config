@@ -156,6 +156,10 @@ nixpkgs.lib.nixosSystem {
               };
             };
         };
+        nix.gc = {
+          automatic = true;
+          options = "--delete-older-than 30d";
+        };
         security.acme = {
           acceptTerms = true;
           defaults.email = pkgs.secrets.personal.email;
