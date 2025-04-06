@@ -145,16 +145,22 @@
     };
     sway = {
       enable = true;
-      keybindings = with config.ordenada.features.sway; {
-        "${modifier}+j" = "focus left";
-        "${modifier}+k" = "focus right";
-        "${modifier}+Prior" = "exec ${pkgs.pamixer}/bin/pamixer --unmute --increase 5";
-        "${modifier}+Next" = "exec ${pkgs.pamixer}/bin/pamixer --unmute --decrease 5";
-        "${modifier}+x" = "exec ${pkgs.swaylock-effects}/bin/swaylock";
-        "${modifier}+n" = "exec ${pkgs.swaynotificationcenter}/bin/swaync-client -t -sw";
-        "${modifier}+p" = "exec ${pkgs.wlogout}/bin/wlogout";
-        "${modifier}+Insert" = "exec pkill -SIGINT -f wf-recorder";
-      };
+      keybindings =
+        let
+          pamixer = "${pkgs.pamixer}/bin/pamixer";
+        in
+        with config.ordenada.features.sway;
+        {
+          "${modifier}+j" = "focus left";
+          "${modifier}+k" = "focus right";
+          "XF86AudioMute" = "exec ${pamixer} -t";
+          "XF86AudioRaiseVolume" = "exec ${pamixer} --unmute --increase 5";
+          "XF86AudioLowerVolume" = "exec ${pamixer} --unmute --decrease 5";
+          "${modifier}+x" = "exec ${pkgs.swaylock-effects}/bin/swaylock";
+          "${modifier}+n" = "exec ${pkgs.swaynotificationcenter}/bin/swaync-client -t -sw";
+          "${modifier}+p" = "exec ${pkgs.wlogout}/bin/wlogout";
+          "${modifier}+Insert" = "exec pkill -SIGINT -f wf-recorder";
+        };
     };
     waybar.enable = true;
     bemenu.enable = true;
