@@ -52,6 +52,7 @@
         wgrep
         emacs-conflict
         nginx-mode
+        hcl-mode
       ];
       ace-window.enable = true;
       all-the-icons.enable = true;
