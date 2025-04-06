@@ -1,9 +1,11 @@
 keys:
   - &primary age164jvgs39v4qzmke0h2ua4tygtgmchnjvexfgvtjxvl9hd07ugdfqqw95at
   - &auriga age1p57454z8mpvd4acley0vh0c9mphrmqyztynvwua23p9ly8a8meqsey3xv0
+  - &cygnus age1k79erdm8drn44snhatw8wsdnsle9zhjvs49956ujvyn4dqu9paksm38gf0
 creation_rules:
   - path_regex: ^secrets.yaml$
     key_groups:
       - age:
           - *primary
           - *auriga
+          - *cygnus

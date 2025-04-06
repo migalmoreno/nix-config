@@ -7,6 +7,7 @@ nixpkgs.lib.nixosSystem {
   modules = [
     home-manager.nixosModules.home-manager
     ordenada.nixosModules.ordenada
+    sops-nix.nixosModules.sops
     ../services/cgit.nix
     (
       {
@@ -69,11 +70,38 @@ nixpkgs.lib.nixosSystem {
           };
         };
         virtualisation.oci-containers.containers = {
-          tubo = {
-            image = "migalmoreno/tubo";
+          tubo-backend = {
+            image = "migalmoreno/tubo-backend";
             ports = [ "3000:3000" ];
-            extraOptions = [ "--network=host" ];
+            extraOptions = [ "--network=container:gluetun" ];
+            dependsOn = [ "gluetun" ];
           };
+          tubo-bg-helper = {
+            image = "migalmoreno/tubo-bg-helper";
+            ports = [ "3005:3005" ];
+            extraOptions = [ "--network=container:gluetun" ];
+            dependsOn = [ "gluetun" ];
+          };
+          gluetun = {
+            image = "qmcgaw/gluetun";
+            extraOptions = [
+              "--cap-add=NET_ADMIN"
+              "--device=/dev/net/tun:/dev/net/tun"
+            ];
+            ports = [
+              "3000:3000"
+              "3005:3005"
+            ];
+            environmentFiles = [ config.sops.templates."gluetun.env".path ];
+          };
+        };
+        sops = {
+          defaultSopsFile = ../secrets.yaml;
+          age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+          secrets = {
+            "hosts/cygnus/gluetun/config" = { };
+          };
+          templates."gluetun.env".content = config.sops.placeholder."hosts/cygnus/gluetun/config";
         };
         networking.firewall.allowedTCPPorts = [
           80
