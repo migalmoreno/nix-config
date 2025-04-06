@@ -94,13 +94,27 @@ nixpkgs.lib.nixosSystem {
         nixarr = {
           enable = true;
           jellyfin.enable = true;
+          lidarr.enable = true;
+          readarr.enable = true;
           radarr.enable = true;
+          bazarr.enable = true;
+          sabnzbd = {
+            enable = true;
+            guiPort = 8081;
+          };
           sonarr = {
             enable = true;
             package = pkgs.sonarr.overrideAttrs (lib.const { doCheck = false; });
           };
           prowlarr.enable = true;
-          transmission.enable = true;
+          transmission = {
+            enable = true;
+            openFirewall = true;
+            extraSettings = {
+              rpc-host-whitelist-enabled = false;
+              rpc-whitelist-enabled = false;
+            };
+          };
         };
         users.users.streamer.extraGroups = [ "video" ];
         services.jellyseerr = {
@@ -223,7 +237,19 @@ nixpkgs.lib.nixosSystem {
               ];
             }
             {
-              "Development" = [
+              "Media and Storage" = [
+                {
+                  "Jellyfin" = {
+                    icon = "jellyfin";
+                    href = "http://${config.networking.hostName}:8096";
+                  };
+                }
+                {
+                  "Filestash" = {
+                    icon = "filestash";
+                    href = "http://${config.networking.hostName}:${toString config.services.filestash.settings.general.port}";
+                  };
+                }
                 {
                   "Cgit" = {
                     icon = "git";
@@ -233,17 +259,11 @@ nixpkgs.lib.nixosSystem {
               ];
             }
             {
-              "Media and Storage" = [
-                {
-                  "Jellyfin" = {
-                    icon = "jellyfin";
-                    href = "http://${config.networking.hostName}:8096";
-                  };
-                }
+              "Media Automation" = [
                 {
                   "Jellyseerr" = {
                     icon = "jellyseerr";
-                    href = "http://${config.networking.hostName}:5055";
+                    href = "http://${config.networking.hostName}:${toString config.services.jellyseerr.port}";
                   };
                 }
                 {
@@ -259,9 +279,43 @@ nixpkgs.lib.nixosSystem {
                   };
                 }
                 {
-                  "Filestash" = {
-                    icon = "filestash";
-                    href = "http://${config.networking.hostName}:8334";
+                  "Readarr" = {
+                    icon = "readarr";
+                    href = "http://${config.networking.hostName}:8787";
+                  };
+                }
+                {
+                  "Lidarr" = {
+                    icon = "lidarr";
+                    href = "http://${config.networking.hostName}:8686";
+                  };
+                }
+                {
+                  "Prowlarr" = {
+                    icon = "prowlarr";
+                    href = "http://${config.networking.hostName}:9696";
+                  };
+                }
+                {
+                  "Bazarr" = {
+                    icon = "bazarr";
+                    href = "http://${config.networking.hostName}:${toString config.services.bazarr.listenPort}";
+                  };
+                }
+              ];
+            }
+            {
+              "Download Clients" = [
+                {
+                  "Transmission" = {
+                    icon = "transmission";
+                    href = "http://${config.networking.hostName}:${toString config.nixarr.transmission.uiPort}";
+                  };
+                }
+                {
+                  "SABnzbd" = {
+                    icon = "sabnzbd";
+                    href = "http://${config.networking.hostName}:${toString config.nixarr.sabnzbd.guiPort}";
                   };
                 }
               ];
