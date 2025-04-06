@@ -49,6 +49,12 @@ nixpkgs.lib.nixosSystem {
               autoStartTty = "/dev/pts/0";
               modifier = "Mod2";
             };
+            waybar.modules = with config.ordenada.features.waybar.defaultModules; [
+              swayWorkspaces
+              swayMode
+              swayWindow
+              swaync
+            ];
             ssh = {
               enable = true;
               daemon = false;
