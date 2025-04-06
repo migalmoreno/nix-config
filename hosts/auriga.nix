@@ -202,6 +202,12 @@ nixpkgs.lib.nixosSystem {
                     href = "http://${config.networking.hostName}:${toString config.services.grafana.settings.server.http_port}";
                   };
                 }
+                {
+                  "Adguard Home" = {
+                    icon = "adguard-home";
+                    href = "http://${config.networking.hostName}:${toString config.services.adguardhome.port}";
+                  };
+                }
               ];
             }
             {
@@ -321,6 +327,11 @@ nixpkgs.lib.nixosSystem {
               ];
             }
           ];
+        };
+        services.adguardhome = {
+          enable = true;
+          port = 3003;
+          settings = { };
         };
         services.grafana = {
           enable = true;
