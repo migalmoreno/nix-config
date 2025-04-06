@@ -22,6 +22,11 @@ nixpkgs.lib.nixosSystem {
       {
         time.timeZone = "Europe/Madrid";
         hardware.graphics.enable = true;
+        hardware.keyboard.qmk.enable = true;
+        services.udev.packages = with pkgs; [
+          via
+          vial
+        ];
         nixpkgs.overlays = overlays;
         networking.hostName = "orion";
         networking.firewall.enable = false;
@@ -31,6 +36,8 @@ nixpkgs.lib.nixosSystem {
           git-agecrypt
           pavucontrol
           alacritty
+          via
+          vial
         ];
         ordenada = {
           users.saiph = { };
