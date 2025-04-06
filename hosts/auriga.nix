@@ -434,9 +434,14 @@ nixpkgs.lib.nixosSystem {
           };
         };
         virtualisation.oci-containers.containers = {
-          tubo = {
-            image = "migalmoreno/tubo";
+          tubo-backend = {
+            image = "migalmoreno/tubo-backend";
             ports = [ "3000:3000" ];
+            extraOptions = [ "--network=host" ];
+          };
+          tubo-bg-helper = {
+            image = "migalmoreno/tubo-bg-helper";
+            ports = [ "3005:3005" ];
             extraOptions = [ "--network=host" ];
           };
         };
