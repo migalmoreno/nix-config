@@ -148,6 +148,7 @@
       keybindings =
         let
           pamixer = "${pkgs.pamixer}/bin/pamixer";
+          playerctl = "${pkgs.playerctl}/bin/playerctl";
         in
         with config.ordenada.features.sway;
         {
@@ -156,6 +157,10 @@
           "XF86AudioMute" = "exec ${pamixer} -t";
           "XF86AudioRaiseVolume" = "exec ${pamixer} --unmute --increase 5";
           "XF86AudioLowerVolume" = "exec ${pamixer} --unmute --decrease 5";
+          "XF86AudioPlay" = "exec ${playerctl} play-pause";
+          "XF86AudioPause" = "exec ${playerctl} play-pause";
+          "XF86AudioNext" = "exec ${playerctl} next";
+          "XF86AudioPrev" = "exec ${playerctl} previous";
           "${modifier}+x" = "exec ${pkgs.swaylock-effects}/bin/swaylock";
           "${modifier}+n" = "exec ${pkgs.swaynotificationcenter}/bin/swaync-client -t -sw";
           "${modifier}+p" = "exec ${pkgs.wlogout}/bin/wlogout";
@@ -164,6 +169,7 @@
     };
     waybar.enable = true;
     bemenu.enable = true;
+    playerctl.enable = true;
     firefox = {
       enable = true;
       extraSettings = {
