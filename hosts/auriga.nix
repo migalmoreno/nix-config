@@ -413,6 +413,14 @@ nixpkgs.lib.nixosSystem {
           recommendedGzipSettings = true;
           recommendedProxySettings = true;
           virtualHosts = {
+            "git.migalmoreno.com" = {
+              listen = [
+                {
+                  addr = "0.0.0.0";
+                  port = 4040;
+                }
+              ];
+            };
             "irc.auriga" = {
               root = "${pkgs.gamja}";
               listen = [
