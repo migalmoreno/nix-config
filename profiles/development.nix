@@ -11,7 +11,7 @@
     keyboard.layout = {
       name = "us,es";
       options = [
-        "grp:shifts_toggle"
+        "grp:rctrl_rshift_toggle"
         "caps:ctrl_modifier"
         "altwin:prtsc_rwin"
       ];
