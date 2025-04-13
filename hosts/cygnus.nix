@@ -70,6 +70,13 @@ nixpkgs.lib.nixosSystem {
           };
         };
         virtualisation.oci-containers.containers = {
+          tubo-frontend = {
+            image = "migalmoreno/tubo-frontend";
+            ports = [ "8080:8080" ];
+            environment = {
+              BACKEND_URL = "https://api.tubo.media";
+            };
+          };
           tubo-backend = {
             image = "migalmoreno/tubo-backend";
             ports = [ "3000:3000" ];
@@ -158,6 +165,20 @@ nixpkgs.lib.nixosSystem {
                 };
               };
               "tubo.media" = {
+                enableACME = true;
+                forceSSL = true;
+                extraConfig = crawlersBlock;
+                locations = {
+                  "/" = {
+                    proxyPass = "http://localhost:8080";
+                    extraConfig = ''
+                      limit_req zone=ip burst=20 nodelay;
+                    '';
+                  };
+                  "/robots.txt" = robotsTxt;
+                };
+              };
+              "api.tubo.media" = {
                 enableACME = true;
                 forceSSL = true;
                 extraConfig = crawlersBlock;
