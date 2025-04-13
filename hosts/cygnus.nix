@@ -147,6 +147,7 @@ nixpkgs.lib.nixosSystem {
                 root = "/srv/http/migalmoreno.com";
                 extraConfig = ''
                   error_page 404 = /404.html;
+                  limit_req zone=ip burst=5 nodelay;
                   ${crawlersBlock}
                 '';
               };
