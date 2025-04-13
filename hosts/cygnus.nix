@@ -126,23 +126,12 @@ nixpkgs.lib.nixosSystem {
                   return 200 "User-agent: *\nDisallow: /";
                 '';
               };
-              botNames = [
-                "Bytespider"
-                "AmazonBot"
-                "MJ12bot"
-                "DotBot"
-                "FriendlyCrawler"
-                "GPTBot"
-                "AhrefsBot"
-                "bingbot"
-                "ClaudeBot"
-                "Googlebot"
-              ];
-              crawlersBlock = ''
-                if ($http_user_agent ~* (${lib.concatStringsSep "|" botNames})) {
-                  return 403;
+              crawlersBlock = builtins.readFile (
+                pkgs.fetchurl {
+                  url = "https://raw.githubusercontent.com/ai-robots-txt/ai.robots.txt/refs/heads/main/nginx-block-ai-bots.conf";
+                  sha256 = "0DIHl1vTOAL2o2UIfami0YFsRau74KjNpSsnhjcP3QQ=";
                 }
-              '';
+              );
             in
             {
               "migalmoreno.com" = {
