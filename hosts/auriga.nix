@@ -12,6 +12,7 @@ nixpkgs.lib.nixosSystem {
     ordenada.nixosModules.ordenada
     filestash-nix.nixosModules.filestash
     ../services/cgit.nix
+    ../services/nix.nix
     ../services/whoogle-search.nix
     (
       {
@@ -448,10 +449,6 @@ nixpkgs.lib.nixosSystem {
             image = "migalmoreno/tubo-bg-helper";
             ports = [ "3005:3005" ];
           };
-        };
-        nix.gc = {
-          automatic = true;
-          options = "--delete-older-than 30d";
         };
         nixpkgs.config.permittedInsecurePackages = [
           "aspnetcore-runtime-wrapped-6.0.36"

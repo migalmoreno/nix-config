@@ -9,6 +9,7 @@ nixpkgs.lib.nixosSystem {
     ordenada.nixosModules.ordenada
     sops-nix.nixosModules.sops
     ../services/cgit.nix
+    ../services/nix.nix
     (
       {
         config,
@@ -194,10 +195,6 @@ nixpkgs.lib.nixosSystem {
                 };
               };
             };
-        };
-        nix.gc = {
-          automatic = true;
-          options = "--delete-older-than 30d";
         };
         security.acme = {
           acceptTerms = true;
