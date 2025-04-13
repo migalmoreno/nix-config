@@ -51,6 +51,7 @@
       extraPackages = with pkgs.emacsPackages; [
         wgrep
         emacs-conflict
+        org-present
         nginx-mode
         hcl-mode
       ];
