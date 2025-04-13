@@ -109,7 +109,6 @@ nixpkgs.lib.nixosSystem {
           prowlarr.enable = true;
           transmission = {
             enable = true;
-            openFirewall = true;
             extraSettings = {
               rpc-host-whitelist-enabled = false;
               rpc-whitelist-enabled = false;
