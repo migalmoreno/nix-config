@@ -223,8 +223,8 @@ nixpkgs.lib.nixosSystem {
               "Privacy Clients" = [
                 {
                   "Tubo" = {
-                    icon = "http://${config.networking.hostName}:3000/icons/tubo.svg";
-                    href = "http://${config.networking.hostName}:3000";
+                    icon = "http://${config.networking.hostName}:8083/icons/tubo.svg";
+                    href = "http://${config.networking.hostName}:8083";
                   };
                 }
                 {
@@ -433,6 +433,13 @@ nixpkgs.lib.nixosSystem {
           };
         };
         virtualisation.oci-containers.containers = {
+          tubo-frontend = {
+            image = "migalmoreno/tubo-frontend";
+            ports = [ "8083:8080" ];
+            environment = {
+              BACKEND_URL = "http://auriga:3000";
+            };
+          };
           tubo-backend = {
             image = "migalmoreno/tubo-backend";
             ports = [ "3000:3000" ];
