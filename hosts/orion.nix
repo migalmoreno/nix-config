@@ -51,7 +51,7 @@ nixpkgs.lib.nixosSystem {
                 "git-ext.${builtins.elemAt domains 1}" = "git-link-gitlab";
               };
             };
-            javascript.node = pkgs.nodejs_18;
+            javascript.node = pkgs.nodejs_20;
             sway = {
               autoStartTty = "/dev/pts/0";
               modifier = "Mod2";
