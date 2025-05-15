@@ -451,27 +451,6 @@
         "type": "github"
       }
     },
-    "home-manager_2": {
-      "inputs": {
-        "nixpkgs": [
-          "ordenada",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1736066484,
-        "narHash": "sha256-uTstP36WaFrw+TEHb8nLF14hFPzQBOhmIxzioHCDaL8=",
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "rev": "5ad12b6ea06b84e48f6b677957c74f32d47bdee0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "type": "github"
-      }
-    },
     "kitty-themes-src": {
       "flake": false,
       "locked": {
@@ -990,7 +969,9 @@
         "arkenfox-nixos": "arkenfox-nixos",
         "base16": "base16",
         "flake-compat": "flake-compat_5",
-        "home-manager": "home-manager_2",
+        "home-manager": [
+          "home-manager"
+        ],
         "nix-rice": "nix-rice_2",
         "nixpkgs": "nixpkgs_12",
         "nur": "nur_2",

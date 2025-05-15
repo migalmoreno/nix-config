@@ -19,7 +19,10 @@
       url = "github:mobile-nixos/mobile-nixos";
       flake = false;
     };
-    ordenada.url = "github:migalmoreno/ordenada";
+    ordenada = {
+      url = "github:migalmoreno/ordenada";
+      inputs.home-manager.follows = "home-manager";
+    };
     nix-rice.url = "github:bertof/nix-rice";
     systems.url = "github:nix-systems/default";
     filestash-nix.url = "github:dermetfan/filestash.nix";
