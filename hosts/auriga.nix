@@ -118,6 +118,10 @@ nixpkgs.lib.nixosSystem {
           };
         };
         users.users.streamer.extraGroups = [ "video" ];
+        systemd.tmpfiles.settings."10-radarr".${config.services.radarr.dataDir}.d = lib.mkForce {
+          inherit (config.services.radarr) user group;
+          mode = "0775";
+        };
         services.jellyseerr = {
           enable = true;
           openFirewall = true;
