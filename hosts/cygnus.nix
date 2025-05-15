@@ -169,7 +169,7 @@ nixpkgs.lib.nixosSystem {
               crawlersBlock = builtins.readFile (
                 pkgs.fetchurl {
                   url = "https://raw.githubusercontent.com/ai-robots-txt/ai.robots.txt/refs/heads/main/nginx-block-ai-bots.conf";
-                  sha256 = "0DIHl1vTOAL2o2UIfami0YFsRau74KjNpSsnhjcP3QQ=";
+                  sha256 = "sha256-06Md2MoG+xYQKFtgFlu8qNDGG/f0XeEPyxvE24ZbO/c=";
                 }
               );
             in
