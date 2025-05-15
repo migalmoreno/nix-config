@@ -38,6 +38,7 @@ nixpkgs.lib.nixosSystem {
           git-agecrypt
           via
           vial
+          podman-compose
           (texlive.combine {
             inherit (pkgs.texlive)
               scheme-basic
@@ -338,6 +339,13 @@ nixpkgs.lib.nixosSystem {
           secrets = {
             "hosts/lyra/syncthing/key".owner = "vega";
             "hosts/lyra/syncthing/cert".owner = "vega";
+          };
+        };
+        virtualisation.podman = {
+          enable = true;
+          autoPrune = {
+            enable = true;
+            flags = [ "--all" ];
           };
         };
         systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true";

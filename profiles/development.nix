@@ -23,7 +23,6 @@
     bluetooth.enable = true;
     gtk.enable = true;
     git.enable = true;
-    docker.enable = true;
     android.enable = true;
     javascript.enable = true;
     nix.enable = true;
