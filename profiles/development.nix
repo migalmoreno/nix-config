@@ -53,6 +53,7 @@
         org-present
         nginx-mode
         hcl-mode
+        kotlin-mode
       ];
       ace-window.enable = true;
       all-the-icons.enable = true;
