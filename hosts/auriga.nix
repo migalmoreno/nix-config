@@ -206,6 +206,11 @@ nixpkgs.lib.nixosSystem {
               };
             }
           ];
+          settings = {
+            target = "_self";
+            headerStyle = "clean";
+            color = "neutral";
+          };
           services = [
             {
               "Monitoring" = [
