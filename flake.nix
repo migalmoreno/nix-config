@@ -21,7 +21,10 @@
     };
     ordenada = {
       url = "github:migalmoreno/ordenada";
-      inputs.home-manager.follows = "home-manager";
+      inputs = {
+        home-manager.follows = "home-manager";
+        nur.follows = "nur";
+      };
     };
     nix-rice.url = "github:bertof/nix-rice";
     systems.url = "github:nix-systems/default";
