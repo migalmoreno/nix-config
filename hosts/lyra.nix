@@ -5,7 +5,6 @@ with inputs;
 nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
   modules = [
-    nur.modules.nixos.default
     sops-nix.nixosModules.sops
     ordenada.nixosModules.ordenada
     ../profiles/development.nix
