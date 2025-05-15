@@ -26,7 +26,6 @@
         nur.follows = "nur";
       };
     };
-    nix-rice.url = "github:bertof/nix-rice";
     systems.url = "github:nix-systems/default";
     filestash-nix.url = "github:dermetfan/filestash.nix";
   };
@@ -59,7 +58,6 @@
         let
           secrets = builtins.fromJSON (builtins.readFile ./secrets/secrets.json);
           overlays = [
-            inputs.nix-rice.overlays.default
             (final: prev: { inherit secrets; })
           ];
           pkgs = import nixpkgs { inherit overlays; };
