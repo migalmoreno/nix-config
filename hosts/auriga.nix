@@ -454,6 +454,28 @@ nixpkgs.lib.nixosSystem {
             };
           };
         };
+        virtualisation.podman = {
+          enable = true;
+          defaultNetwork.settings = {
+            dns_enabled = true;
+          };
+          autoPrune = {
+            enable = true;
+            flags = [ "--all" ];
+          };
+        };
+        systemd.services.podman-auto-update = {
+          enable = false;
+          wantedBy = [ "multi-user.target" ];
+        };
+        systemd.timers.podman-auto-update = {
+          enable = false;
+          timerConfig = {
+            OnCalendar = "daily";
+            RandomizedDelaySec = 900;
+            Persistent = true;
+          };
+        };
         virtualisation.oci-containers.containers = {
           tubo-frontend = {
             image = "migalmoreno/tubo-frontend";
