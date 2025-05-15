@@ -92,6 +92,16 @@ nixpkgs.lib.nixosSystem {
             ];
           };
         };
+        virtualisation.oci-containers.containers = {
+          tubo-frontend = {
+            image = "migalmoreno/tubo-frontend";
+            ports = [ "8080:8080" ];
+            extraOptions = [ "--pull=newer" ];
+            environment = {
+              BACKEND_URL = "http://${pkgs.secrets.hosts.auriga.address}:3000";
+            };
+          };
+        };
         sops = {
           defaultSopsFile = ../secrets.yaml;
           age.sshKeyPaths = [ "${config.home-manager.users.saiph.home.homeDirectory}/.ssh/id_ed25519" ];
