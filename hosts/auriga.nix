@@ -6,7 +6,6 @@ nixpkgs.lib.nixosSystem {
   system = "aarch64-linux";
   modules = [
     nixos-hardware.nixosModules.raspberry-pi-4
-    home-manager.nixosModules.home-manager
     nixarr.nixosModules.default
     sops-nix.nixosModules.sops
     ordenada.nixosModules.ordenada

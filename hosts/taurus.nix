@@ -5,7 +5,6 @@ with inputs;
 nixpkgs.lib.nixosSystem {
   system = "aarch64-linux";
   modules = [
-    home-manager.nixosModules.home-manager
     ordenada.nixosModules.ordenada
     (import "${mobile-nixos}/lib/configuration.nix" { device = "oneplus-enchilada"; })
     (

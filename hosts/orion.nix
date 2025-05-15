@@ -7,7 +7,6 @@ nixpkgs.lib.nixosSystem {
   modules = [
     nixos-wsl.nixosModules.default
     nur.modules.nixos.default
-    home-manager.nixosModules.home-manager
     ordenada.nixosModules.ordenada
     sops-nix.nixosModules.sops
     ../profiles/development.nix

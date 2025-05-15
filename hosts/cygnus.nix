@@ -5,7 +5,6 @@ with inputs;
 nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
   modules = [
-    home-manager.nixosModules.home-manager
     ordenada.nixosModules.ordenada
     sops-nix.nixosModules.sops
     ../services/cgit.nix
