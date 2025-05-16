@@ -444,6 +444,20 @@ nixpkgs.lib.nixosSystem {
             };
             "irc.auriga" = {
               root = "${pkgs.gamja}";
+              locations."= /config.json".extraConfig = ''
+                alias ${pkgs.writeText "gamja-config.json" ''
+                  {
+                    "server": {
+                      "url": "http://auriga:8080",
+                      "autojoin": [],
+                      "auth": "optional",
+                      "nick": "migalmoreno",
+                      "autoconnect": false,
+                      "ping": 0
+                    }
+                  }
+                ''};
+              '';
               listen = [
                 {
                   addr = "0.0.0.0";
