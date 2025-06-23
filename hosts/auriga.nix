@@ -1,18 +1,8 @@
 { inputs, overlays, ... }:
 
-with inputs;
-
-nixpkgs.lib.nixosSystem {
+inputs.nixpkgs.lib.nixosSystem {
   system = "aarch64-linux";
   modules = [
-    nixos-hardware.nixosModules.raspberry-pi-4
-    nixarr.nixosModules.default
-    sops-nix.nixosModules.sops
-    ordenada.nixosModules.ordenada
-    filestash-nix.nixosModules.filestash
-    ../services/cgit.nix
-    ../services/nix.nix
-    ../services/whoogle-search.nix
     (
       {
         config,
@@ -21,6 +11,15 @@ nixpkgs.lib.nixosSystem {
         ...
       }:
       {
+        imports = with inputs; [
+          nixos-hardware.nixosModules.raspberry-pi-4
+          nixarr.nixosModules.default
+          sops-nix.nixosModules.sops
+          filestash-nix.nixosModules.filestash
+          ../profiles/cgit.nix
+          ../profiles/nix.nix
+          ../profiles/tailscale.nix
+        ];
         hardware = {
           enableRedistributableFirmware = true;
           raspberry-pi."4" = {
@@ -29,9 +28,19 @@ nixpkgs.lib.nixosSystem {
           };
         };
         hardware.graphics.enable = true;
-        networking.hostName = "auriga";
-        networking.interfaces.wlan0.useDHCP = true;
-        networking.firewall.enable = true;
+        networking = {
+          hostName = "auriga";
+          useDHCP = false;
+          interfaces.wlan0.useDHCP = true;
+          firewall = {
+            enable = true;
+            allowedTCPPorts = [
+              6667
+              3000
+            ];
+          };
+          networkmanager.enable = true;
+        };
         nixpkgs.overlays = overlays;
         boot = {
           kernelPackages = pkgs.linuxKernel.packages.linux_rpi4;
@@ -80,23 +89,22 @@ nixpkgs.lib.nixosSystem {
           git
           rsync
         ];
-        ordenada = {
-          users.capella = { };
-          features = {
-            userInfo.username = "capella";
-            home.enable = true;
-            bash.enable = true;
-            networking.enable = true;
-            ssh = {
-              enable = true;
-              rootAuthorizedKeys = [
-                pkgs.secrets.personal.publicSshKey
-                pkgs.secrets.work.publicSshKey
-              ];
-            };
-            tailscale.enable = true;
-            nix.enable = true;
-            docker.enable = true;
+        services.openssh = {
+          enable = true;
+          settings = {
+            PasswordAuthentication = false;
+            KbdInteractiveAuthentication = false;
+            PermitRootLogin = "yes";
+          };
+        };
+        users.users = {
+          root.openssh.authorizedKeys.keys = [
+            pkgs.secrets.personal.publicSshKey
+            pkgs.secrets.work.publicSshKey
+          ];
+          capella = {
+            isNormalUser = true;
+            extraGroups = [ "wheel" ];
           };
         };
         services.resolved.enable = true;
@@ -193,10 +201,6 @@ nixpkgs.lib.nixosSystem {
           ];
           httpOrigins = [ "*" ];
         };
-        networking.firewall.allowedTCPPorts = [
-          6667
-          3000
-        ];
         services.homepage-dashboard = {
           enable = true;
           widgets = [
