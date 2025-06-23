@@ -65,7 +65,15 @@ nixpkgs.lib.nixosSystem {
             fsType = "vfat";
           };
         };
-        swapDevices = [ { device = "/dev/disk/by-label/SWAP"; } ];
+        swapDevices = [
+          {
+            device = "/dev/disk/by-label/SWAP";
+          }
+          {
+            device = "/var/lib/swapfile";
+            size = 16 * 1024;
+          }
+        ];
         time.timeZone = "Europe/Madrid";
         environment.systemPackages = with pkgs; [
           emacs
