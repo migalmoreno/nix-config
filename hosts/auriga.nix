@@ -145,18 +145,44 @@ inputs.nixpkgs.lib.nixosSystem {
             "hosts/auriga/syncthing/key" = { };
             "hosts/auriga/syncthing/cert" = { };
             "hosts/auriga/tubo/db/password" = { };
+            "hosts/auriga/searxng/secret_key" = { };
+            "hosts/auriga/radarr/api_key" = { };
+            "hosts/auriga/sonarr/api_key" = { };
+            "hosts/auriga/lidarr/api_key" = { };
+            "hosts/auriga/readarr/api_key" = { };
+            "hosts/auriga/prowlarr/api_key" = { };
+            "hosts/auriga/bazarr/api_key" = { };
+            "hosts/auriga/jellyfin/api_key" = { };
+            "hosts/auriga/jellyseerr/api_key" = { };
+            "hosts/auriga/grafana/password" = { };
           };
-          templates."tubo-backend.env".content = ''
-            DB_HOST=tubo-db
-            DB_NAME=tubo
-            DB_USER=tubo
-            DB_PASSWORD=${config.sops.placeholder."hosts/auriga/tubo/db/password"}
-          '';
-          templates."tubo-db.env".content = ''
-            POSTGRES_DB=tubo
-            POSTGRES_USER=tubo
-            POSTGRES_PASSWORD=${config.sops.placeholder."hosts/auriga/tubo/db/password"}
-          '';
+          templates = {
+            "tubo-backend.env".content = ''
+              DB_HOST=tubo-db
+              DB_NAME=tubo
+              DB_USER=tubo
+              DB_PASSWORD=${config.sops.placeholder."hosts/auriga/tubo/db/password"}
+            '';
+            "tubo-db.env".content = ''
+              POSTGRES_DB=tubo
+              POSTGRES_USER=tubo
+              POSTGRES_PASSWORD=${config.sops.placeholder."hosts/auriga/tubo/db/password"}
+            '';
+            "searxng.env".content = ''
+              SEARXNG_SECRET=${config.sops.placeholder."hosts/auriga/searxng/secret_key"}
+            '';
+            "homepage.env".content = ''
+              HOMEPAGE_VAR_RADARR_API_KEY=${config.sops.placeholder."hosts/auriga/radarr/api_key"}
+              HOMEPAGE_VAR_SONARR_API_KEY=${config.sops.placeholder."hosts/auriga/sonarr/api_key"}
+              HOMEPAGE_VAR_JELLYFIN_API_KEY=${config.sops.placeholder."hosts/auriga/jellyfin/api_key"}
+              HOMEPAGE_VAR_JELLYSEERR_API_KEY=${config.sops.placeholder."hosts/auriga/jellyseerr/api_key"}
+              HOMEPAGE_VAR_READARR_API_KEY=${config.sops.placeholder."hosts/auriga/readarr/api_key"}
+              HOMEPAGE_VAR_LIDARR_API_KEY=${config.sops.placeholder."hosts/auriga/lidarr/api_key"}
+              HOMEPAGE_VAR_PROWLARR_API_KEY=${config.sops.placeholder."hosts/auriga/prowlarr/api_key"}
+              HOMEPAGE_VAR_BAZARR_API_KEY=${config.sops.placeholder."hosts/auriga/bazarr/api_key"}
+              HOMEPAGE_VAR_GRAFANA_PASSWORD=${config.sops.placeholder."hosts/auriga/grafana/password"}
+            '';
+          };
         };
         systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true";
         services.syncthing = {
@@ -201,8 +227,11 @@ inputs.nixpkgs.lib.nixosSystem {
           ];
           httpOrigins = [ "*" ];
         };
+        systemd.services.homepage-dashboard.serviceConfig.Group = "podman";
         services.homepage-dashboard = {
           enable = true;
+          allowedHosts = "*";
+          environmentFile = config.sops.templates."homepage.env".path;
           widgets = [
             {
               resources = {
@@ -215,145 +244,248 @@ inputs.nixpkgs.lib.nixosSystem {
               };
             }
           ];
+          docker = {
+            auriga-podman = {
+              socket = "/var/run/podman/podman.sock";
+            };
+          };
           settings = {
             target = "_self";
-            headerStyle = "clean";
-            color = "neutral";
+            headerStyle = "boxedWidgets";
+            color = "slate";
+            disableCollapse = true;
+            hideVersion = true;
+            disableUpdateCheck = true;
+            layout = {
+              "Monitoring" = {
+                style = "row";
+                columns = 2;
+              };
+              "Download Clients" = {
+                style = "row";
+                columns = 2;
+              };
+              "Media Automation" = {
+                style = "row";
+                columns = 4;
+              };
+              "Communication" = {
+                style = "row";
+                columns = 2;
+              };
+              "Media and Storage" = {
+                style = "row";
+                columns = 2;
+              };
+              "Privacy Clients" = {
+                style = "row";
+                columns = 3;
+              };
+            };
           };
-          services = [
-            {
-              "Monitoring" = [
-                {
-                  "Grafana" = {
-                    icon = "grafana";
-                    href = "http://${config.networking.hostName}:${toString config.services.grafana.settings.server.http_port}";
-                  };
-                }
-                {
-                  "Adguard Home" = {
-                    icon = "adguard-home";
-                    href = "http://${config.networking.hostName}:${toString config.services.adguardhome.port}";
-                  };
-                }
-              ];
-            }
-            {
-              "Communication" = [
-                {
-                  "Gamja" = {
-                    icon = "irc";
-                    href = "http://${config.networking.hostName}:4800";
-                  };
-                }
-              ];
-            }
-            {
-              "Privacy Clients" = [
-                {
-                  "Tubo" = {
-                    icon = "http://${config.networking.hostName}:8083/icons/tubo.svg";
-                    href = "http://${config.networking.hostName}:8083";
-                  };
-                }
-                {
-                  "Redlib" = {
-                    icon = "redlib";
-                    href = "http://${config.networking.hostName}:${toString config.services.redlib.port}";
-                  };
-                }
-                {
-                  "Whoogle" = {
-                    icon = "whoogle";
-                    href = "http://${config.networking.hostName}:${toString config.services.whoogle-search.port}";
-                  };
-                }
-              ];
-            }
-            {
-              "Media and Storage" = [
-                {
-                  "Jellyfin" = {
-                    icon = "jellyfin";
-                    href = "http://${config.networking.hostName}:8096";
-                  };
-                }
-                {
-                  "Filestash" = {
-                    icon = "filestash";
-                    href = "http://${config.networking.hostName}:${toString config.services.filestash.settings.general.port}";
-                  };
-                }
-                {
-                  "Cgit" = {
-                    icon = "git";
-                    href = "http://${config.networking.hostName}:4040";
-                  };
-                }
-              ];
-            }
-            {
-              "Media Automation" = [
-                {
-                  "Jellyseerr" = {
-                    icon = "jellyseerr";
-                    href = "http://${config.networking.hostName}:${toString config.services.jellyseerr.port}";
-                  };
-                }
-                {
-                  "Radarr" = {
-                    icon = "radarr";
-                    href = "http://${config.networking.hostName}:7878";
-                  };
-                }
-                {
-                  "Sonarr" = {
-                    icon = "sonarr";
-                    href = "http://${config.networking.hostName}:8989";
-                  };
-                }
-                {
-                  "Readarr" = {
-                    icon = "readarr";
-                    href = "http://${config.networking.hostName}:8787";
-                  };
-                }
-                {
-                  "Lidarr" = {
-                    icon = "lidarr";
-                    href = "http://${config.networking.hostName}:8686";
-                  };
-                }
-                {
-                  "Prowlarr" = {
-                    icon = "prowlarr";
-                    href = "http://${config.networking.hostName}:9696";
-                  };
-                }
-                {
-                  "Bazarr" = {
-                    icon = "bazarr";
-                    href = "http://${config.networking.hostName}:${toString config.services.bazarr.listenPort}";
-                  };
-                }
-              ];
-            }
-            {
-              "Download Clients" = [
-                {
-                  "Transmission" = {
-                    icon = "transmission";
-                    href = "http://${config.networking.hostName}:${toString config.nixarr.transmission.uiPort}";
-                  };
-                }
-                {
-                  "SABnzbd" = {
-                    icon = "sabnzbd";
-                    href = "http://${config.networking.hostName}:${toString config.nixarr.sabnzbd.guiPort}";
-                  };
-                }
-              ];
-            }
-          ];
+          services =
+            let
+              mkHostUrl = port: "http://${config.networking.hostName}:${toString port}";
+            in
+            [
+              {
+                "Monitoring" = [
+                  {
+                    "Grafana" = {
+                      icon = "grafana";
+                      href = mkHostUrl config.services.grafana.settings.server.http_port;
+                      widget = {
+                        type = "grafana";
+                        url = mkHostUrl config.services.grafana.settings.server.http_port;
+                        username = "admin";
+                        password = "{{HOMEPAGE_VAR_GRAFANA_PASSWORD}}";
+                      };
+                    };
+                  }
+                  {
+                    "Adguard Home" = {
+                      icon = "adguard-home";
+                      href = mkHostUrl config.services.adguardhome.port;
+                      widget = {
+                        type = "adguard";
+                        url = mkHostUrl config.services.adguardhome.port;
+                        username = "";
+                        password = "";
+                      };
+                    };
+                  }
+                ];
+              }
+              {
+                "Communication" = [
+                  {
+                    "Gamja" = {
+                      icon = "irc";
+                      href = mkHostUrl 4800;
+                    };
+                  }
+                  {
+                    "Movim" = {
+                      icon = "https://chat.migalmoreno.com/theme/img/app/128.png";
+                      href = "https://chat.migalmoreno.com";
+                    };
+                  }
+                ];
+              }
+              {
+                "Media and Storage" = [
+                  {
+                    "Filestash" = {
+                      icon = "filestash";
+                      href = mkHostUrl config.services.filestash.settings.general.port;
+                    };
+                  }
+                  {
+                    "Cgit" = {
+                      icon = "git";
+                      href = mkHostUrl 4040;
+                    };
+                  }
+                  {
+                    "Jellyfin" = {
+                      icon = "jellyfin";
+                      href = mkHostUrl 8096;
+                      widget = {
+                        type = "jellyfin";
+                        url = mkHostUrl 8096;
+                        key = "{{HOMEPAGE_VAR_JELLYFIN_API_KEY}}";
+                      };
+                    };
+                  }
+                ];
+              }
+              {
+                "Media Automation" = [
+                  {
+                    "Jellyseerr" = {
+                      icon = "jellyseerr";
+                      href = mkHostUrl config.services.jellyseerr.port;
+                      widget = {
+                        type = "jellyseerr";
+                        url = mkHostUrl config.services.jellyseerr.port;
+                        key = "{{HOMEPAGE_VAR_JELLYSEERR_API_KEY}}";
+                      };
+                    };
+                  }
+                  {
+                    "Radarr" = {
+                      icon = "radarr";
+                      href = mkHostUrl 7878;
+                      widget = {
+                        type = "radarr";
+                        url = mkHostUrl 7878;
+                        key = "{{HOMEPAGE_VAR_RADARR_API_KEY}}";
+                      };
+                    };
+                  }
+                  {
+                    "Sonarr" = {
+                      icon = "sonarr";
+                      href = mkHostUrl 8989;
+                      widget = {
+                        type = "sonarr";
+                        url = mkHostUrl 8989;
+                        key = "{{HOMEPAGE_VAR_SONARR_API_KEY}}";
+                      };
+                    };
+                  }
+                  {
+                    "Readarr" = {
+                      icon = "readarr";
+                      href = mkHostUrl 8787;
+                      widget = {
+                        type = "readarr";
+                        url = mkHostUrl 8787;
+                        key = "{{HOMEPAGE_VAR_READARR_API_KEY}}";
+                      };
+                    };
+                  }
+                  {
+                    "Lidarr" = {
+                      icon = "lidarr";
+                      href = mkHostUrl 8686;
+                      widget = {
+                        type = "lidarr";
+                        url = mkHostUrl 8686;
+                        key = "{{HOMEPAGE_VAR_LIDARR_API_KEY}}";
+                      };
+                    };
+                  }
+                  {
+                    "Bazarr" = {
+                      icon = "bazarr";
+                      href = mkHostUrl config.services.bazarr.listenPort;
+                      widget = {
+                        type = "bazarr";
+                        url = mkHostUrl config.services.bazarr.listenPort;
+                        key = "{{HOMEPAGE_VAR_BAZARR_API_KEY}}";
+                      };
+                    };
+                  }
+                  {
+                    "Prowlarr" = {
+                      icon = "prowlarr";
+                      href = mkHostUrl 9696;
+                      widget = {
+                        type = "prowlarr";
+                        url = mkHostUrl 9696;
+                        key = "{{HOMEPAGE_VAR_PROWLARR_API_KEY}}";
+                      };
+                    };
+                  }
+                ];
+              }
+              {
+                "Privacy Clients" = [
+                  {
+                    "Tubo" = {
+                      icon = mkHostUrl "8083/icons/tubo.svg";
+                      href = mkHostUrl 8083;
+                      server = "auriga-podman";
+                      container = "tubo-backend";
+                      showStats = true;
+                    };
+                  }
+                  {
+                    "Redlib" = {
+                      icon = "redlib";
+                      href = mkHostUrl config.services.redlib.port;
+                    };
+                  }
+                  {
+                    "SearXNG" = {
+                      icon = "searxng";
+                      href = mkHostUrl config.services.searx.settings.server.port;
+                    };
+                  }
+                ];
+              }
+              {
+                "Download Clients" = [
+                  {
+                    "Transmission" = {
+                      icon = "transmission";
+                      href = mkHostUrl config.nixarr.transmission.uiPort;
+                      widget = {
+                        type = "transmission";
+                        url = mkHostUrl config.nixarr.transmission.uiPort;
+                      };
+                    };
+                  }
+                  {
+                    "SABnzbd" = {
+                      icon = "sabnzbd";
+                      href = mkHostUrl config.nixarr.sabnzbd.guiPort;
+                    };
+                  }
+                ];
+              }
+            ];
         };
         services.adguardhome = {
           enable = true;
