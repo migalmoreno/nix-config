@@ -103,6 +103,7 @@ nixpkgs.lib.nixosSystem {
         nixarr = {
           enable = true;
           jellyfin.enable = true;
+          jellyseerr.enable = true;
           lidarr.enable = true;
           readarr.enable = true;
           radarr.enable = true;
@@ -111,10 +112,7 @@ nixpkgs.lib.nixosSystem {
             enable = true;
             guiPort = 8081;
           };
-          sonarr = {
-            enable = true;
-            package = pkgs.sonarr.overrideAttrs (lib.const { doCheck = false; });
-          };
+          sonarr.enable = true;
           prowlarr.enable = true;
           transmission = {
             enable = true;
@@ -124,14 +122,10 @@ nixpkgs.lib.nixosSystem {
             };
           };
         };
-        users.users.streamer.extraGroups = [ "video" ];
+        users.users.${config.util-nixarr.globals.radarr.user}.extraGroups = [ "video" ];
         systemd.tmpfiles.settings."10-radarr".${config.services.radarr.dataDir}.d = lib.mkForce {
           inherit (config.services.radarr) user group;
           mode = "0775";
-        };
-        services.jellyseerr = {
-          enable = true;
-          openFirewall = true;
         };
         sops = {
           defaultSopsFile = ../secrets.yaml;
@@ -546,12 +540,6 @@ nixpkgs.lib.nixosSystem {
           };
           environment.PGWEB_DATABASE_URL = "postgres://tubo:tubo@localhost:5432/tubo";
         };
-        nixpkgs.config.permittedInsecurePackages = [
-          "aspnetcore-runtime-wrapped-6.0.36"
-          "aspnetcore-runtime-6.0.36"
-          "dotnet-sdk-wrapped-6.0.428"
-          "dotnet-sdk-6.0.428"
-        ];
         system.stateVersion = "24.05";
       }
     )
