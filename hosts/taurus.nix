@@ -1,34 +1,30 @@
 { inputs, overlays, ... }:
 
-with inputs;
-
-nixpkgs.lib.nixosSystem {
+inputs.nixpkgs.lib.nixosSystem {
   system = "aarch64-linux";
   modules = [
-    ordenada.nixosModules.ordenada
-    (import "${mobile-nixos}/lib/configuration.nix" { device = "oneplus-enchilada"; })
     (
+      { config, pkgs, ... }:
       {
-        config,
-        lib,
-        pkgs,
-        ...
-      }:
-      {
+        imports = [
+          (import "${inputs.mobile-nixos}/lib/configuration.nix" { device = "oneplus-enchilada"; })
+          ../../profiles/ssh.nix
+          ../../profiles/nix.nix
+        ];
         nixpkgs.overlays = overlays;
-        mobile.beautification = {
-          silentBoot = false;
-          splash = true;
-        };
         time.timeZone = "Europe/Madrid";
-        networking.firewall.enable = false;
         services.xserver.desktopManager.phosh = {
           enable = true;
           user = "maia";
           group = "users";
         };
-        networking.interfaces.wlan0.useDHCP = true;
-        networking.hostName = "taurus";
+        networking = {
+          hostName = "taurus";
+          useDHCP = false;
+          firewall.enable = false;
+          interfaces.wlan0.useDHCP = true;
+          networkmanager.enable = true;
+        };
         programs.calls.enable = true;
         environment.systemPackages = with pkgs; [
           chatty
@@ -36,37 +32,38 @@ nixpkgs.lib.nixosSystem {
           megapixels
           portfolio-filemanager
         ];
-        ordenada = {
-          users.maia = { };
-          features = {
-            userInfo.username = "maia";
-            home = {
-              enable = true;
-              extraGroups = [
-                "dialout"
-                "feedbackd"
-                "video"
-                "wheel"
-              ];
-            };
-            networking.enable = true;
-            nix.enable = true;
-            ssh = {
-              enable = true;
-              userAuthorizedKeys = [
-                pkgs.secrets.personal.publicSshKey
-                pkgs.secrets.work.publicSshKey
-              ];
-            };
+        users.users = {
+          root = {
+            password = pkgs.secrets.hosts.taurus.password;
+            openssh.authorizedKeys.keys = [
+              pkgs.secrets.personal.publicSshKey
+              pkgs.secrets.work.publicSshKey
+            ];
+          };
+          maia = {
+            isNormalUser = true;
+            password = pkgs.secrets.hosts.taurus.password;
+            extraGroups = [
+              "wheel"
+              "dialout"
+              "feedbackd"
+              "video"
+              "wheel"
+              "networkmanager"
+            ];
           };
         };
-        hardware.enableRedistributableFirmware = true;
-        hardware.graphics.enable = true;
-        hardware.sensor.iio.enable = true;
+        hardware = {
+          enableRedistributableFirmware = true;
+          graphics.enable = true;
+          sensor.iio.enable = true;
+        };
         mobile.quirks.qualcomm.sdm845-modem.enable = true;
         mobile.quirks.audio.alsa-ucm-meld = true;
-        users.users.root.password = pkgs.secrets.hosts.taurus.password;
-        users.users.maia.password = pkgs.secrets.hosts.taurus.password;
+        mobile.beautification = {
+          silentBoot = false;
+          splash = true;
+        };
         system.stateVersion = "24.05";
       }
     )
