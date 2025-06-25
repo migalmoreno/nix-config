@@ -8,7 +8,6 @@ nixpkgs.lib.nixosSystem {
     sops-nix.nixosModules.sops
     ordenada.nixosModules.ordenada
     ../profiles/development.nix
-    ../services/whoogle-search.nix
     (
       {
         lib,
