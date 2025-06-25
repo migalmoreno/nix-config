@@ -36,7 +36,9 @@
       eachSystem = f: lib.genAttrs (import systems) (system: f (import nixpkgs { inherit system; }));
       readDirFilenames =
         dir:
-        (builtins.filter (path: lib.hasSuffix ".nix" path) (builtins.attrNames (builtins.readDir dir)));
+        (builtins.filter (file: lib.hasSuffix ".nix" file.name || file.value == "directory") (
+          lib.mapAttrsToList (name: value: { inherit name value; }) (builtins.readDir dir)
+        ));
     in
     rec {
       images = {
@@ -63,9 +65,9 @@
           pkgs = import nixpkgs { inherit overlays; };
         in
         builtins.listToAttrs (
-          map (path: {
-            name = lib.removeSuffix ".nix" path;
-            value = import (./hosts + "/${path}") { inherit inputs pkgs overlays; };
+          map (file: rec {
+            name = nixpkgs.lib.removeSuffix ".nix" file.name;
+            value = import (./hosts + "/${name}") { inherit inputs pkgs overlays; };
           }) (readDirFilenames ./hosts)
         );
       homeConfigurations = builtins.listToAttrs (
