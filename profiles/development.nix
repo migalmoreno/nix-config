@@ -51,6 +51,7 @@
         (add-hook 'after-save-hook #'delete-trailing-whitespace)
         (with-eval-after-load 'nginx-mode
           (setopt nginx-indent-level 2))
+        (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
       '';
       extraPackages = with pkgs.emacsPackages; [
         wgrep
@@ -59,6 +60,7 @@
         nginx-mode
         hcl-mode
         kotlin-mode
+        lua-mode
       ];
       ace-window.enable = true;
       all-the-icons.enable = true;
