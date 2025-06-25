@@ -1,15 +1,8 @@
 { inputs, overlays, ... }:
 
-with inputs;
-
-nixpkgs.lib.nixosSystem {
+inputs.nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
   modules = [
-    nixos-wsl.nixosModules.default
-    ordenada.nixosModules.ordenada
-    sops-nix.nixosModules.sops
-    ../profiles/development.nix
-    ../services/whoogle-search.nix
     (
       {
         lib,
@@ -18,6 +11,12 @@ nixpkgs.lib.nixosSystem {
         ...
       }:
       {
+        imports = with inputs; [
+          nixos-wsl.nixosModules.default
+          ordenada.nixosModules.ordenada
+          sops-nix.nixosModules.sops
+          ../profiles/development.nix
+        ];
         time.timeZone = "Europe/Madrid";
         hardware.graphics.enable = true;
         hardware.keyboard.qmk.enable = true;
