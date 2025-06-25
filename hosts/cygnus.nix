@@ -1,14 +1,8 @@
 { inputs, overlays, ... }:
 
-with inputs;
-
-nixpkgs.lib.nixosSystem {
+inputs.nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
   modules = [
-    ordenada.nixosModules.ordenada
-    sops-nix.nixosModules.sops
-    ../services/cgit.nix
-    ../services/nix.nix
     (
       {
         config,
@@ -17,8 +11,28 @@ nixpkgs.lib.nixosSystem {
         ...
       }:
       {
-        networking.hostName = "cygnus";
-        networking.firewall.enable = true;
+        imports = with inputs; [
+          sops-nix.nixosModules.sops
+          ../profiles/cgit.nix
+          ../profiles/nix.nix
+          ../profiles/tailscale.nix
+          ../services/prosody.nix
+          ../services/goaccess.nix
+        ];
+        disabledModules = [ "services/networking/prosody.nix" ];
+        networking = {
+          hostName = "cygnus";
+          useDHCP = false;
+          firewall = {
+            enable = true;
+            allowedTCPPorts = [
+              22
+              80
+              443
+            ];
+          };
+          networkmanager.enable = true;
+        };
         time.timeZone = "Europe/Madrid";
         nixpkgs.overlays = overlays;
         boot = {
@@ -43,20 +57,22 @@ nixpkgs.lib.nixosSystem {
           git
           rsync
         ];
-        ordenada = {
-          users.deneb = { };
-          features = {
-            userInfo.username = "deneb";
-            home.enable = true;
-            networking.enable = true;
-            ssh = {
-              enable = true;
-              rootAuthorizedKeys = [
-                pkgs.secrets.personal.publicSshKey
-                pkgs.secrets.work.publicSshKey
-              ];
-            };
-            nix.enable = true;
+        services.openssh = {
+          enable = true;
+          settings = {
+            PasswordAuthentication = false;
+            KbdInteractiveAuthentication = false;
+            PermitRootLogin = "yes";
+          };
+        };
+        users.users = {
+          root.openssh.authorizedKeys.keys = [
+            pkgs.secrets.personal.publicSshKey
+            pkgs.secrets.work.publicSshKey
+          ];
+          deneb = {
+            isNormalUser = true;
+            extraGroups = [ "wheel" ];
           };
         };
         fileSystems = {
@@ -142,9 +158,6 @@ nixpkgs.lib.nixosSystem {
             POSTGRES_PASSWORD=${config.sops.placeholder."hosts/cygnus/tubo/db/password"}
           '';
         };
-        networking.firewall.allowedTCPPorts = [
-          80
-          443
         ];
         services.nginx = {
           enable = true;
