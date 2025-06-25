@@ -1,13 +1,8 @@
 { inputs, overlays, ... }:
 
-with inputs;
-
-nixpkgs.lib.nixosSystem {
+inputs.nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
   modules = [
-    sops-nix.nixosModules.sops
-    ordenada.nixosModules.ordenada
-    ../profiles/development.nix
     (
       {
         lib,
@@ -16,6 +11,11 @@ nixpkgs.lib.nixosSystem {
         ...
       }:
       {
+        imports = with inputs; [
+          sops-nix.nixosModules.sops
+          ordenada.nixosModules.ordenada
+          ../profiles/development.nix
+        ];
         networking.hostName = "lyra";
         networking.firewall.enable = false;
         time.timeZone = "Europe/Madrid";
