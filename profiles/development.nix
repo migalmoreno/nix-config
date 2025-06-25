@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   ordenada.features = {
@@ -188,6 +193,25 @@
         "network.protocol-handler.external.mailto" = false;
         "privacy.trackingprotection.enabled" = true;
         "privacy.trackingprotection.socialtracking.enabled" = true;
+      };
+      arkenfoxSettings = lib.mkOptionDefault {
+        "0800" = {
+          enable = true;
+          "0807"."browser.urlbar.clipboard.featureGate".enable = true;
+          "0808"."browser.urlbar.recentsearches.featureGate".enable = true;
+          "0815"."browser.urlbar.suggest.engines".enable = true;
+        };
+        "5000" = {
+          enable = true;
+          "5003"."signon.rememberSignons".enable = true;
+          "5010" = {
+            "browser.urlbar.suggest.history".enable = true;
+            "browser.urlbar.suggest.bookmark".enable = true;
+            "browser.urlbar.suggest.openpage".enable = true;
+            "browser.urlbar.suggest.topsites".enable = true;
+          };
+          "5013"."places.history.enabled".enable = true;
+        };
       };
       extraAddons = with pkgs.nur.repos.rycee.firefox-addons; [ react-devtools ];
       extraSearchConfig = {
