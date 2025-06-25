@@ -2,19 +2,15 @@
 
 inputs.nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
+  specialArgs = { inherit inputs; };
   modules = [
     (
+      { config, pkgs, ... }:
       {
-        lib,
-        pkgs,
-        config,
-        ...
-      }:
-      {
-        imports = with inputs; [
-          sops-nix.nixosModules.sops
-          ordenada.nixosModules.ordenada
-          ../profiles/development.nix
+        imports = [
+          ./syncthing.nix
+          ../../profiles/development.nix
+          ../../profiles/sops.nix
         ];
         networking.hostName = "lyra";
         networking.firewall.enable = false;
@@ -27,7 +23,7 @@ inputs.nixpkgs.lib.nixosSystem {
           via
           vial
         ];
-        nixpkgs.overlays = overlays;
+        nixpkgs = { inherit overlays; };
         environment.systemPackages = with pkgs; [
           emacs
           git
@@ -35,31 +31,6 @@ inputs.nixpkgs.lib.nixosSystem {
           via
           vial
           podman-compose
-          (texlive.combine {
-            inherit (pkgs.texlive)
-              scheme-basic
-              wrapfig
-              capt-of
-              hyperref
-              ec
-              geometry
-              xcolor
-              ulem
-              preview
-              amsfonts
-              etoolbox
-              grfext
-              natbib
-              titling
-              titlesec
-              fontspec
-              enumitem
-              plex
-              xkeyval
-              fontaxes
-              metafont
-              ;
-          })
         ];
         boot = {
           initrd.availableKernelModules = [
@@ -326,15 +297,7 @@ inputs.nixpkgs.lib.nixosSystem {
             };
             networking.enable = true;
             tailscale.enable = true;
-            qemu.enable = false;
-          };
-        };
-        sops = {
-          defaultSopsFile = ../secrets.yaml;
-          age.sshKeyPaths = [ "${config.home-manager.users.vega.home.homeDirectory}/.ssh/id_ed25519" ];
-          secrets = {
-            "hosts/lyra/syncthing/key".owner = "vega";
-            "hosts/lyra/syncthing/cert".owner = "vega";
+            qemu.enable = true;
           };
         };
         virtualisation.podman = {
@@ -342,53 +305,6 @@ inputs.nixpkgs.lib.nixosSystem {
           autoPrune = {
             enable = true;
             flags = [ "--all" ];
-          };
-        };
-        systemd.services.syncthing.environment.STNODEFAULTFOLDER = "true";
-        services.syncthing = with config.home-manager.users.vega; {
-          enable = true;
-          user = "vega";
-          key = config.sops.secrets."hosts/lyra/syncthing/key".path;
-          cert = config.sops.secrets."hosts/lyra/syncthing/cert".path;
-          dataDir = "${xdg.dataHome}/syncthing";
-          configDir = "${xdg.configHome}/syncthing";
-          overrideDevices = true;
-          overrideFolders = true;
-          settings = {
-            devices = {
-              auriga.id = "FZVCCHW-DF2SVCK-6NFAH3K-A6TTZ6S-D44H3NZ-SHSC7FV-EQL3R2S-J2CR3QZ";
-              orion.id = "JHG7EZC-D52KXLP-AN45CEX-ADKNSST-J4R3XDF-NDI26JH-JIJYZJ5-AEJHFQO";
-            };
-            folders = {
-              documents = {
-                path = "~/documents";
-                devices = [ "auriga" ];
-              };
-              pictures = {
-                path = "~/pictures";
-                devices = [ "auriga" ];
-              };
-              notes = {
-                path = "~/notes";
-                devices = [ "auriga" ];
-              };
-              videos = {
-                path = "~/videos";
-                devices = [ "auriga" ];
-              };
-              work-projects = {
-                path = "~/src/work";
-                devices = [ "orion" ];
-              };
-              public-notes = {
-                path = "~/notes/public";
-                devices = [ "orion" ];
-              };
-              work-documents = {
-                path = "~/documents/work";
-                devices = [ "orion" ];
-              };
-            };
           };
         };
         system.stateVersion = "24.05";
