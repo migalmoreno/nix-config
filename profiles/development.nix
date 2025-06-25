@@ -218,19 +218,13 @@
       };
       extraAddons = with pkgs.nur.repos.rycee.firefox-addons; [ react-devtools ];
       extraSearchConfig = {
-        order = [
-          "Whoogle"
-          "Google"
-        ];
+        default = "SearXNG";
+        privateDefault = "SearXNG";
         engines = {
-          "Google".metaData.alias = "@g";
-          "Whoogle" = {
-            iconUpdateURL = "http://localhost:5000/favicon.ico";
-            updateInterval = 24 * 60 * 60 * 1000;
-            definedAliases = [ "@w" ];
+          "SearXNG" = {
             urls = [
               {
-                template = "http://localhost:5000/search";
+                template = "http://auriga:8888/search";
                 params = [
                   {
                     name = "q";
@@ -239,8 +233,11 @@
                 ];
               }
             ];
+            icon = "${pkgs.searxng}/share/static/themes/simple/img/favicon.svg";
+            definedAliases = [ "@s" ];
           };
         };
+        order = [ "SearXNG" ];
       };
     };
     irc = {
