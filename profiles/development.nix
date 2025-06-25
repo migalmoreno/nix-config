@@ -187,6 +187,9 @@
         "browser.toolbars.bookmarks.visibility" = "never";
         "browser.topsites.contile.enabled" = false;
         "browser.translations.enable" = false;
+        "browser.urlbar.shortcuts.bookmarks" = false;
+        "browser.urlbar.shortcuts.history" = false;
+        "browser.urlbar.shortcuts.tabs" = false;
         "general.smoothScroll" = false;
         "general.autoScroll" = true;
         "identity.fxaccounts.enabled" = false;
