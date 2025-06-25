@@ -269,7 +269,6 @@
     compile.enable = true;
     ssh = with pkgs.secrets.hosts; {
       enable = true;
-      daemon = false;
       matchBlocks = {
         auriga = {
           hostname = auriga.address;
