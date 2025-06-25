@@ -354,6 +354,12 @@ inputs.nixpkgs.lib.nixosSystem {
                       };
                     };
                   }
+                  {
+                    "GoAccess" = {
+                      icon = "goaccess";
+                      href = "http://cygnus:8081";
+                    };
+                  }
                 ];
               }
               {
