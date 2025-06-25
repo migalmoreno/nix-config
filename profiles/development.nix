@@ -1,11 +1,13 @@
 {
   config,
-  pkgs,
+  inputs,
   lib,
+  pkgs,
   ...
 }:
 
 {
+  imports = [ inputs.ordenada.nixosModules.ordenada ];
   ordenada.features = {
     userInfo = {
       fullName = "Miguel Ángel Moreno";
