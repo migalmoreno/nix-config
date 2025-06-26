@@ -67,24 +67,12 @@
               "Grafana" = {
                 icon = "grafana";
                 href = mkHostUrl config.services.grafana.settings.server.http_port;
-                widget = {
-                  type = "grafana";
-                  url = mkHostUrl config.services.grafana.settings.server.http_port;
-                  username = "admin";
-                  password = "{{HOMEPAGE_VAR_GRAFANA_PASSWORD}}";
-                };
               };
             }
             {
               "Adguard Home" = {
                 icon = "adguard-home";
                 href = mkHostUrl config.services.adguardhome.port;
-                widget = {
-                  type = "adguard";
-                  url = mkHostUrl config.services.adguardhome.port;
-                  username = "";
-                  password = "";
-                };
               };
             }
             {
