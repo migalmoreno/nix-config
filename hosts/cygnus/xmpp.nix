@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   imports = [ ../../services/prosody.nix ];
@@ -75,9 +80,16 @@
     group = "root";
     mode = "0777";
   };
+  services.nginx.virtualHosts."chat.migalmoreno.com".extraConfig = ''
+    client_max_body_size 0;
+    proxy_headers_hash_max_size 1024;
+    proxy_headers_hash_bucket_size 128;
+  '';
   services.movim = {
     enable = true;
     port = 8084;
+    debug = true;
+    verbose = true;
     domain = "chat.migalmoreno.com";
     podConfig = {
       chatonly = true;
