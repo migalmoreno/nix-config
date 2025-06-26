@@ -65,7 +65,6 @@ inputs.nixpkgs.lib.nixosSystem {
             fsType = "vfat";
           };
         };
-        zramSwap.enable = true;
         swapDevices = [
           {
             device = "/dev/disk/by-label/SWAP";
