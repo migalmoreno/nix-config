@@ -52,7 +52,7 @@
         };
         "Privacy Clients" = {
           style = "row";
-          columns = 3;
+          columns = 2;
         };
       };
     };
@@ -222,15 +222,6 @@
         {
           "Privacy Clients" = [
             {
-              "Tubo" = {
-                icon = mkHostUrl "8083/icons/tubo.svg";
-                href = mkHostUrl 8083;
-                server = "auriga-podman";
-                container = "tubo-backend";
-                showStats = true;
-              };
-            }
-            {
               "Redlib" = {
                 icon = "redlib";
                 href = mkHostUrl config.services.redlib.port;
@@ -240,6 +231,15 @@
               "SearXNG" = {
                 icon = "searxng";
                 href = mkHostUrl config.services.searx.settings.server.port;
+              };
+            }
+            {
+              "Tubo" = {
+                icon = mkHostUrl "8083/icons/tubo.svg";
+                href = mkHostUrl 8083;
+                server = "auriga-podman";
+                container = "tubo-backend";
+                showStats = true;
               };
             }
           ];
