@@ -1,6 +1,5 @@
 {
   config,
-  lib,
   pkgs,
   ...
 }:
@@ -88,8 +87,8 @@
   services.movim = {
     enable = true;
     port = 8084;
-    debug = true;
-    verbose = true;
+    debug = false;
+    verbose = false;
     domain = "chat.migalmoreno.com";
     podConfig = {
       chatonly = true;
@@ -99,6 +98,24 @@
     nginx = {
       enableACME = true;
       forceSSL = true;
+    };
+    phpCfg = {
+      "memory_limit" = "2048M";
+      "upload_max_filesize" = "2048M";
+      "post_max_size" = "2048M";
+      "opcache.memory_consumption" = 2048;
+    };
+    poolConfig = {
+      "pm" = "ondemand";
+      "php_admin_value[error_log]" = "stderr";
+      "php_admin_flag[log_errors]" = true;
+      "catch_workers_output" = true;
+      "pm.max_children" = 40;
+      "pm.start_servers" = 10;
+      "pm.min_spare_servers" = 5;
+      "pm.max_spare_servers" = 20;
+      "pm.max_requests" = 500;
+      "php_admin_value[memory_limit]" = "2048M";
     };
   };
   services.nginx.virtualHosts."migalmoreno.com".locations = {
