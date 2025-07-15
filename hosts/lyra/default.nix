@@ -8,9 +8,15 @@ inputs.nixpkgs.lib.nixosSystem {
       { config, pkgs, ... }:
       {
         imports = [
-          ./syncthing.nix
           ../../profiles/development.nix
           ../../profiles/sops.nix
+          ./syncthing.nix
+        ];
+        swapDevices = [
+          {
+            device = "/var/lib/swapfile";
+            size = 16 * 1024;
+          }
         ];
         networking.hostName = "lyra";
         networking.firewall.enable = false;
