@@ -1,3 +1,5 @@
+{ config, ... }:
+
 {
   imports = [ ../../profiles/cgit.nix ];
   services.nginx.virtualHosts."git.migalmoreno.com" = {
@@ -8,4 +10,12 @@
       }
     ];
   };
+  profiles.homepage.services."Media and Storage".widgets = [
+    {
+      "Cgit" = {
+        icon = "git";
+        href = "http://${config.networking.hostName}:4040";
+      };
+    }
+  ];
 }

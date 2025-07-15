@@ -93,6 +93,9 @@ inputs.nixpkgs.lib.nixosSystem {
         sops = {
           age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
           secrets."hosts/auriga/grafana/password" = { };
+          templates."homepage.env".content = ''
+            HOMEPAGE_VAR_GRAFANA_PASSWORD=${config.sops.placeholder."hosts/auriga/grafana/password"}
+          '';
         };
         services.redlib = {
           enable = true;

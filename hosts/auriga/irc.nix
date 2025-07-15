@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   services.soju = {
@@ -33,4 +33,12 @@
       }
     ];
   };
+  profiles.homepage.services."Communication".widgets = [
+    {
+      "Gamja" = {
+        icon = "irc";
+        href = "http://${config.networking.hostName}:4800";
+      };
+    }
+  ];
 }
