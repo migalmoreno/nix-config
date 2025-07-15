@@ -14,6 +14,7 @@ inputs.nixpkgs.lib.nixosSystem {
           ./xmpp.nix
           ../../profiles/server.nix
         ];
+        profiles.tailscale.enable = false;
         nixpkgs = { inherit overlays; };
         networking = {
           hostName = "cygnus";
