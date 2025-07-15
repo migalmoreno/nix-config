@@ -8,13 +8,12 @@ inputs.nixpkgs.lib.nixosSystem {
       { config, pkgs, ... }:
       {
         imports = [
-          ./syncthing.nix
-          ./wsl.nix
           ../../profiles/development.nix
           ../../profiles/sops.nix
+          ./syncthing.nix
+          ./wsl.nix
         ];
         time.timeZone = "Europe/Madrid";
-        hardware.graphics.enable = true;
         hardware.keyboard.qmk.enable = true;
         services.udev.packages = with pkgs; [
           via
@@ -55,6 +54,7 @@ inputs.nixpkgs.lib.nixosSystem {
               swayWindow
               swaync
             ];
+            qemu.enable = true;
             age = {
               enable = true;
               identities = [ "${userInfo.homeDirectory}/.ssh/id_ed25519" ];
@@ -76,7 +76,7 @@ inputs.nixpkgs.lib.nixosSystem {
             };
           };
         };
-        sops.age.sshKeyPaths = [ "${config.home-manager.users.saiph.home.homeDirectory}/.ssh/id_ed25519" ];
+        sops.age.sshKeyPaths = [ "${config.ordenada.features.userInfo.homeDirectory}/.ssh/id_ed25519" ];
         system.stateVersion = "22.05";
       }
     )
