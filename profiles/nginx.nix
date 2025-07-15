@@ -6,7 +6,7 @@
     default = { };
   };
   config = {
-    profiles.nginx.globals = rec {
+    profiles.nginx.globals = {
       crawlersBlock = builtins.readFile (
         pkgs.fetchurl {
           url = "https://raw.githubusercontent.com/ai-robots-txt/ai.robots.txt/refs/heads/main/nginx-block-ai-bots.conf";
