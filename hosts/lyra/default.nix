@@ -130,8 +130,8 @@ inputs.nixpkgs.lib.nixosSystem {
                 };
               };
             };
+            home.autoStartWmOnTty = "/dev/tty1";
             sway = {
-              autoStartTty = "/dev/tty1";
               modifier = "Mod4";
             };
             kanshi = {
