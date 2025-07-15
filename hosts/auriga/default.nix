@@ -9,6 +9,7 @@ inputs.nixpkgs.lib.nixosSystem {
       {
         imports = [
           inputs.nixos-hardware.nixosModules.raspberry-pi-4
+          ../../profiles/server.nix
           ./cgit.nix
           ./filestash.nix
           ./homepage.nix
@@ -17,16 +18,16 @@ inputs.nixpkgs.lib.nixosSystem {
           ./searxng.nix
           ./syncthing.nix
           ./tubo.nix
-          ../../profiles/server.nix
         ];
+        profiles.tailscale.enable = true;
         hardware = {
           enableRedistributableFirmware = true;
           raspberry-pi."4" = {
             apply-overlays-dtmerge.enable = true;
             fkms-3d.enable = true;
           };
+          graphics.enable = true;
         };
-        hardware.graphics.enable = true;
         networking = {
           hostName = "auriga";
           useDHCP = false;
