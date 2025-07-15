@@ -38,9 +38,6 @@
         "duckduckgo".disabled = true;
         "qwant".disabled = true;
         "startpage".disabled = false;
-        "piped".disabled = true;
-        "vimeo".disabled = true;
-        "dailymotion".disabled = true;
         "library genesis".disabled = false;
         "reddit".disabled = false;
       };
