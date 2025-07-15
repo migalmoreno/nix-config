@@ -100,6 +100,12 @@ inputs.nixpkgs.lib.nixosSystem {
         services.redlib = {
           enable = true;
           port = 8000;
+          settings = {
+            "REDLIB_DEFAULT_USE_HLS" = "on";
+            "REDLIB_DEFAULT_HIDE_AWARDS" = "on";
+            "REDLIB_DEFAULT_HIDE_SCORE" = "on";
+            "REDLIB_DEFAULT_REMOVE_DEFAULT_FEEDS" = "on";
+          };
         };
         services.adguardhome = {
           enable = false;
