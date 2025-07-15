@@ -3,11 +3,9 @@
 {
   sops = {
     secrets = {
-      "hosts/cygnus/gluetun/config" = { };
       "hosts/cygnus/tubo/db/password" = { };
     };
     templates = {
-      "gluetun.env".content = config.sops.placeholder."hosts/cygnus/gluetun/config";
       "tubo-backend.env".content = ''
         DB_HOST=tubo-db
         DB_NAME=tubo
@@ -21,6 +19,8 @@
       '';
     };
   };
+  services.resolved.enable = true;
+  virtualisation.podman.defaultNetwork.settings.dns_enabled = true;
   virtualisation.oci-containers.containers = {
     tubo-frontend = {
       image = "migalmoreno/tubo-frontend";
@@ -34,11 +34,9 @@
       image = "migalmoreno/tubo-backend";
       ports = [ "3000:3000" ];
       extraOptions = [
-        "--network=container:gluetun"
         "--pull=newer"
       ];
       dependsOn = [
-        "gluetun"
         "tubo-db"
       ];
       environmentFiles = [ config.sops.templates."tubo-backend.env".path ];
@@ -47,31 +45,13 @@
       image = "migalmoreno/tubo-bg-helper";
       ports = [ "3005:3005" ];
       extraOptions = [
-        "--network=container:gluetun"
         "--pull=newer"
       ];
-      dependsOn = [ "gluetun" ];
     };
     tubo-db = {
       image = "postgres:16-alpine";
-      extraOptions = [
-        "--network=container:gluetun"
-      ];
-      dependsOn = [ "gluetun" ];
       volumes = [ "/var/local/db/tubo:/var/lib/postgresql/data" ];
       environmentFiles = [ config.sops.templates."tubo-db.env".path ];
-    };
-    gluetun = {
-      image = "qmcgaw/gluetun";
-      extraOptions = [
-        "--cap-add=NET_ADMIN"
-        "--device=/dev/net/tun:/dev/net/tun"
-      ];
-      ports = [
-        "3000:3000"
-        "3005:3005"
-      ];
-      environmentFiles = [ config.sops.templates."gluetun.env".path ];
     };
   };
   services.nginx.virtualHosts = with config.profiles.nginx.globals; {
