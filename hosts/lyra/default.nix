@@ -314,6 +314,7 @@ inputs.nixpkgs.lib.nixosSystem {
             flags = [ "--all" ];
           };
         };
+        virtualisation.containers.registries.insecure = [ "auriga:8084" ];
         system.stateVersion = "24.05";
       }
     )

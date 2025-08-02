@@ -12,6 +12,7 @@ inputs.nixpkgs.lib.nixosSystem {
           ../../profiles/server.nix
           ./cgit.nix
           ./filestash.nix
+          ./forgejo.nix
           ./homepage.nix
           ./irc.nix
           ./nixarr.nix
@@ -166,6 +167,7 @@ inputs.nixpkgs.lib.nixosSystem {
             Persistent = true;
           };
         };
+        virtualisation.containers.registries.insecure = [ "auriga:8084" ];
         virtualisation.oci-containers.containers = {
           pass-web-frontend = {
             image = "auriga:8084/migalmoreno/pass-web-frontend";
