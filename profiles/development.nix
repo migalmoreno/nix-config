@@ -177,6 +177,7 @@
           "${modifier}+Insert" = "exec pkill -SIGINT -f wf-recorder";
         };
     };
+    scripts.screenshot.enable = true;
     bemenu.enable = true;
     playerctl.enable = true;
     firefox = {
