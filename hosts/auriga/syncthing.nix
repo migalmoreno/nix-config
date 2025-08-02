@@ -9,6 +9,7 @@
   services.syncthing = {
     key = config.sops.secrets."hosts/auriga/syncthing/key".path;
     cert = config.sops.secrets."hosts/auriga/syncthing/cert".path;
+    guiAddress = "0.0.0.0:8384";
     settings = {
       devices.lyra.id = "M4GMJIA-KU75HGM-BTXRUNS-MVXZQFD-N2YG5KQ-6V2RQHZ-CNORKP5-H2WN6AP";
       folders = {
