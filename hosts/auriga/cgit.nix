@@ -18,4 +18,6 @@
       };
     }
   ];
+  services.cgit."git.migalmoreno.com".settings.clone-url =
+    "http://${config.networking.hostName}:4040/$CGIT_REPO_URL";
 }

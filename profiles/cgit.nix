@@ -94,9 +94,10 @@ in
       enable-commit-graph = true;
       enable-log-filecount = true;
       enable-log-linecount = true;
+      enable-http-clone = true;
       readme = ":README";
       remove-suffix = true;
-      clone-url = "https://git.migalmoreno.com/$CGIT_REPO_URL";
+      virtual-root = "/";
       about-filter = "${about-formatting}/bin/about-formatting";
       source-filter = "${package}/lib/cgit/filters/syntax-highlighting.py";
     };
@@ -178,4 +179,5 @@ in
     };
   };
   users.users.${config.services.cgit."git.migalmoreno.com".user}.extraGroups = [ "git" ];
+  users.users.${config.services.nginx.user}.extraGroups = [ "git" ];
 }

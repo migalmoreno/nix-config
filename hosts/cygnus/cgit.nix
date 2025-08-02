@@ -77,6 +77,8 @@ in
       };
     };
   };
+  services.cgit."git.migalmoreno.com".settings.clone-url =
+    "https://git.migalmoreno.com/$CGIT_REPO_URL";
   services.nginx.virtualHosts."git.migalmoreno.com" = with config.profiles.nginx.globals; {
     enableACME = true;
     forceSSL = true;
