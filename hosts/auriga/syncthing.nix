@@ -28,6 +28,10 @@
           path = "~/videos";
           devices = [ "lyra" ];
         };
+        password-store = {
+          path = "~/password-store";
+          devices = [ "lyra" ];
+        };
       };
     };
   };

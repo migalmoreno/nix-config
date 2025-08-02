@@ -21,6 +21,10 @@
         orion.id = "JHG7EZC-D52KXLP-AN45CEX-ADKNSST-J4R3XDF-NDI26JH-JIJYZJ5-AEJHFQO";
       };
       folders = {
+        password-store = {
+          path = "~/.local/state/password-store";
+          devices = [ "auriga" ];
+        };
         documents = {
           path = "~/documents";
           devices = [ "auriga" ];

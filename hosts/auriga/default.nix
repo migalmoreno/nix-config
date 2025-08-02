@@ -94,8 +94,14 @@ inputs.nixpkgs.lib.nixosSystem {
         sops = {
           age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
           secrets."hosts/auriga/grafana/password" = { };
-          templates."homepage.env".content = ''
-            HOMEPAGE_VAR_GRAFANA_PASSWORD=${config.sops.placeholder."hosts/auriga/grafana/password"}
+          secrets."hosts/auriga/pass-web/admin_password" = { };
+          secrets."hosts/auriga/pass-web/secret_key" = { };
+          templates."homepage.env".content = "HOMEPAGE_VAR_GRAFANA_PASSWORD=${
+            config.sops.placeholder."hosts/auriga/grafana/password"
+          }";
+          templates."pass-web.env".content = ''
+            ADMIN_PASSWORD=${config.sops.placeholder."hosts/auriga/pass-web/admin_password"}
+            JWT_SECRET_KEY=${config.sops.placeholder."hosts/auriga/pass-web/secret_key"}
           '';
         };
         services.redlib = {
@@ -160,6 +166,34 @@ inputs.nixpkgs.lib.nixosSystem {
             Persistent = true;
           };
         };
+        virtualisation.oci-containers.containers = {
+          pass-web-frontend = {
+            image = "auriga:8084/migalmoreno/pass-web-frontend";
+            ports = [ "8085:80" ];
+            extraOptions = [ "--pull=newer" ];
+          };
+          pass-web-backend = {
+            image = "auriga:8084/migalmoreno/pass-web-backend";
+            ports = [ "8001:8000" ];
+            extraOptions = [ "--pull=newer" ];
+            environment = {
+              ADMIN_USERNAME = "migalmoreno";
+            };
+            volumes = [
+              "/var/lib/syncthing/password-store:/home/user/.password-store:ro"
+              "/var/local/data/pass-web/gnupg:/tmp/host-gnupg:ro"
+            ];
+            environmentFiles = [ config.sops.templates."pass-web.env".path ];
+          };
+        };
+        profiles.homepage.services."Media and Storage" = [
+          {
+            "Password Store" = {
+              icon = "mdi-lock";
+              href = "http://${config.networking.hostName}:8085";
+            };
+          }
+        ];
         system.stateVersion = "24.05";
       }
     )
