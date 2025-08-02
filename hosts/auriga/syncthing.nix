@@ -31,4 +31,12 @@
       };
     };
   };
+  profiles.homepage.services."Media and Storage" = [
+    {
+      "Syncthing" = {
+        icon = "syncthing";
+        href = "http://${config.networking.hostName}:8384";
+      };
+    }
+  ];
 }

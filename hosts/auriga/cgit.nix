@@ -10,7 +10,7 @@
       }
     ];
   };
-  profiles.homepage.services."Media and Storage".widgets = [
+  profiles.homepage.services."Media and Storage" = [
     {
       "Cgit" = {
         icon = "git";

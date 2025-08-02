@@ -33,7 +33,7 @@
       }
     ];
   };
-  profiles.homepage.services."Communication".widgets = [
+  profiles.homepage.services."Communication" = [
     {
       "Gamja" = {
         icon = "irc";

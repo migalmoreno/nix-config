@@ -61,7 +61,7 @@
     '';
   };
   profiles.homepage.services = {
-    "Media and Storage".widgets = [
+    "Media and Storage" = [
       {
         "Jellyfin" = {
           icon = "jellyfin";
@@ -74,115 +74,103 @@
         };
       }
     ];
-    "Media Automation" = {
-      layout = {
-        style = "row";
-        columns = 4;
-      };
-      widgets = [
-        {
-          "Jellyseerr" = {
-            icon = "jellyseerr";
-            href = "http://${config.networking.hostName}:${toString config.services.jellyseerr.port}";
-            widget = {
-              type = "jellyseerr";
-              url = "http://${config.networking.hostName}:${toString config.services.jellyseerr.port}";
-              key = "{{HOMEPAGE_VAR_JELLYSEERR_API_KEY}}";
-            };
+    "Media Automation" = [
+      {
+        "Jellyseerr" = {
+          icon = "jellyseerr";
+          href = "http://${config.networking.hostName}:${toString config.services.jellyseerr.port}";
+          widget = {
+            type = "jellyseerr";
+            url = "http://${config.networking.hostName}:${toString config.services.jellyseerr.port}";
+            key = "{{HOMEPAGE_VAR_JELLYSEERR_API_KEY}}";
           };
-        }
-        {
-          "Radarr" = {
-            icon = "radarr";
-            href = "http://${config.networking.hostName}:7878";
-            widget = {
-              type = "radarr";
-              url = "http://${config.networking.hostName}:7878";
-              key = "{{HOMEPAGE_VAR_RADARR_API_KEY}}";
-            };
+        };
+      }
+      {
+        "Radarr" = {
+          icon = "radarr";
+          href = "http://${config.networking.hostName}:7878";
+          widget = {
+            type = "radarr";
+            url = "http://${config.networking.hostName}:7878";
+            key = "{{HOMEPAGE_VAR_RADARR_API_KEY}}";
           };
-        }
-        {
-          "Sonarr" = {
-            icon = "sonarr";
-            href = "http://${config.networking.hostName}:8989";
-            widget = {
-              type = "sonarr";
-              url = "http://${config.networking.hostName}:8989";
-              key = "{{HOMEPAGE_VAR_SONARR_API_KEY}}";
-            };
+        };
+      }
+      {
+        "Sonarr" = {
+          icon = "sonarr";
+          href = "http://${config.networking.hostName}:8989";
+          widget = {
+            type = "sonarr";
+            url = "http://${config.networking.hostName}:8989";
+            key = "{{HOMEPAGE_VAR_SONARR_API_KEY}}";
           };
+        };
 
-        }
-        {
-          "Readarr" = {
-            icon = "readarr";
-            href = "http://${config.networking.hostName}:8787";
-            widget = {
-              type = "readarr";
-              url = "http://${config.networking.hostName}:8787";
-              key = "{{HOMEPAGE_VAR_READARR_API_KEY}}";
-            };
+      }
+      {
+        "Readarr" = {
+          icon = "readarr";
+          href = "http://${config.networking.hostName}:8787";
+          widget = {
+            type = "readarr";
+            url = "http://${config.networking.hostName}:8787";
+            key = "{{HOMEPAGE_VAR_READARR_API_KEY}}";
           };
-        }
-        {
-          "Lidarr" = {
-            icon = "lidarr";
-            href = "http://${config.networking.hostName}:8686";
-            widget = {
-              type = "lidarr";
-              url = "http://${config.networking.hostName}:8686";
-              key = "{{HOMEPAGE_VAR_LIDARR_API_KEY}}";
-            };
+        };
+      }
+      {
+        "Lidarr" = {
+          icon = "lidarr";
+          href = "http://${config.networking.hostName}:8686";
+          widget = {
+            type = "lidarr";
+            url = "http://${config.networking.hostName}:8686";
+            key = "{{HOMEPAGE_VAR_LIDARR_API_KEY}}";
           };
-        }
-        {
-          "Bazarr" = {
-            icon = "bazarr";
-            href = "http://${config.networking.hostName}:${toString config.services.bazarr.listenPort}";
-            widget = {
-              type = "bazarr";
-              url = "http://${config.networking.hostName}:${toString config.services.bazarr.listenPort}";
-              key = "{{HOMEPAGE_VAR_BAZARR_API_KEY}}";
-            };
+        };
+      }
+      {
+        "Bazarr" = {
+          icon = "bazarr";
+          href = "http://${config.networking.hostName}:${toString config.services.bazarr.listenPort}";
+          widget = {
+            type = "bazarr";
+            url = "http://${config.networking.hostName}:${toString config.services.bazarr.listenPort}";
+            key = "{{HOMEPAGE_VAR_BAZARR_API_KEY}}";
           };
-        }
-        {
-          "Prowlarr" = {
-            icon = "prowlarr";
-            href = "http://${config.networking.hostName}:9696";
-            widget = {
-              type = "prowlarr";
-              url = "http://${config.networking.hostName}:9696";
-              key = "{{HOMEPAGE_VAR_PROWLARR_API_KEY}}";
-            };
+        };
+      }
+      {
+        "Prowlarr" = {
+          icon = "prowlarr";
+          href = "http://${config.networking.hostName}:9696";
+          widget = {
+            type = "prowlarr";
+            url = "http://${config.networking.hostName}:9696";
+            key = "{{HOMEPAGE_VAR_PROWLARR_API_KEY}}";
           };
-        }
-      ];
-    };
-    "Download Clients" = {
-      layout = {
-        style = "row";
-        columns = 2;
-      };
-      widgets = [
-        {
-          "Transmission" = {
-            icon = "transmission";
-            href = "http://${config.networking.hostName}:${toString config.nixarr.transmission.uiPort}";
-            widget = {
-              type = "transmission";
-              url = "http://${config.networking.hostName}:${toString config.nixarr.transmission.uiPort}";
-            };
+        };
+      }
+    ];
+    "Download Clients" = [
+      {
+        "Transmission" = {
+          icon = "transmission";
+          href = "http://${config.networking.hostName}:${toString config.nixarr.transmission.uiPort}";
+          widget = {
+            type = "transmission";
+            url = "http://${config.networking.hostName}:${toString config.nixarr.transmission.uiPort}";
           };
-        }
-        {
-          "SABnzbd" = {
-            icon = "sabnzbd";
-            href = "http://${config.networking.hostName}:${toString config.nixarr.sabnzbd.guiPort}";
-          };
-        }
-      ];
-    };
+        };
+      }
+      {
+        "SABnzbd" = {
+          icon = "sabnzbd";
+          href = "http://${config.networking.hostName}:${toString config.nixarr.sabnzbd.guiPort}";
+        };
+      }
+    ];
   };
 }

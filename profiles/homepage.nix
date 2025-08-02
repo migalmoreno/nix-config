@@ -9,24 +9,20 @@ let
   inherit (lib) mkOption types;
   cfg = config.profiles.homepage;
   yamlFormat = pkgs.formats.yaml { };
-  serviceType = types.submodule {
-    options = {
-      widgets = mkOption { type = types.listOf yamlFormat.type; };
-      layout = mkOption { type = types.attrsOf yamlFormat.type; };
-    };
-  };
 in
 {
   options.profiles.homepage = {
     services = mkOption {
-      type = types.attrsOf serviceType;
-      default = { };
+      type = types.attrsOf yamlFormat.type;
     };
     widgets = mkOption {
       type = types.listOf yamlFormat.type;
     };
     environmentFile = mkOption {
       type = types.path;
+    };
+    layout = mkOption {
+      type = types.listOf yamlFormat.type;
     };
   };
   config = {
@@ -47,7 +43,7 @@ in
         }
       ] ++ cfg.widgets;
       docker = {
-        auriga-podman = {
+        podman = {
           socket = "/var/run/podman/podman.sock";
         };
       };
@@ -59,10 +55,10 @@ in
         disableCollapse = true;
         hideVersion = true;
         disableUpdateCheck = true;
-        layout = lib.mapAttrs (_: settings: settings.layout) cfg.services;
+        layout = cfg.layout;
       };
-      services = lib.mapAttrsToList (category: settings: {
-        ${category} = settings.widgets;
+      services = lib.mapAttrsToList (category: widgets: {
+        ${category} = widgets;
       }) cfg.services;
     };
     systemd.services.homepage-dashboard.serviceConfig.Group = "podman";

@@ -18,47 +18,55 @@
         };
       }
     ];
+    layout = [
+      {
+        "Download Clients".style = "column";
+      }
+      {
+        "Communication".style = "column";
+      }
+      {
+        "Media Automation" = {
+          style = "row";
+          columns = 4;
+        };
+      }
+      {
+        "Media and Storage".style = "column";
+      }
+      {
+        "Monitoring".style = "column";
+      }
+    ];
     services = {
-      "Monitoring" = {
-        layout = {
-          style = "row";
-          columns = 2;
-        };
-        widgets = [
-          {
-            "Grafana" = {
-              icon = "grafana";
-              href = "http://${config.networking.hostName}:${toString config.services.grafana.settings.server.http_port}";
-            };
-          }
-          {
-            "Adguard Home" = {
-              icon = "adguard-home";
-              href = "http://${config.networking.hostName}:${toString config.services.adguardhome.port}";
-            };
-          }
-          {
-            "GoAccess" = {
-              icon = "goaccess";
-              href = "http://cygnus:8081";
-            };
-          }
-        ];
-      };
-      "Communication" = {
-        layout = {
-          style = "row";
-          columns = 2;
-        };
-        widgets = [
-          {
-            "Movim" = {
-              icon = "https://chat.migalmoreno.com/theme/img/app/128.png";
-              href = "https://chat.migalmoreno.com";
-            };
-          }
-        ];
-      };
+      "Communication" = [
+        {
+          "Movim" = {
+            icon = "https://chat.migalmoreno.com/theme/img/app/128.png";
+            href = "https://chat.migalmoreno.com";
+          };
+        }
+      ];
+      "Monitoring" = [
+        {
+          "Grafana" = {
+            icon = "grafana";
+            href = "http://${config.networking.hostName}:${toString config.services.grafana.settings.server.http_port}";
+          };
+        }
+        {
+          "Adguard Home" = {
+            icon = "adguard-home";
+            href = "http://${config.networking.hostName}:${toString config.services.adguardhome.port}";
+          };
+        }
+        {
+          "GoAccess" = {
+            icon = "goaccess";
+            href = "http://cygnus:8081";
+          };
+        }
+      ];
     };
   };
   services.nginx.virtualHosts."home.auriga" = {

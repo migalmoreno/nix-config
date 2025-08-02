@@ -50,18 +50,12 @@
   sops.secrets."hosts/auriga/filestash/admin_password" = {
     owner = config.services.filestash.user;
   };
-  profiles.homepage.services."Media and Storage" = {
-    layout = {
-      style = "row";
-      columns = 2;
-    };
-    widgets = [
-      {
-        "Filestash" = {
-          icon = "filestash";
-          href = "http://${config.networking.hostName}:${toString config.services.filestash.settings.general.port}";
-        };
-      }
-    ];
-  };
+  profiles.homepage.services."Media and Storage" = [
+    {
+      "Filestash" = {
+        icon = "filestash";
+        href = "http://${config.networking.hostName}:${toString config.services.filestash.settings.general.port}";
+      };
+    }
+  ];
 }
