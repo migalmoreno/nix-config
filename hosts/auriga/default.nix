@@ -81,6 +81,7 @@ inputs.nixpkgs.lib.nixosSystem {
           emacs
           git
           rsync
+          podman-compose
         ];
         users.users = {
           root.openssh.authorizedKeys.keys = [
