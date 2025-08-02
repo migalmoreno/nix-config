@@ -109,6 +109,10 @@ inputs.nixpkgs.lib.nixosSystem {
               enable = true;
               sshKeys = [ "D6B4894600BB392AB2AEDE499CBBCF3E0620B7F6" ];
             };
+            age = {
+              enable = true;
+              identities = [ "${userInfo.homeDirectory}/.ssh/id_ed25519" ];
+            };
             password-store.enable = true;
             irc.accounts.soju.network = "auriga";
             mail = {
