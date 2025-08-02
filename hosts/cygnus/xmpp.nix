@@ -62,7 +62,7 @@
     "acme"
   ];
   virtualisation.oci-containers.containers.slidge-whatsapp = {
-    image = "codeberg.org/slidge/slidge-whatsapp";
+    image = "codeberg.org/slidge/slidge-whatsapp:main-amd64";
     volumes = [
       "/var/lib/slidge:/var/lib/slidge"
       "${with config.sops.templates."slidge-whatsapp.ini"; "${path}:${path}"}"
