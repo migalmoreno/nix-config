@@ -114,6 +114,8 @@ inputs.nixpkgs.lib.nixosSystem {
             "REDLIB_DEFAULT_HIDE_AWARDS" = "on";
             "REDLIB_DEFAULT_HIDE_SCORE" = "on";
             "REDLIB_DEFAULT_REMOVE_DEFAULT_FEEDS" = "on";
+            "REDLIB_ENABLE_RSS" = "on";
+            "REDLIB_FULL_URL" = "http://${config.networking.hostName}:${toString config.services.redlib.port}";
           };
         };
         services.adguardhome = {
