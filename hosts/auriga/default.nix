@@ -16,6 +16,7 @@ inputs.nixpkgs.lib.nixosSystem {
           ./forgejo.nix
           ./homepage.nix
           ./irc.nix
+          ./linkding.nix
           ./nixarr.nix
           ./searxng.nix
           ./syncthing.nix
