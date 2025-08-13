@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 
 {
   sops = {
@@ -14,6 +14,11 @@
         POSTGRES_DB=tubo
         POSTGRES_USER=tubo
         POSTGRES_PASSWORD=${config.sops.placeholder."hosts/auriga/tubo/db/password"}
+      '';
+      "pgweb.env".content = ''
+        PGWEB_DATABASE_URL=postgres://tubo:${
+          config.sops.placeholder."hosts/auriga/tubo/db/password"
+        }@tubo-db:5432/tubo?sslmode=disable
       '';
     };
   };
@@ -46,18 +51,19 @@
       volumes = [ "/var/local/db/tubo:/var/lib/postgresql/data" ];
       environmentFiles = [ config.sops.templates."tubo-db.env".path ];
     };
-  };
-  systemd.services.pgweb = {
-    enable = false;
-    description = "pgweb";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" ];
-    serviceConfig = {
-      ExecStart = "${pkgs.pgweb}/bin/pgweb";
-      Restart = "on-failure";
-      KillMode = "mixed";
+    pgweb = {
+      image = "sosedoff/pgweb";
+      ports = [ "8088:8081" ];
+      environmentFiles = [ config.sops.templates."pgweb.env".path ];
+      dependsOn = [ "tubo-db" ];
     };
-    environment.PGWEB_DATABASE_URL = "postgres://tubo:tubo@localhost:5432/tubo";
+  };
+  systemd.tmpfiles.settings = {
+    "10-tubo"."/var/local/db/tubo".d = {
+      user = "root";
+      group = "root";
+      mode = "0755";
+    };
   };
   networking.firewall.allowedTCPPorts = [ 3000 ];
 }
