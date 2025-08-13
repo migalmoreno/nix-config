@@ -10,6 +10,7 @@ inputs.nixpkgs.lib.nixosSystem {
         imports = [
           inputs.nixos-hardware.nixosModules.raspberry-pi-4
           ../../profiles/server.nix
+          ./beaverhabits.nix
           ./cgit.nix
           ./filestash.nix
           ./forgejo.nix
