@@ -243,8 +243,17 @@
             icon = "${pkgs.searxng}/share/static/themes/simple/img/favicon.svg";
             definedAliases = [ "@s" ];
           };
+          "google" = {
+            metaData = {
+              hidden = false;
+              alias = "@g";
+            };
+          };
         };
-        order = [ "SearXNG" ];
+        order = [
+          "SearXNG"
+          "google"
+        ];
       };
     };
     irc = {
