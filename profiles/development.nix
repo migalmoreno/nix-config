@@ -220,7 +220,10 @@
           "5013"."places.history.enabled".enable = true;
         };
       };
-      extraAddons = with pkgs.nur.repos.rycee.firefox-addons; [ react-devtools ];
+      extraAddons = with pkgs.nur.repos.rycee.firefox-addons; [
+        react-devtools
+        linkding-extension
+      ];
       extraSearchConfig = {
         default = "SearXNG";
         privateDefault = "SearXNG";
