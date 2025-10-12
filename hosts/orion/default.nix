@@ -70,7 +70,6 @@ inputs.nixpkgs.lib.nixosSystem {
           tubo-frontend = {
             image = "migalmoreno/tubo-frontend";
             ports = [ "8080:8080" ];
-            extraOptions = [ "--pull=newer" ];
             environment = {
               BACKEND_URL = "http://${pkgs.secrets.hosts.auriga.address}:3000";
             };

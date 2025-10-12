@@ -4,7 +4,6 @@
   virtualisation.oci-containers.containers.beaverhabits = {
     image = "daya0576/beaverhabits";
     ports = [ "8087:8080" ];
-    extraOptions = [ "--pull=newer" ];
     volumes = [ "/var/local/data/beaverhabits:/app/.user" ];
     environment = {
       HABITS_STORAGE = "DATABASE";

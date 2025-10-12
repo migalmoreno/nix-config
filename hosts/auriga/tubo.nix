@@ -31,19 +31,16 @@
       environment = {
         BACKEND_URL = "http://auriga:3000";
       };
-      extraOptions = [ "--pull=newer" ];
     };
     tubo-backend = {
       image = "migalmoreno/tubo-backend";
       ports = [ "3000:3000" ];
-      extraOptions = [ "--pull=newer" ];
       dependsOn = [ "tubo-db" ];
       environmentFiles = [ config.sops.templates."tubo-backend.env".path ];
     };
     tubo-bg-helper = {
       image = "migalmoreno/tubo-bg-helper";
       ports = [ "3005:3005" ];
-      extraOptions = [ "--pull=newer" ];
     };
     tubo-db = {
       image = "postgres:16-alpine";

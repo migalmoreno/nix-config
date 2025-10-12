@@ -178,14 +178,13 @@ inputs.nixpkgs.lib.nixosSystem {
           pass-web-frontend = {
             image = "auriga:8084/migalmoreno/pass-web-frontend";
             ports = [ "8085:80" ];
-            extraOptions = [ "--pull=newer" ];
           };
           pass-web-backend = {
             image = "auriga:8084/migalmoreno/pass-web-backend";
             ports = [ "8001:8000" ];
-            extraOptions = [ "--pull=newer" ];
             environment = {
               ADMIN_USERNAME = "migalmoreno";
+              JWT_EXPIRATION = "525600";
             };
             volumes = [
               "/var/lib/syncthing/password-store:/home/user/.password-store:ro"
