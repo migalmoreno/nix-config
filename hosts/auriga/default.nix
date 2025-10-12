@@ -193,14 +193,36 @@ inputs.nixpkgs.lib.nixosSystem {
             environmentFiles = [ config.sops.templates."pass-web.env".path ];
           };
         };
-        profiles.homepage.services."Media and Storage" = [
-          {
-            "Password Store" = {
-              icon = "mdi-lock";
-              href = "http://${config.networking.hostName}:8085";
-            };
-          }
-        ];
+        profiles.homepage.services = {
+          "Media and Storage" = [
+            {
+              "Password Store" = {
+                icon = "mdi-lock";
+                href = "http://${config.networking.hostName}:8085";
+              };
+            }
+          ];
+          "Monitoring" = [
+            {
+              "Grafana" = {
+                icon = "grafana";
+                href = "http://${config.networking.hostName}:${toString config.services.grafana.settings.server.http_port}";
+              };
+            }
+            {
+              "Prometheus" = {
+                icon = "prometheus";
+                href = "http://${config.networking.hostName}:9090";
+              };
+            }
+            {
+              "Adguard Home" = {
+                icon = "adguard-home";
+                href = "http://${config.networking.hostName}:${toString config.services.adguardhome.port}";
+              };
+            }
+          ];
+        };
         system.stateVersion = "24.05";
       }
     )

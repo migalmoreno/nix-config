@@ -49,18 +49,6 @@
       ];
       "Monitoring" = [
         {
-          "Grafana" = {
-            icon = "grafana";
-            href = "http://${config.networking.hostName}:${toString config.services.grafana.settings.server.http_port}";
-          };
-        }
-        {
-          "Adguard Home" = {
-            icon = "adguard-home";
-            href = "http://${config.networking.hostName}:${toString config.services.adguardhome.port}";
-          };
-        }
-        {
           "GoAccess" = {
             icon = "goaccess";
             href = "http://cygnus:8081";
