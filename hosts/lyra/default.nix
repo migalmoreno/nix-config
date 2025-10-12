@@ -10,8 +10,10 @@ inputs.nixpkgs.lib.nixosSystem {
         imports = [
           ../../profiles/development.nix
           ../../profiles/sops.nix
+          ../../profiles/tailscale.nix
           ./syncthing.nix
         ];
+        profiles.tailscale.enable = true;
         swapDevices = [
           {
             device = "/var/lib/swapfile";
@@ -306,7 +308,6 @@ inputs.nixpkgs.lib.nixosSystem {
               };
             };
             networking.enable = true;
-            tailscale.enable = true;
             qemu.enable = true;
             waybar.enable = true;
           };
