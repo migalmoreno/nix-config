@@ -44,7 +44,6 @@
     };
     tubo-db = {
       image = "postgres:16-alpine";
-      ports = [ "5432:5432" ];
       volumes = [ "/var/local/db/tubo:/var/lib/postgresql/data" ];
       environmentFiles = [ config.sops.templates."tubo-db.env".path ];
     };
