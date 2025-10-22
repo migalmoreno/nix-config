@@ -44,10 +44,8 @@ inputs.nixpkgs.lib.nixosSystem {
               };
             };
             javascript.node = pkgs.nodejs_20;
-            sway = {
-              autoStartTty = "/dev/pts/0";
-              modifier = "Mod2";
-            };
+            home.autoStartWmOnTty = "/dev/pts/0";
+            sway.modifier = "Mod2";
             waybar.modules = with config.ordenada.features.waybar.defaultModules; [
               swayWorkspaces
               swayMode
@@ -63,7 +61,6 @@ inputs.nixpkgs.lib.nixosSystem {
               enable = true;
               identitiesFile = "${userInfo.homeDirectory}/.ssh/id_ed25519";
             };
-            irc.accounts.soju.network = pkgs.secrets.hosts.auriga.address;
           };
         };
         virtualisation.oci-containers.containers = {
