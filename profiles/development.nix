@@ -14,22 +14,35 @@
       email = "mail@migalmoreno.com";
     };
     home.enable = true;
-    theme.polarity = "dark";
-    keyboard.layout = {
-      name = "us,es";
-      options = [
-        "grp:rctrl_rshift_toggle"
-        "caps:ctrl_modifier"
-        "altwin:prtsc_rwin"
-      ];
+    theme = {
+      enable = true;
+      polarity = "dark";
+    };
+    keyboard = {
+      enable = true;
+      layout = {
+        name = "us,es";
+        options = [
+          "grp:rctrl_rshift_toggle"
+          "caps:ctrl_modifier"
+          "altwin:prtsc_rwin"
+        ];
+      };
     };
     fontutils.enable = true;
     bash.enable = true;
-    clojure.enable = true;
+    clojure = {
+      enable = true;
+      cider = {
+        popReplOnConnect = false;
+        replInCurrentWindow = true;
+      };
+    };
     pipewire.enable = true;
     bluetooth.enable = true;
     gtk.enable = true;
     git.enable = true;
+    tailscale.enable = true;
     android.enable = true;
     javascript.enable = true;
     nix.enable = true;
@@ -77,10 +90,6 @@
         todoIntegration = true;
       };
       pdf-tools.enable = true;
-      cider = {
-        popReplOnConnect = false;
-        replInCurrentWindow = true;
-      };
       spelling = {
         enable = true;
         package = pkgs.aspellWithDicts (
@@ -123,16 +132,13 @@
         enable = true;
         weekNumbers = true;
       };
-      erc = {
-        autoQuery = "bury";
-        queryDisplay = "buffer";
-        joinBuffer = "buffer";
-        autojoin = false;
+      programming = {
+        enable = true;
+        apheleia.enable = true;
+        flymake.enable = true;
+        rainbow-delimiters.enable = true;
+        eglot.enable = true;
       };
-      apheleia.enable = true;
-      flymake.enable = true;
-      rainbow-delimiters.enable = true;
-      eglot.enable = true;
       project.enable = true;
       shell.enable = true;
       vterm.enable = true;
@@ -153,6 +159,8 @@
       };
       tramp.enable = true;
     };
+    waybar.enable = true;
+    wlogout.enable = true;
     sway = {
       enable = true;
       keybindings =
@@ -220,13 +228,17 @@
           "5013"."places.history.enabled".enable = true;
         };
       };
-      extraAddons = with pkgs.nur.repos.rycee.firefox-addons; [
-        react-devtools
-        linkding-extension
-      ];
+      extraAddons =
+        with (import inputs.nur {
+          inherit pkgs;
+          nurpkgs = pkgs;
+        }).repos.rycee.firefox-addons; [
+          react-devtools
+          linkding-extension
+        ];
       extraSearchConfig = {
-        default = "SearXNG";
-        privateDefault = "SearXNG";
+        default = "google";
+        privateDefault = "google";
         engines = {
           "SearXNG" = {
             urls = [
@@ -251,13 +263,19 @@
           };
         };
         order = [
-          "SearXNG"
           "google"
+          "SearXNG"
         ];
       };
     };
     irc = {
       enable = true;
+      erc = {
+        autoQuery = "bury";
+        queryDisplay = "buffer";
+        joinBuffer = "buffer";
+        autojoin = false;
+      };
       accounts = {
         soju = {
           nick = "migalmoreno";
@@ -265,6 +283,7 @@
           tls = false;
           bouncer = true;
           client = config.networking.hostName;
+          network = "auriga";
         };
         libera = {
           network = "irc.libera.chat";

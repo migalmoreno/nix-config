@@ -13,6 +13,21 @@ inputs.nixpkgs.lib.nixosSystem {
           ../../profiles/tailscale.nix
           ./syncthing.nix
         ];
+        users.users."vega" = {
+          isNormalUser = true;
+          extraGroups = [
+            "adbusers"
+            "docker"
+            "networkmanager"
+            "wheel"
+          ];
+        };
+        home-manager.users."vega".imports = [
+          inputs.ordenada.homeModules.ordenada
+          {
+            home.stateVersion = config.system.stateVersion;
+          }
+        ];
         profiles.tailscale.enable = true;
         swapDevices = [
           {
@@ -99,224 +114,226 @@ inputs.nixpkgs.lib.nixosSystem {
           MODE="0666", \
           RUN+="${pkgs.coreutils}/bin/chmod a+w /sys/class/backlight/%k/brightness"
         '';
-        ordenada = {
-          users.vega = { };
-          features = with config.ordenada.features; {
-            userInfo = {
-              username = "vega";
-              gpgPrimaryKey = "5F23F458";
-            };
-            git.signCommits = true;
-            gnupg = {
-              enable = true;
-              sshKeys = [ "D6B4894600BB392AB2AEDE499CBBCF3E0620B7F6" ];
-            };
-            age = {
-              enable = true;
-              identities = [ "${userInfo.homeDirectory}/.ssh/id_ed25519" ];
-            };
-            password-store.enable = true;
-            irc.accounts.soju.network = "auriga";
-            mail = {
-              enable = true;
-              accounts = {
-                personal = {
-                  primary = true;
-                  fqda = "mail@migalmoreno.com";
-                  extraConfig = {
-                    imap = {
-                      host = "mail.gandi.net";
-                      port = 993;
-                    };
-                    smtp = {
-                      host = "mail.gandi.net";
-                      port = 465;
-                    };
+        ordenada.features = with config.ordenada.features; {
+          userInfo = {
+            username = "vega";
+            gpgPrimaryKey = "5F23F458";
+          };
+          git.signCommits = true;
+          gnupg = {
+            enable = true;
+            sshKeys = [ "D6B4894600BB392AB2AEDE499CBBCF3E0620B7F6" ];
+          };
+          age = {
+            enable = true;
+            identities = [ "${userInfo.homeDirectory}/.ssh/id_ed25519" ];
+          };
+          password-store.enable = true;
+          mail = {
+            enable = true;
+            accounts = {
+              personal = {
+                primary = true;
+                fqda = "mail@migalmoreno.com";
+                extraConfig = {
+                  imap = {
+                    host = "mail.gandi.net";
+                    port = 993;
+                  };
+                  smtp = {
+                    host = "mail.gandi.net";
+                    port = 465;
                   };
                 };
               };
             };
-            home.autoStartWmOnTty = "/dev/tty1";
-            sway = {
-              modifier = "Mod4";
-            };
-            kanshi = {
+          };
+          home.autoStartWmOnTty = "/dev/tty1";
+          sway.modifier = "Mod4";
+          kanshi = {
+            enable = true;
+            settings = [
+              {
+                profile.name = "headless";
+                profile.outputs = [
+                  {
+                    criteria = "eDP-1";
+                    status = "enable";
+                  }
+                ];
+              }
+              {
+                profile.name = "single-left";
+                profile.outputs = [
+                  {
+                    criteria = "eDP-1";
+                    status = "disable";
+                  }
+                  {
+                    criteria = "HDMI-A-1";
+                    status = "enable";
+                  }
+                ];
+              }
+              {
+                profile.name = "single-right";
+                profile.outputs = [
+                  {
+                    criteria = "eDP-1";
+                    status = "disable";
+                  }
+                  {
+                    criteria = "DP-2";
+                    status = "enable";
+                  }
+                ];
+              }
+              {
+                profile.name = "multi";
+                profile.outputs = [
+                  {
+                    criteria = "eDP-1";
+                    status = "disable";
+                  }
+                  {
+                    criteria = "HDMI-A-1";
+                    mode = "1920x1080";
+                    position = "0,0";
+                  }
+                  {
+                    criteria = "DP-2";
+                    mode = "1920x1080";
+                    position = "1920,0";
+                  }
+                ];
+              }
+            ];
+          };
+          emacs = {
+            gnus = {
               enable = true;
-              settings = [
-                {
-                  profile.name = "headless";
-                  profile.outputs = [
-                    {
-                      criteria = "eDP-1";
-                      status = "enable";
-                    }
-                  ];
-                }
-                {
-                  profile.name = "single-left";
-                  profile.outputs = [
-                    {
-                      criteria = "eDP-1";
-                      status = "disable";
-                    }
-                    {
-                      criteria = "HDMI-A-1";
-                      status = "enable";
-                    }
-                  ];
-                }
-                {
-                  profile.name = "single-right";
-                  profile.outputs = [
-                    {
-                      criteria = "eDP-1";
-                      status = "disable";
-                    }
-                    {
-                      criteria = "DP-2";
-                      status = "enable";
-                    }
-                  ];
-                }
-                {
-                  profile.name = "multi";
-                  profile.outputs = [
-                    {
-                      criteria = "eDP-1";
-                      status = "disable";
-                    }
-                    {
-                      criteria = "HDMI-A-1";
-                      mode = "1920x1080";
-                      position = "0,0";
-                    }
-                    {
-                      criteria = "DP-2";
-                      mode = "1920x1080";
-                      position = "1920,0";
-                    }
-                  ];
-                }
+              topicGroups = {
+                "Personal" = [
+                  "nnmaildir+personal:Inbox"
+                  "nnmaildir+personal:Drafts"
+                  "nnmaildir+personal:Sent"
+                  "nnmaildir+personal:Archive"
+                  "nnmaildir+personal:Junk"
+                  "nnmaildir+personal:Trash"
+                ];
+                "Bug Trackers" = [
+                  "nntp+gwene:gmane.comp.gnu.guix.bugs"
+                  "nntp+gwene:gmane.comp.gnu.guix.patches"
+                ];
+                "News" = [
+                  "nntp+gwene:gwene.rs.lobste"
+                  "nntp+gwene:gwene.org.hnrss.newest.points"
+                  "nntp+gwene:gwene.net.lwn.headlines.newrss"
+                ];
+                "Inbox" = [ ];
+                "Gnus" = [ ];
+              };
+              topicTopology = [
+                ''
+                  ("Gnus" visible)
+                ''
+                ''
+                  (("Inbox" visible)
+                   (("Personal" visible nil)))
+                ''
+                ''
+                  (("Bug Trackers" visible nil))
+                ''
+                ''
+                  (("News" visible nil))
+                ''
+              ];
+              messageArchiveMethod = [
+                "nnmaildir"
+                "personal"
+              ];
+              messageArchiveGroup = [
+                ''
+                  (".*" "Sent")
+                ''
+              ];
+              groupParameters = {
+                "^nnmaildir" = {
+                  "gcc-self" = "nnmaildir+personal:Sent";
+                  "display" = 1000;
+                };
+                "^nntp" = {
+                  "display" = 1000;
+                };
+              };
+              postingStyles = with userInfo; [
+                ''
+                  ((header "cc" ".*@debbugs.gnu.org")
+                   (To ordenada-gnus-get-article-participants)
+                   (cc nil))
+                ''
+                ''
+                  ((header "to" ".*@lists.sr.ht")
+                   (To ordenada-gnus-get-article-participants)
+                   (cc "${email}"))
+                ''
+                ''
+                  ("^nntp.+:"
+                   (To ordenada-gnus-get-article-participants)
+                   (cc "${email}"))
+                ''
               ];
             };
-            emacs = {
-              gnus = {
-                enable = true;
-                topicGroups = {
-                  "Personal" = [
-                    "nnmaildir+personal:Inbox"
-                    "nnmaildir+personal:Drafts"
-                    "nnmaildir+personal:Sent"
-                    "nnmaildir+personal:Archive"
-                    "nnmaildir+personal:Junk"
-                    "nnmaildir+personal:Trash"
-                  ];
-                  "Bug Trackers" = [
-                    "nntp+gwene:gmane.comp.gnu.guix.bugs"
-                    "nntp+gwene:gmane.comp.gnu.guix.patches"
-                  ];
-                  "News" = [
-                    "nntp+gwene:gwene.rs.lobste"
-                    "nntp+gwene:gwene.org.hnrss.newest.points"
-                    "nntp+gwene:gwene.net.lwn.headlines.newrss"
-                  ];
-                  "Inbox" = [ ];
-                  "Gnus" = [ ];
-                };
-                topicTopology = [
-                  ''
-                    ("Gnus" visible)
-                  ''
-                  ''
-                    (("Inbox" visible)
-                     (("Personal" visible nil)))
-                  ''
-                  ''
-                    (("Bug Trackers" visible nil))
-                  ''
-                  ''
-                    (("News" visible nil))
-                  ''
-                ];
-                messageArchiveMethod = [
-                  "nnmaildir"
-                  "personal"
-                ];
-                messageArchiveGroup = [
-                  ''
-                    (".*" "Sent")
-                  ''
-                ];
-                groupParameters = {
-                  "^nnmaildir" = {
-                    "gcc-self" = "nnmaildir+personal:Sent";
-                    "display" = 1000;
-                  };
-                  "^nntp" = {
-                    "display" = 1000;
-                  };
-                };
-                postingStyles = with userInfo; [
-                  ''
-                    ((header "cc" ".*@debbugs.gnu.org")
-                     (To ordenada-gnus-get-article-participants)
-                     (cc nil))
-                  ''
-                  ''
-                    ((header "to" ".*@lists.sr.ht")
-                     (To ordenada-gnus-get-article-participants)
-                     (cc "${email}"))
-                  ''
-                  ''
-                    ("^nntp.+:"
-                     (To ordenada-gnus-get-article-participants)
-                     (cc "${email}"))
-                  ''
-                ];
-              };
-              message.enable = true;
-              org-roam = {
-                captureTemplates = [
-                  ''
-                    ("b" "public" plain "%?"
-                     :if-new (file+head "public/%<%Y%m%d%H%M%S>-''${slug}.org"
-                                        "#+title: ''${title}\n#+filetags: :''${Topic}:\n")
-                     :unnarrowed t)
-                  ''
-                  ''
-                    ("t" "private" plain "%?"
-                     :if-new (file+head "private/%<%Y%m%d%H%M%S>-''${slug}.org"
-                                        "#+title: ''${title}\n#+filetags: :''${Topic}:\n")
-                     :unnarrowed t)
-                  ''
-                ];
-                dailiesDirectory = "./";
-                dailiesCaptureTemplates = [
-                  ''
-                    ("b" "public" entry
-                     "* %?"
-                     :if-new (file+head "public/daily/%<%Y-%m-%d>.org"
-                                        "#+title: %<%Y-%m-%d>\n"))
-                  ''
-                  ''
-                    ("t" "private" entry
-                     "* %?"
-                     :if-new (file+head "private/daily/%<%Y-%m-%d>.org"
-                                        "#+title: %<%Y-%m-%d>\n"))
-                  ''
-                ];
-              };
+            message.enable = true;
+            org-roam = {
+              captureTemplates = [
+                ''
+                  ("b" "public" plain "%?"
+                   :if-new (file+head "public/%<%Y%m%d%H%M%S>-''${slug}.org"
+                                      "#+title: ''${title}\n#+filetags: :''${Topic}:\n")
+                   :unnarrowed t)
+                ''
+                ''
+                  ("t" "private" plain "%?"
+                   :if-new (file+head "private/%<%Y%m%d%H%M%S>-''${slug}.org"
+                                      "#+title: ''${title}\n#+filetags: :''${Topic}:\n")
+                   :unnarrowed t)
+                ''
+              ];
+              dailiesDirectory = "./";
+              dailiesCaptureTemplates = [
+                ''
+                  ("b" "public" entry
+                   "* %?"
+                   :if-new (file+head "public/daily/%<%Y-%m-%d>.org"
+                                      "#+title: %<%Y-%m-%d>\n"))
+                ''
+                ''
+                  ("t" "private" entry
+                   "* %?"
+                   :if-new (file+head "private/daily/%<%Y-%m-%d>.org"
+                                      "#+title: %<%Y-%m-%d>\n"))
+                ''
+              ];
             };
-            networking.enable = true;
-            qemu.enable = true;
-            waybar.enable = true;
           };
+          networking.enable = true;
+          qemu.enable = true;
         };
         virtualisation.podman = {
           enable = true;
           autoPrune = {
             enable = true;
             flags = [ "--all" ];
+          };
+        };
+        virtualisation.oci-containers.containers = {
+          acestream-http-proxy = {
+            image = "ghcr.io/martinbjeldbak/acestream-http-proxy";
+            ports = [ "6878:6878" ];
+            environment = {
+              ALLOW_REMOTE_ACCESS = "yes";
+            };
           };
         };
         virtualisation.containers.registries.insecure = [ "auriga:8084" ];
