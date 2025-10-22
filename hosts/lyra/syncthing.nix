@@ -41,6 +41,10 @@
           path = "~/videos";
           devices = [ "auriga" ];
         };
+        projects = {
+          path = "~/src/projects";
+          devices = [ "auriga" ];
+        };
         work-projects = {
           path = "~/src/work";
           devices = [ "orion" ];

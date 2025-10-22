@@ -33,6 +33,10 @@
           path = "~/password-store";
           devices = [ "lyra" ];
         };
+        projects = {
+          path = "~/projects";
+          devices = [ "lyra" ];
+        };
       };
     };
   };
