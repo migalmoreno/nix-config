@@ -80,6 +80,7 @@
       ace-window.enable = true;
       all-the-icons.enable = true;
       appearance.enable = true;
+      keymaps.enable = true;
       modus-themes.enable = true;
       org = {
         enable = true;
@@ -161,6 +162,8 @@
     };
     waybar.enable = true;
     wlogout.enable = true;
+    swaync.enable = true;
+    swaylock.enable = true;
     sway = {
       enable = true;
       keybindings =
