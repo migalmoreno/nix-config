@@ -13,22 +13,6 @@ inputs.nixpkgs.lib.nixosSystem {
           ../../profiles/tailscale.nix
           ./syncthing.nix
         ];
-        users.users."vega" = {
-          isNormalUser = true;
-          extraGroups = [
-            "adbusers"
-            "docker"
-            "networkmanager"
-            "wheel"
-          ];
-        };
-        home-manager.users."vega".imports = [
-          inputs.ordenada.homeModules.ordenada
-          {
-            home.stateVersion = config.system.stateVersion;
-          }
-        ];
-        profiles.tailscale.enable = true;
         swapDevices = [
           {
             device = "/var/lib/swapfile";
@@ -114,10 +98,18 @@ inputs.nixpkgs.lib.nixosSystem {
           MODE="0666", \
           RUN+="${pkgs.coreutils}/bin/chmod a+w /sys/class/backlight/%k/brightness"
         '';
+        home-manager.users."vega".imports = [
+          inputs.ordenada.homeModules.ordenada
+          {
+            home.stateVersion = config.system.stateVersion;
+          }
+        ];
         ordenada.features = with config.ordenada.features; {
           userInfo = {
+            enable = true;
             username = "vega";
             gpgPrimaryKey = "5F23F458";
+            extraGroups = [ "wheel" ];
           };
           git.signCommits = true;
           gnupg = {
