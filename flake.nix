@@ -56,18 +56,6 @@
             ];
             pkgs = import nixpkgs { inherit overlays; };
           in
-        homeConfigurations = builtins.listToAttrs (
-          map
-            (user: {
-              name = user;
-              value = user.home;
-            })
-            (
-              lib.concatMap (host: (builtins.attrNames nixosConfigurations.${host}.config.home-manager.users)) (
-                builtins.attrNames nixosConfigurations
-              )
-            )
-        );
           lib.pipe (readDirFilenames ./hosts) [
             (map (file: rec {
               name = lib.removeSuffix ".nix" file.name;
@@ -77,6 +65,16 @@
             }))
             builtins.listToAttrs
           ];
+        homeConfigurations = lib.pipe nixosConfigurations [
+          (lib.filterAttrs (name: value: lib.hasAttrByPath [ "config" "home-manager" ] value))
+          builtins.attrNames
+          (lib.concatMap (host: (builtins.attrNames nixosConfigurations.${host}.config.home-manager.users)))
+          (map (user: {
+            name = user;
+            value = user.home;
+          }))
+          builtins.listToAttrs
+        ];
       };
       perSystem =
         { pkgs, ... }:
