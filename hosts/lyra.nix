@@ -7,110 +7,19 @@ inputs.nixpkgs.lib.nixosSystem {
     (
       { config, pkgs, ... }:
       {
-        imports = [
-          ../../profiles/development.nix
-          ../../profiles/sops.nix
-          ../../profiles/tailscale.nix
-          ./syncthing.nix
-        ];
-        swapDevices = [
-          {
-            device = "/var/lib/swapfile";
-            size = 16 * 1024;
-          }
-        ];
-        networking.hostName = "lyra";
-        networking.firewall.enable = false;
-        time.timeZone = "Europe/Madrid";
-        hardware.firmware = [ pkgs.sof-firmware ];
-        hardware.enableRedistributableFirmware = true;
-        hardware.graphics.enable = true;
-        hardware.keyboard.qmk.enable = true;
-        services.udev.packages = with pkgs; [
-          via
-          vial
-        ];
-        nixpkgs = { inherit overlays; };
-        environment.systemPackages = with pkgs; [
-          emacs
-          git
-          git-agecrypt
-          via
-          vial
-          podman-compose
-        ];
-        boot = {
-          initrd.availableKernelModules = [
-            "xhci_pci"
-            "thunderbolt"
-            "usb_storage"
-            "usbhid"
-          ];
-          kernelModules = [
-            "kvm-intel"
-            "i2c-dev"
-            "ddcci"
-            "ddcci_backlight"
-            "v4l2loopback"
-          ];
-          extraModulePackages = with config.boot.kernelPackages; [
-            ddcci-driver
-            v4l2loopback
-          ];
-          extraModprobeConfig = ''
-            options ddcci dyndbg delay=120
-            options ddcci-backlight dyndbg
-            options v4l2loopback exclusive_caps=1 max_buffers=2 video_nr=-1
-          '';
-          loader = {
-            efi.canTouchEfiVariables = true;
-            efi.efiSysMountPoint = "/boot/efi";
-            timeout = 0;
-            grub = {
-              enable = true;
-              efiSupport = true;
-              enableCryptodisk = true;
-              device = "nodev";
-            };
-          };
-          binfmt.emulatedSystems = [ "aarch64-linux" ];
-          initrd.luks.devices = {
-            system-root = {
-              device = "/dev/disk/by-uuid/0f74821b-da48-4f0c-9f94-f39e646da1bf";
-            };
-          };
-        };
-        fileSystems = {
-          "/" = {
-            device = "/dev/mapper/system-root";
-            fsType = "ext4";
-            options = [ "noatime" ];
-          };
-          "/boot/efi" = {
-            device = "/dev/nvme0n1p1";
-            fsType = "vfat";
-          };
-        };
-        services.udev.extraRules = ''
-          ACTION=="add", \
-          SUBSYSTEM=="backlight", \
-          KERNEL=="intel_backlight", \
-          MODE="0666", \
-          RUN+="${pkgs.coreutils}/bin/chmod a+w /sys/class/backlight/%k/brightness"
-        '';
-        home-manager.users."vega".imports = [
-          inputs.ordenada.homeModules.ordenada
-          {
-            home.stateVersion = config.system.stateVersion;
-          }
-        ];
+        imports = [ ../profiles/development.nix ];
         ordenada.features = with config.ordenada.features; {
+          hostInfo.hostName = "lyra";
           userInfo = {
-            enable = true;
             username = "vega";
             gpgPrimaryKey = "5F23F458";
             extraGroups = [ "wheel" ];
           };
+          base.nixosPackages = with pkgs; [
+            emacs
+            git-agecrypt
+            podman-compose
+          ];
           git.signCommits = true;
           gnupg = {
             enable = true;
@@ -137,6 +46,50 @@ inputs.nixpkgs.lib.nixosSystem {
                     port = 465;
                   };
                 };
+              };
+            };
+          };
+          syncthing = {
+            devices = {
+              auriga.id = "FZVCCHW-DF2SVCK-6NFAH3K-A6TTZ6S-D44H3NZ-SHSC7FV-EQL3R2S-J2CR3QZ";
+              orion.id = "JHG7EZC-D52KXLP-AN45CEX-ADKNSST-J4R3XDF-NDI26JH-JIJYZJ5-AEJHFQO";
+            };
+            folders = {
+              password-store = {
+                path = "~/.local/state/password-store";
+                devices = [ "auriga" ];
+              };
+              documents = {
+                path = "~/documents";
+                devices = [ "auriga" ];
+              };
+              pictures = {
+                path = "~/pictures";
+                devices = [ "auriga" ];
+              };
+              notes = {
+                path = "~/notes";
+                devices = [ "auriga" ];
+              };
+              videos = {
+                path = "~/videos";
+                devices = [ "auriga" ];
+              };
+              projects = {
+                path = "~/src/projects";
+                devices = [ "auriga" ];
+              };
+              work-projects = {
+                path = "~/src/work";
+                devices = [ "orion" ];
+              };
+              public-notes = {
+                path = "~/notes/public";
+                devices = [ "orion" ];
+              };
+              work-documents = {
+                path = "~/documents/work";
+                devices = [ "orion" ];
               };
             };
           };
@@ -312,6 +265,81 @@ inputs.nixpkgs.lib.nixosSystem {
           networking.enable = true;
           qemu.enable = true;
         };
+        home-manager.users.${config.ordenada.features.userInfo.username}.imports = [
+          inputs.ordenada.homeModules.ordenada
+          {
+            home.stateVersion = config.system.stateVersion;
+          }
+        ];
+        swapDevices = [
+          {
+            device = "/var/lib/swapfile";
+            size = 16 * 1024;
+          }
+        ];
+        networking.firewall.enable = false;
+        hardware.firmware = [ pkgs.sof-firmware ];
+        hardware.enableRedistributableFirmware = true;
+        nixpkgs = { inherit overlays; };
+        boot = {
+          initrd.availableKernelModules = [
+            "xhci_pci"
+            "thunderbolt"
+            "usb_storage"
+            "usbhid"
+          ];
+          kernelModules = [
+            "kvm-intel"
+            "i2c-dev"
+            "ddcci"
+            "ddcci_backlight"
+            "v4l2loopback"
+          ];
+          extraModulePackages = with config.boot.kernelPackages; [
+            ddcci-driver
+            v4l2loopback
+          ];
+          extraModprobeConfig = ''
+            options ddcci dyndbg delay=120
+            options ddcci-backlight dyndbg
+            options v4l2loopback exclusive_caps=1 max_buffers=2 video_nr=-1
+          '';
+          loader = {
+            efi.canTouchEfiVariables = true;
+            efi.efiSysMountPoint = "/boot/efi";
+            timeout = 0;
+            grub = {
+              enable = true;
+              efiSupport = true;
+              enableCryptodisk = true;
+              device = "nodev";
+            };
+          };
+          binfmt.emulatedSystems = [ "aarch64-linux" ];
+          initrd.luks.devices = {
+            system-root = {
+              device = "/dev/disk/by-uuid/0f74821b-da48-4f0c-9f94-f39e646da1bf";
+            };
+          };
+        };
+        fileSystems = {
+          "/" = {
+            device = "/dev/mapper/system-root";
+            fsType = "ext4";
+            options = [ "noatime" ];
+          };
+          "/boot/efi" = {
+            device = "/dev/nvme0n1p1";
+            fsType = "vfat";
+          };
+        };
+        services.udev.extraRules = ''
+          ACTION=="add", \
+          SUBSYSTEM=="backlight", \
+          KERNEL=="intel_backlight", \
+          MODE="0666", \
+          RUN+="${pkgs.coreutils}/bin/chmod a+w /sys/class/backlight/%k/brightness"
+        '';
         virtualisation.podman = {
           enable = true;
           autoPrune = {

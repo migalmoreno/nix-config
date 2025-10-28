@@ -1,5 +1,4 @@
 {
-  description = "Personal Nix configuration";
   inputs = {
     disko = {
       url = "github:nix-community/disko";
@@ -10,7 +9,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixos-wsl.url = "github:nix-community/nixos-wsl/main";
     nur.url = "github:nix-community/nur";
     sops-nix.url = "github:mic92/sops-nix";
     nixos-hardware.url = "github:nixos/nixos-hardware/master";
@@ -21,10 +19,7 @@
     };
     ordenada = {
       url = "github:migalmoreno/ordenada";
-      inputs = {
-        home-manager.follows = "home-manager";
-        nur.follows = "nur";
-      };
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     systems.url = "github:nix-systems/default";
     filestash-nix.url = "github:dermetfan/filestash.nix";
@@ -41,9 +36,11 @@
       inherit (nixpkgs) lib;
       readDirFilenames =
         dir:
-        (builtins.filter (file: lib.hasSuffix ".nix" file.name || file.value == "directory") (
-          lib.mapAttrsToList (name: value: { inherit name value; }) (builtins.readDir dir)
-        ));
+        (lib.pipe dir [
+          builtins.readDir
+          (lib.mapAttrsToList (name: value: { inherit name value; }))
+          (builtins.filter (file: lib.hasSuffix ".nix" file.name || file.value == "directory"))
+        ]);
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import inputs.systems;
@@ -59,12 +56,6 @@
             ];
             pkgs = import nixpkgs { inherit overlays; };
           in
-          builtins.listToAttrs (
-            map (file: rec {
-              name = nixpkgs.lib.removeSuffix ".nix" file.name;
-              value = import (./hosts + "/${name}") { inherit inputs pkgs overlays; };
-            }) (readDirFilenames ./hosts)
-          );
         homeConfigurations = builtins.listToAttrs (
           map
             (user: {
@@ -77,6 +68,15 @@
               )
             )
         );
+          lib.pipe (readDirFilenames ./hosts) [
+            (map (file: rec {
+              name = lib.removeSuffix ".nix" file.name;
+              value = import (./hosts + "/${if file.value == "directory" then name else "${name}.nix"}") {
+                inherit inputs pkgs overlays;
+              };
+            }))
+            builtins.listToAttrs
+          ];
       };
       perSystem =
         { pkgs, ... }:

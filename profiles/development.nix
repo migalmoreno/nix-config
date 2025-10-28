@@ -9,15 +9,27 @@
 {
   imports = [ inputs.ordenada.nixosModules.ordenada ];
   ordenada.features = {
+    hostInfo = {
+      enable = true;
+      timeZone = "Europe/Madrid";
+    };
     userInfo = {
+      enable = true;
       fullName = "Miguel Ángel Moreno";
       email = "mail@migalmoreno.com";
     };
+    qmk.enable = true;
     home.enable = true;
     theme = {
       enable = true;
       polarity = "dark";
+      enableToggle = true;
     };
+    sops = {
+      enable = true;
+      file = ../secrets.yaml;
+    };
+    syncthing.enable = true;
     keyboard = {
       enable = true;
       layout = {
@@ -125,6 +137,7 @@
       orderless.enable = true;
       ebdb.enable = true;
       eshell.enable = true;
+      eat.enable = true;
       help.enable = true;
       daemons.enable = true;
       which-key.enable = true;
@@ -239,37 +252,25 @@
           react-devtools
           linkding-extension
         ];
-      extraSearchConfig = {
-        default = "google";
-        privateDefault = "google";
-        engines = {
-          "SearXNG" = {
-            urls = [
-              {
-                template = "http://auriga:8888/search";
-                params = [
-                  {
-                    name = "q";
-                    value = "{searchTerms}";
-                  }
-                ];
-              }
-            ];
-            icon = "${pkgs.searxng}/share/static/themes/simple/img/favicon.svg";
-            definedAliases = [ "@s" ];
-          };
-          "google" = {
-            metaData = {
-              hidden = false;
-              alias = "@g";
-            };
-          };
+      defaultSearchEngine = "google";
+      extraSearchEngines = {
+        "SearXNG" = {
+          urls = [
+            {
+              template = "http://auriga:8888/search";
+              params = [
+                {
+                  name = "q";
+                  value = "{searchTerms}";
+                }
+              ];
+            }
+          ];
+          icon = "${pkgs.searxng}/share/static/themes/simple/img/favicon.svg";
+          definedAliases = [ "@s" ];
         };
-        order = [
-          "google"
-          "SearXNG"
-        ];
       };
+      extraSearchConfig.engines.google.metaData.alias = "@g";
     };
     irc = {
       enable = true;
